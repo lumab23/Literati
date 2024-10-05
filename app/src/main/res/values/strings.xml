@@ -14,4 +14,26 @@
     <string name="alternatives">Ou cadastre-se com</string>
     <string name="login_alt">Já tem uma conta? </string>
     <string name="link_login">Login</string>
+    <string name="forgot_password">Esqueceu a senha?\n</string>
+    <string name="alternativas_login">Ou entre com</string>
+    <string name="cadastro_alt">Ainda não tem uma conta?</string>
+    <string name="cadastro_link">Cadastre-se</string>
+    <string name="my_books">Meus Livros</string>
+    <string name="community">Comunidades</string>
+    <string name="home">Menu</string>
+    <string name="search">Pesquisar</string>
+    <string name="profile">Perfil</string>
+    <string name="welcome">Bem Vindo</string>
+    <string name="name_book">book name</string>
+    <string name="recomendacao_baseada">Porque você está lendo The Shining</string>
+    <string name="trend_fantasy">Tendência em Fantasia</string>
+    <string name="trend_romance">Tendência em Romance</string>
+    <string name="trend_classicos">Tendência em Classicos</string>
+    <string name="literati">Literati\n</string>
+    <string name="pesquise_por">Pesquise por</string>
+    <string name="decada">Década</string>
+    <string name="gêneros">Gêneros</string>
+    <string name="favoritos_profile">Favoritos</string>
+    <string name="lendo">Lendo</string>
+    <string name="disp_troca">Disponível para troca</string>
 </resources>

@@ -49,11 +49,14 @@ fun SignUpScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             MyTextFieldComponent(labelValue = stringResource(id = R.string.nome), leadingIcon = Icons.Default.Person)
+            Spacer(modifier = Modifier.height(20.dp))
             MyTextFieldComponent(labelValue = stringResource(id = R.string.email), leadingIcon = Icons.Default.Email)
+            Spacer(modifier = Modifier.height(20.dp))
             MyPasswordFieldComponent(labelValue = stringResource(id = R.string.password), leadingIcon = Icons.Default.Lock)
+            Spacer(modifier = Modifier.height(20.dp))
             MyPasswordFieldComponent(labelValue = stringResource(id = R.string.password_again), leadingIcon = Icons.Default.Lock)
 
-            ButtonComponenent(value = stringResource(id = R.string.entrar), route = Screen.LoginScreen.route, navController = navController)
+            ButtonComponenent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -68,7 +71,6 @@ fun SignUpScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             AlternativeOptionAccount(
-                //onLinkClick = { navController.navigate(Screen.LoginScreen.route) },
                 value = stringResource(id = R.string.login_alt),
                 linkText = stringResource(id = R.string.link_login),
                 route = Screen.LoginScreen.route,
