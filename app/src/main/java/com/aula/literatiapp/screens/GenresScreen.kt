@@ -104,61 +104,9 @@ fun GenresScreen(navController: NavController) {
 
 @Composable
 fun RomanceScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Romance aqui
     val books = listOf(
         R.drawable.booklovers
-
     )
-    Scaffold(
-        topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros) , navController = navController, modifier = Modifier)
-        },
-        bottomBar = {
-            BottomNavigation(modifier = Modifier, navController = navController)
-        }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues) )
-        ScrollableBookColumn(
-            bookList = books,
-            navController = navController,
-            modifier = Modifier
-                .padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun NaoFiccaoScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Não-Ficção aqui
-    val books = listOf(
-        R.drawable.bride
-    )
-
-    Scaffold(
-        topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
-        },
-        bottomBar = {
-            BottomNavigation(modifier = Modifier, navController = navController)
-        }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues) )
-        ScrollableBookColumn(
-            bookList = books,
-            navController = navController,
-            modifier = Modifier
-                .padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun PoesiaScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Poesia aqui
-    val books = listOf(
-        R.drawable.carrie
-    )
-
     Scaffold(
         topBar = {
             MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
@@ -167,24 +115,22 @@ fun PoesiaScreen(navController: NavController) {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues))
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
 
+
 @Composable
-fun FiccaoCientificaScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Ficção Científica aqui
+fun NaoFiccaoScreen(navController: NavController) {
     val books = listOf(
-        R.drawable.frankenstein
-
+        R.drawable.bride
     )
-
     Scaffold(
         topBar = {
             MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
@@ -192,17 +138,65 @@ fun FiccaoCientificaScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues))
+    ) { paddingValues ->
         ScrollableBookColumn(
-            bookList =  books,
+            bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
-
     }
 }
+
+
+@Composable
+fun PoesiaScreen(navController: NavController) {
+    val books = listOf(
+        R.drawable.carrie
+    )
+    Scaffold(
+        topBar = {
+            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
+}
+
+
+@Composable
+fun FiccaoCientificaScreen(navController: NavController) {
+    val books = listOf(
+        R.drawable.frankenstein
+    )
+    Scaffold(
+        topBar = {
+            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
+}
+
 
 @Composable
 fun TerrorScreen(navController: NavController) {
@@ -216,23 +210,22 @@ fun TerrorScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues))
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
+
 
 @Composable
 fun BiografiaScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Biografia aqui
     val books = listOf(
-        R.drawable.jane_eyre,
-
+        R.drawable.jane_eyre
     )
     Scaffold(
         topBar = {
@@ -241,23 +234,22 @@ fun BiografiaScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues))
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
+
 
 @Composable
 fun MisterioScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Mistério aqui
     val books = listOf(
-        R.drawable.it,
-        R.drawable.mobydick
+        R.drawable.it
     )
     Scaffold(
         topBar = {
@@ -266,47 +258,61 @@ fun MisterioScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues) )
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
+
 
 @Composable
 fun FantasiaScreen(navController: NavController) {
     // Adicione o conteúdo da categoria Fantasia aqui
     val books = listOf(
         R.drawable.it,
-        R.drawable.americandirt
+        R.drawable.themidnightlibrary,
+        R.drawable.tbosas,
+        R.drawable.thereturnoftheking,
+        R.drawable.hp_gobletoffiere,
+        R.drawable.thehobbit,
+        R.drawable.thecruelprince,
+        R.drawable.theinvisiblelifeofaddielarue,
+        R.drawable.thewickedking,
+        R.drawable.hp_prisonerofazkaban,
+        R.drawable.hp_orderofphoenix,
+        R.drawable.thequeenofnothing,
+        R.drawable.hp_deathlyhallows,
+        R.drawable.acourtofthornsandrose
     )
+
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            MenorDashboard(value = stringResource(id = R.string.fantasia), navController = navController, modifier = Modifier)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues) )
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(paddingValues)
+                .padding(16.dp) // Apply padding directly
         )
     }
 }
+
 
 @Composable
 fun ClassicosScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Clássicos aqui
     val books = listOf(
-        R.drawable.americandirt
+        R.drawable.pride_and_prejudice
     )
     Scaffold(
         topBar = {
@@ -315,22 +321,22 @@ fun ClassicosScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues))
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
 
+
 @Composable
 fun YoungAdultScreen(navController: NavController) {
-    // Adicione o conteúdo da categoria Young Adult aqui
     val books = listOf(
-        R.drawable._984
+        R.drawable.ikissedsharawheeler
     )
     Scaffold(
         topBar = {
@@ -339,13 +345,14 @@ fun YoungAdultScreen(navController: NavController) {
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
-    ){ paddingValues ->
-        Box(modifier = Modifier .padding(paddingValues))
+    ) { paddingValues ->
         ScrollableBookColumn(
             bookList = books,
             navController = navController,
             modifier = Modifier
+                .padding(paddingValues)
                 .padding(16.dp)
         )
     }
 }
+

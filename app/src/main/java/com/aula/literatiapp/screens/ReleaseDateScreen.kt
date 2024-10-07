@@ -1,27 +1,16 @@
 package com.aula.literatiapp.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.CategorySection
@@ -98,8 +87,32 @@ fun ReleaseDateScreen(navController: NavController) {
 
 @Composable
 fun AVirScreen(navController: NavController) {
-    // Conteúdo da tela "A Vir"
+    val books = listOf(
+        R.drawable._984
+    )
+
+    Scaffold(
+        topBar = {
+            MenorDashboard(
+                value = stringResource(id = R.string.a_vir),
+                navController = navController,
+                modifier = Modifier
+            )
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
 }
+
 
 @Composable
 fun Screen2020s(navController: NavController) {
@@ -127,51 +140,144 @@ fun Screen2020s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.decada), navController = navController, modifier = Modifier)
+            MenorDashboard(
+                value = stringResource(id = R.string.decada),
+                navController = navController,
+                modifier = Modifier
+            )
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
     ) { paddingValues ->
 
-        Box(modifier = Modifier.padding(paddingValues)) {
-            ScrollableBookColumn(
-                bookList = books,
-                navController = navController,
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-        }
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp) // Adding the padding directly to the column
+        )
     }
 }
 
+
 @Composable
 fun Screen2010s(navController: NavController) {
-    // Conteúdo da tela "2010s"
+    val books = listOf(
+        R.drawable.theotherblackgirl
+    )
+
+    Scaffold(
+        topBar = {
+            MenorDashboard(
+                value = stringResource(id = R.string.ano_10),
+                navController = navController,
+                modifier = Modifier
+            )
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
 }
+
 
 @Composable
 fun Screen2000s(navController: NavController) {
-    // Conteúdo da tela "2000s"
+    val books = listOf(
+        R.drawable.it
+    )
+
+    Scaffold(
+        topBar = {
+            MenorDashboard(
+                value = stringResource(id = R.string.ano_200),
+                navController = navController,
+                modifier = Modifier
+            )
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
 }
+
+
 
 @Composable
 fun Screen1990s(navController: NavController) {
-    // Conteúdo da tela "1990s"
+    val books = listOf(
+        R.drawable.babel
+    )
+
+    Scaffold(
+        topBar = {
+            MenorDashboard(
+                value = stringResource(id = R.string.ano_90),
+                navController = navController,
+                modifier = Modifier
+            )
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
 }
+
 
 @Composable
 fun Screen1980s(navController: NavController) {
-    // Conteúdo da tela "1980s"
+    val books = listOf(
+        R.drawable.tbosas
+    )
+
+    Scaffold(
+        topBar = {
+            MenorDashboard(
+                value = stringResource(id = R.string.ano_80),
+                navController = navController,
+                modifier = Modifier
+            )
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+        ScrollableBookColumn(
+            bookList = books,
+            navController = navController,
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        )
+    }
 }
 
 
-@Preview(
-    showSystemUi = true,
-    name = "Release Date Screen"
-)
-@Composable
-fun ReleaseDateScreenPreview() {
-    val navController = rememberNavController()
-    ReleaseDateScreen(navController = navController)
-}
+
+

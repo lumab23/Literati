@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,6 +57,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -491,10 +494,10 @@ fun BookCard(
             defaultElevation = 6.dp
         ),
         modifier = Modifier
-            .size(width = 60.dp, height = 102.dp),
+            .size(width = 75.dp, height = 110.dp),
         onClick = { onBookClick() }
     ) {
-        Image(painter = painter, contentDescription = "null")
+        Image(painter = painter, contentDescription = "null", contentScale = ContentScale.Crop)
     }
 }
 
@@ -641,33 +644,46 @@ fun MenorDashboard(value: String, navController: NavController, modifier: Modifi
     }
 }
 
+
 @Composable
 fun ScrollableBookColumn(
     bookList: List<Int>,
     navController: NavController,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3), // Define 3 colunas
-        contentPadding = PaddingValues(8.dp), // Espaçamento ao redor da grade
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.padding(5.dp)
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
     ) {
-        items(bookList.size) { index ->
-            BookCard(
-                painter = painterResource(id = bookList[index]),
-                onBookClick = {
-                    // Navegar para a tela do livro
-                    navController.navigate(Screen.BookScreen.route)
-                },
-                navController = navController,
-                modifier = Modifier
-                    .height(300.dp)
-                    .padding(horizontal = 4.dp)
-            )
+        // Agrupamos os livros em linhas de 3
+        items(bookList.chunked(4)) { rowItems ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Iteramos sobre cada livro em uma linha de até 3 livros
+                rowItems.forEach { bookResId ->
+                    BookCard(
+                        painter = painterResource(id = bookResId),
+                        onBookClick = {
+                            navController.navigate(Screen.BookScreen.route)
+                        },
+                        navController = navController,
+                        modifier = Modifier
+                            .weight(1f) // Ocupa o mesmo espaço para cada livro
+                            .height(150.dp)
+                    )
+                }
+                // Adiciona espaço vazio se a linha não tiver exatamente 3 itens
+                repeat(4 - rowItems.size) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         }
     }
 }
+
 
 
 @Composable

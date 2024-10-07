@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun BookScreen(navController: NavController) {
-
+fun MetasScreen(navController: NavController) {
     // usar scaffold para definir bottom navigation
 
 }
