@@ -34,5 +34,17 @@ sealed class Screen(val route: String) {
     data object Screen1990s : Screen("1990s_screen")
     data object Screen1980s : Screen("1980s_screen")
 
+    // settings
+    data object SettingsScreen : Screen("settings_screen")
+    data object AltEmailSenhaScreen : Screen("alt_email_e_senha")
+    data object AltUserScreen : Screen("alt_user")
+    data object EnableNotifScreen : Screen("enable_notif")
+    data object IdiomasScreen : Screen("idiomas_screen")
+    data object AcessibilityScreen : Screen("acessibility_screen")
+
+
+    data object MessageScreen : Screen("messages_screen")
+    data object ChatScreen : Screen("chat_screen")
+
 }
 

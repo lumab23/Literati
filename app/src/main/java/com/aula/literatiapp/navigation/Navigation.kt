@@ -1,21 +1,28 @@
 package com.aula.literatiapp.navigation
 
+import android.os.Message
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.internal.composableLambda
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.screens.AVirScreen
+import com.aula.literatiapp.screens.AcessibilityScreen
+import com.aula.literatiapp.screens.AltEmailSenhaScreen
+import com.aula.literatiapp.screens.AltUserScreen
 import com.aula.literatiapp.screens.BiografiaScreen
 import com.aula.literatiapp.screens.BookScreen
+import com.aula.literatiapp.screens.ChatScreen
 import com.aula.literatiapp.screens.ClassicosScreen
 import com.aula.literatiapp.screens.CommunityScreen
+import com.aula.literatiapp.screens.EnableNotifScreen
 import com.aula.literatiapp.screens.FantasiaScreen
 import com.aula.literatiapp.screens.FiccaoCientificaScreen
 import com.aula.literatiapp.screens.ForgotPasswordScreen
 import com.aula.literatiapp.screens.GenresScreen
+import com.aula.literatiapp.screens.IdiomasScreen
 import com.aula.literatiapp.screens.LoginScreen
 import com.aula.literatiapp.screens.MainScreen
+import com.aula.literatiapp.screens.MessageScreen
 import com.aula.literatiapp.screens.MisterioScreen
 import com.aula.literatiapp.screens.MyBooksScreen
 import com.aula.literatiapp.screens.NaoFiccaoScreen
@@ -29,6 +36,7 @@ import com.aula.literatiapp.screens.Screen2000s
 import com.aula.literatiapp.screens.Screen2010s
 import com.aula.literatiapp.screens.Screen2020s
 import com.aula.literatiapp.screens.SearchScreen
+import com.aula.literatiapp.screens.SettingsScreen
 import com.aula.literatiapp.screens.SignUpScreen
 import com.aula.literatiapp.screens.TerrorScreen
 import com.aula.literatiapp.screens.YoungAdultScreen
@@ -37,13 +45,14 @@ import com.aula.literatiapp.screens.YoungAdultScreen
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.SignUpScreen.route) {
-        composable(route = Screen.SignUpScreen.route) {
-            SignUpScreen(navController = navController)
-        }
+    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
 
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController)
+        }
+
+        composable(route = Screen.SignUpScreen.route) {
+            SignUpScreen(navController = navController)
         }
 
         composable(route = Screen.ForgotPasswordScreen.route) {
@@ -147,6 +156,67 @@ fun Navigation() {
         composable(route = Screen.Screen1980s.route) {
             Screen1980s(navController = navController)
         }
+        
+        composable(route = Screen.SettingsScreen.route) { 
+            SettingsScreen(navController = navController)
+        }
+        
+        composable(route = Screen.AltEmailSenhaScreen.route) { 
+            AltEmailSenhaScreen(navController = navController)
+        }
+        
+        composable(route = Screen.AltUserScreen.route) { 
+            AltUserScreen(navController = navController)
+        }
+        
+        composable(route = Screen.EnableNotifScreen.route) { 
+            EnableNotifScreen(navController = navController)
+        }
+        
+        composable(route = Screen.AcessibilityScreen.route) {
+            AcessibilityScreen(navController = navController)
+        }
+        
+        composable(route = Screen.IdiomasScreen.route) { 
+            IdiomasScreen(navController = navController)
+        }
+
+        composable(route = Screen.MessageScreen.route) {
+            MessageScreen(navController = navController)
+        }
+
+        composable(route = Screen.ChatScreen.route) {
+            // Example data: Replace with your actual data and logic
+            val messages = listOf(
+                com.aula.literatiapp.model.Message(
+                    "User1",
+                    "https://image.url",
+                    "Hello!",
+                    time = "10:30",
+                    isSentByUser = false
+                ),
+                com.aula.literatiapp.model.Message(
+                    "User2",
+                    "https://image.url",
+                    "Hi there!",
+                    time = "10:32",
+                    isSentByUser = true
+                )
+            )
+
+            // Example message sending handler
+            val onMessageSend: (String) -> Unit = { newMessage ->
+                // Handle sending message
+                println("Message sent: $newMessage")
+            }
+
+            ChatScreen(
+                messages = messages,
+                onMessageSend = onMessageSend,
+                navController = navController
+            )
+        }
+
 
     }
 }

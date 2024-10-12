@@ -43,4 +43,13 @@
     <string name="ano_90">1990s</string>
     <string name="ano_80">1980s</string>
     <string name="fantasia">Fantasia</string>
+    <string name="config">Configurações</string>
+    <string name="alt_emailsenha">Alterar email e senha</string>
+    <string name="message">Mensagens</string>
+    <string name="chat">Mensagem</string>
+    <string name="username">Amanda</string>
+    <string name="message_preview">Gostaria de fazer uma troca.</string>
+    <string name="time">11:30 AM</string>
+    <string name="messages_screen">Mensagens</string>
+    <string name="metas">Metas</string>
 </resources>

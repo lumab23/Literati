@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -19,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -61,7 +57,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -70,11 +65,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.navigation.Screen
 import com.aula.literatiapp.ui.theme.textColor
@@ -574,25 +567,30 @@ fun CategorySection(
         Spacer(modifier = Modifier.height(8.dp))
 
         categories.forEachIndexed { index, category ->
-            Text(
-                text = category,
-                fontSize = 15.sp,
+            Box(
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
                     .clickable { onCategoryClick(category) }
-            )
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = category,
+                    fontSize = 15.sp,
+                    color = if (category == "Excluir Conta") colorResource(id = R.color.error_text_color) else colorResource(
+                        id = R.color.text_color
+                    )
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             if (index < categories.size - 1) {
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = colorResource(id = R.color.tertiary_container)
-                )
+                HorizontalDivider()
             }
         }
     }
 }
+
 
 @Composable
 fun MenorDashboard(value: String, navController: NavController, modifier: Modifier = Modifier) {
@@ -612,7 +610,8 @@ fun MenorDashboard(value: String, navController: NavController, modifier: Modifi
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Ícone alinhado à esquerda
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { navController.popBackStack()
+            navController.createDeepLink()}) {
 
                 Icon(
                     imageVector = Icons.Default.ChevronLeft,
@@ -704,3 +703,5 @@ fun SectionNameMenor(value: String) {
 
     }
 }
+
+

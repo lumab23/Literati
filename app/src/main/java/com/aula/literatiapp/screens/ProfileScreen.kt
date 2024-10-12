@@ -41,6 +41,7 @@ import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.ScrollableBookRow
 import com.aula.literatiapp.components.SectionNameMenor
+import com.aula.literatiapp.navigation.Screen
 
 @Composable
 fun ProfileScreen(navController: NavController) {
@@ -145,7 +146,7 @@ fun TopBar(navController: NavController) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { navController.navigate(Screen.SettingsScreen.route) }) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "settings")
         }
 
@@ -188,7 +189,7 @@ fun TopBar(navController: NavController) {
             }
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { navController.navigate(Screen.MessageScreen.route) }) {
             Icon(imageVector = Icons.Default.ChatBubble, contentDescription = "chat")
         }
     }
