@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary">#FF4C662B</color>
+    <color name="secondary">#FF586249</color>
+    <color name="tertiary">#FF4C662B</color>
+
+    <!-- Primary Container Colors -->
+    <color name="primary_container">#FFcdeda3</color>
+    <color name="secondary_container">#FFdce7c8</color>
+    <color name="tertiary_container">#FFcdeda3</color>
+
+    <!-- Surface Colors -->
+    <color name="surface_dim">#FFdadbd0</color>
+    <color name="surface">#FFf9faef</color>
+    <color name="surface_bright">#FFf9faef</color>
+
+    <!-- Text Colors -->
+    <color name="text_color">#FF000000</color>
+
+    <!-- Error Colors -->
+    <color name="error_text_color">#FFba1a1a</color>
+    <color name="error_text_color_container">#FFffdad6</color>
+
+</resources>
