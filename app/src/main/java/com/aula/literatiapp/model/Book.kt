@@ -6,5 +6,6 @@ data class Book(
     val publisher: String?,
     val description: String?,
     val imageLinks: ImageLinks?,
-    val tags: String?
+    val tags: String?,
+    val genres: List<String>?
 )

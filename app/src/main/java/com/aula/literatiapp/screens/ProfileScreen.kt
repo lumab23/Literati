@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BottomNavigation
+import com.aula.literatiapp.components.CategorySection
 import com.aula.literatiapp.components.ScrollableBookRow
 import com.aula.literatiapp.components.SectionNameMenor
 import com.aula.literatiapp.navigation.Screen
@@ -58,7 +60,7 @@ fun ProfileScreen(navController: NavController) {
         R.drawable.dialaforaunties,
         R.drawable.thecruelprince,
         R.drawable.thesongofachilles,
-        R.drawable.dune_bookcover
+        R.drawable.acourtofthornsandrose
     )
 
     val troca = listOf(
@@ -67,6 +69,11 @@ fun ProfileScreen(navController: NavController) {
         R.drawable.itstartswithus,
         R.drawable.booklovers,
         R.drawable.it
+    )
+
+    val listas = listOf(
+        "Reviews",
+        "Tags"
     )
 
     Scaffold(
@@ -83,14 +90,8 @@ fun ProfileScreen(navController: NavController) {
             // Cabeçalho do perfil
             item {
                 TopBar(navController = navController)
-
-                // Divisória após o topo
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = colorResource(id = R.color.tertiary_container)
-                )
-
-                Spacer(modifier = Modifier.height(20.dp)) // Espaço entre a divisória e a próxima seção
+                HorizontalDivider()
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
             // Seção de favoritos
@@ -99,10 +100,7 @@ fun ProfileScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
                 ScrollableBookRow(bookList = favoritos, navController = navController)
                 Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = colorResource(id = R.color.tertiary_container)
-                )
+                HorizontalDivider()
                 Spacer(modifier = Modifier.height(15.dp))
             }
 
@@ -112,10 +110,7 @@ fun ProfileScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
                 ScrollableBookRow(bookList = lendo, navController = navController)
                 Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = colorResource(id = R.color.tertiary_container)
-                )
+                HorizontalDivider()
                 Spacer(modifier = Modifier.height(15.dp))
             }
 
@@ -125,11 +120,29 @@ fun ProfileScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
                 ScrollableBookRow(bookList = troca, navController = navController)
                 Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = colorResource(id = R.color.tertiary_container)
+                HorizontalDivider()
+                //Spacer(modifier = Modifier.height(15.dp))
+            }
+
+            item {
+                CategorySection(
+                    title = "",
+                    categories = listas,
+                    onCategoryClick = { selectedSection ->
+                        when (selectedSection) {
+                            "Reviews" -> {
+
+                            }
+                            "Lista de leitura" -> {
+
+                            }
+                            "Tags" -> {
+
+                            }
+                        }
+
+                    }
                 )
-                Spacer(modifier = Modifier.height(15.dp))
             }
 
 
@@ -150,41 +163,38 @@ fun TopBar(navController: NavController) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "settings")
         }
 
-        // Add Box to position the profile picture in the middle
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .offset(y = 50.dp)
-                .height(180.dp), // Center the image
-            contentAlignment = Alignment.TopCenter // Align to the top center of the Box
+                .height(180.dp),
+            contentAlignment = Alignment.TopCenter
         ) {
-            // Use Column to stack the image and the Row below it
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally, // Align elements horizontally in the center
-                verticalArrangement = Arrangement.Center // Center the elements vertically
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
+
                 Image(
-                    painter = painterResource(id = R.drawable.profile_picture), // Replace with your image resource
+                    painter = painterResource(id = R.drawable.profile_picture),
                     contentDescription = "profile picture",
                     modifier = Modifier
-                        .size(80.dp) // Adjust the size of the image
-                        .clip(CircleShape) // Make the image round
-                        .border(2.dp, Color.Gray, CircleShape) // Optional border
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .border(2.dp, Color.Gray, CircleShape)
+                        .align(Alignment.CenterHorizontally)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp)) // Space between image and Row
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically // Align the icon and text vertically centered
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.CheckCircle,
-                        contentDescription = "Troca disponível",
-                        tint = colorResource(id = R.color.secondary),
-                        modifier = Modifier.size(20.dp)
+                    Text(
+                        text = "Amanda",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.width(4.dp)) // Space between icon and text
-                    Text(text = "Livros para trocar", fontSize = 12.sp)
                 }
             }
         }

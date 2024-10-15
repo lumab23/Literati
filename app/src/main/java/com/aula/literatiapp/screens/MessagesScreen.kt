@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
+import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.BottomNavigation
-import com.aula.literatiapp.components.MenorDashboard
 import com.aula.literatiapp.navigation.Screen
 
 // adicionar um onProfileClick()
@@ -90,7 +90,9 @@ fun MessageComponent(navController: NavController) {
 @Composable
 fun MessageScreen(navController: NavController) {
     Scaffold(
-        topBar = { MenorDashboard(value = stringResource(id = R.string.messages_screen), navController = navController) },
+        topBar = {
+            BackNavigationDashboard(value = "Mensagens", navController = navController)
+        },
         bottomBar = { BottomNavigation(modifier = Modifier, navController = navController) }
     ) { paddingValues ->
 

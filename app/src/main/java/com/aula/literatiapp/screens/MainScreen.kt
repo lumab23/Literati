@@ -11,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.R
-import com.aula.literatiapp.components.Dashboard
+import com.aula.literatiapp.components.MainDashboard
 import com.aula.literatiapp.components.ScrollableBookRow
 import com.aula.literatiapp.components.SectionName
 
@@ -31,11 +32,11 @@ fun MainScreen(navController: NavController) {
 
     val fantasy = listOf(
         R.drawable.thereturnoftheking,
-        R.drawable.fellowshipofthering,
         R.drawable.hp_gobletoffiere,
         R.drawable.thehobbit,
         R.drawable.thetwotowers,
-        R.drawable.dune_bookcover
+        R.drawable.sixofcrows,
+        R.drawable.acourtofthornsandrose
     )
 
     val romance = listOf(
@@ -62,7 +63,7 @@ fun MainScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Dashboard(value = stringResource(id = R.string.literati), modifier = Modifier)
+            MainDashboard(value = stringResource(id = R.string.literati), fontSize = 28.sp)
             //SearchBarComponent(modifier = Modifier)
         },
         bottomBar = {

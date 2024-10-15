@@ -12,6 +12,10 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,7 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.AlternativeOptionAccount
 import com.aula.literatiapp.components.AlternativeOptionGoogle
-import com.aula.literatiapp.components.ButtonComponenent
+import com.aula.literatiapp.components.ButtonComponent
 import com.aula.literatiapp.components.HeadingTextComponent
 import com.aula.literatiapp.components.MyPasswordFieldComponent
 import com.aula.literatiapp.components.MyTextFieldComponent
@@ -32,6 +36,11 @@ import com.aula.literatiapp.navigation.Screen
 
 @Composable
 fun SignUpScreen(navController: NavController) {
+
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+    var confirmarSenha by remember { mutableStateOf("") }
 
     Surface(
         color = Color.White,
@@ -48,15 +57,15 @@ fun SignUpScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            MyTextFieldComponent(labelValue = stringResource(id = R.string.nome), leadingIcon = Icons.Default.Person)
+            MyTextFieldComponent(value = username, labelValue = stringResource(id = R.string.nome), leadingIcon = Icons.Default.Person)
             Spacer(modifier = Modifier.height(20.dp))
-            MyTextFieldComponent(labelValue = stringResource(id = R.string.email), leadingIcon = Icons.Default.Email)
+            MyTextFieldComponent(value = email, labelValue = stringResource(id = R.string.email), leadingIcon = Icons.Default.Email)
             Spacer(modifier = Modifier.height(20.dp))
-            MyPasswordFieldComponent(labelValue = stringResource(id = R.string.password), leadingIcon = Icons.Default.Lock)
+            MyPasswordFieldComponent(value = senha, labelValue = stringResource(id = R.string.password), leadingIcon = Icons.Default.Lock)
             Spacer(modifier = Modifier.height(20.dp))
-            MyPasswordFieldComponent(labelValue = stringResource(id = R.string.password_again), leadingIcon = Icons.Default.Lock)
+            MyPasswordFieldComponent(value = confirmarSenha, labelValue = stringResource(id = R.string.password_again), leadingIcon = Icons.Default.Lock)
 
-            ButtonComponenent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
+            ButtonComponent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
 
             Spacer(modifier = Modifier.height(20.dp))
 

@@ -13,9 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
+import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.CategorySection
-import com.aula.literatiapp.components.MenorDashboard
 import com.aula.literatiapp.components.ScrollableBookColumn
 import com.aula.literatiapp.navigation.Screen
 
@@ -31,13 +31,13 @@ fun GenresScreen(navController: NavController) {
         "Biografia",
         "Mistério",
         "Fantasia",
-        "Classicos",
+        "Clássicos",
         "Young Adult"
     )
 
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = stringResource(id = R.string.gêneros), navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -47,12 +47,13 @@ fun GenresScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .padding(paddingValues)
+                .fillMaxSize()
         ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .padding(horizontal = 16.dp)
                     .align(Alignment.TopCenter)
             ) {
 
@@ -109,7 +110,7 @@ fun RomanceScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Romance", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -133,7 +134,7 @@ fun NaoFiccaoScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Não-Ficção", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -157,7 +158,7 @@ fun PoesiaScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Poesia", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -181,7 +182,7 @@ fun FiccaoCientificaScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Ficção Científica", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -205,7 +206,7 @@ fun TerrorScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Terror", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -229,7 +230,7 @@ fun BiografiaScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Biografia", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -253,7 +254,7 @@ fun MisterioScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Mistério", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -292,7 +293,7 @@ fun FantasiaScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.fantasia), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Fantasia", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -316,7 +317,7 @@ fun ClassicosScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Clássicos", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -340,7 +341,7 @@ fun YoungAdultScreen(navController: NavController) {
     )
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.gêneros), navController = navController, modifier = Modifier)
+            BackNavigationDashboard(value = "Young Adult", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)

@@ -2,27 +2,33 @@ package com.aula.literatiapp.navigation
 
 import android.os.Message
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.internal.composableLambda
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.screens.AVirScreen
 import com.aula.literatiapp.screens.AcessibilityScreen
-import com.aula.literatiapp.screens.AltEmailSenhaScreen
+import com.aula.literatiapp.screens.AltEmailScreen
+import com.aula.literatiapp.screens.AltSenhaScreen
 import com.aula.literatiapp.screens.AltUserScreen
 import com.aula.literatiapp.screens.BiografiaScreen
 import com.aula.literatiapp.screens.BookScreen
 import com.aula.literatiapp.screens.ChatScreen
 import com.aula.literatiapp.screens.ClassicosScreen
 import com.aula.literatiapp.screens.CommunityScreen
+import com.aula.literatiapp.screens.CreateCommunityScreen
 import com.aula.literatiapp.screens.EnableNotifScreen
+import com.aula.literatiapp.screens.EspCommunityScreen
 import com.aula.literatiapp.screens.FantasiaScreen
 import com.aula.literatiapp.screens.FiccaoCientificaScreen
 import com.aula.literatiapp.screens.ForgotPasswordScreen
 import com.aula.literatiapp.screens.GenresScreen
-import com.aula.literatiapp.screens.IdiomasScreen
 import com.aula.literatiapp.screens.LoginScreen
 import com.aula.literatiapp.screens.MainScreen
+import com.aula.literatiapp.screens.MaisPopular
+import com.aula.literatiapp.screens.MenorAvaliado
 import com.aula.literatiapp.screens.MessageScreen
+import com.aula.literatiapp.screens.MetasScreen
 import com.aula.literatiapp.screens.MisterioScreen
 import com.aula.literatiapp.screens.MyBooksScreen
 import com.aula.literatiapp.screens.NaoFiccaoScreen
@@ -161,8 +167,12 @@ fun Navigation() {
             SettingsScreen(navController = navController)
         }
         
-        composable(route = Screen.AltEmailSenhaScreen.route) { 
-            AltEmailSenhaScreen(navController = navController)
+        composable(route = Screen.AltEmailScreen.route) {
+            AltEmailScreen(navController = navController)
+        }
+
+        composable(route = Screen.AltSenhaScreen.route) {
+            AltSenhaScreen(navController = navController)
         }
         
         composable(route = Screen.AltUserScreen.route) { 
@@ -176,10 +186,7 @@ fun Navigation() {
         composable(route = Screen.AcessibilityScreen.route) {
             AcessibilityScreen(navController = navController)
         }
-        
-        composable(route = Screen.IdiomasScreen.route) { 
-            IdiomasScreen(navController = navController)
-        }
+
 
         composable(route = Screen.MessageScreen.route) {
             MessageScreen(navController = navController)
@@ -215,6 +222,26 @@ fun Navigation() {
                 onMessageSend = onMessageSend,
                 navController = navController
             )
+        }
+
+        composable(route = Screen.MaisPopular.route) {
+            MaisPopular(navController = navController)
+        }
+
+        composable(route = Screen.MenorAvaliado.route) {
+            MenorAvaliado(navController = navController)
+        }
+
+        composable(route = Screen.EspCommunityScreen.route) {
+            EspCommunityScreen(navController = navController)
+        }
+
+        composable(route = Screen.CreateCommunityScreen.route) {
+            CreateCommunityScreen(navController = navController)
+        }
+        
+        composable(route = Screen.MetasScreen.route) {
+            MetasScreen(navController = navController)
         }
 
 

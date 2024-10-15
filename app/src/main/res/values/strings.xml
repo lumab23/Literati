@@ -52,4 +52,14 @@
     <string name="time">11:30 AM</string>
     <string name="messages_screen">Mensagens</string>
     <string name="metas">Metas</string>
+    <string name="nome_comunidade">Romance</string>
+    <string name="criar_comunidade">Criar comunidade</string>
+    <string name="encontre_comunidades">Encontre comunidades...</string>
+    <string name="comunidades">Comunidades</string>
+    <string name="challenges">Metas</string>
+    <string name="bookshelv">Meus Livros</string>
+    <string name="desafio">Desafio</string>
+    <string name="avaliacoes">Avaliacões</string>
+    <string name="av">324 avaliacões</string>
+    <string name="genres">Gêneros</string>
 </resources>

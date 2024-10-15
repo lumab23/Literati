@@ -11,6 +11,10 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,7 +27,7 @@ import com.aula.literatiapp.components.NormalTextComponent
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.AlternativeOptionAccount
 import com.aula.literatiapp.components.AlternativeOptionGoogle
-import com.aula.literatiapp.components.ButtonComponenent
+import com.aula.literatiapp.components.ButtonComponent
 import com.aula.literatiapp.components.ForgotPasswordLink
 import com.aula.literatiapp.components.HeadingTextComponent
 import com.aula.literatiapp.components.MyPasswordFieldComponent
@@ -32,6 +36,9 @@ import com.aula.literatiapp.navigation.Screen
 
 @Composable
 fun LoginScreen(navController: NavController) {
+
+    var email by remember { mutableStateOf("") }
+    val senha by remember { mutableStateOf("") }
 
     Surface(
         color = Color.White,
@@ -48,9 +55,9 @@ fun LoginScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            MyTextFieldComponent(labelValue = stringResource(id = R.string.email), leadingIcon = Icons.Default.Email)
+            MyTextFieldComponent(value = email, labelValue = stringResource(id = R.string.email), leadingIcon = Icons.Default.Email)
             Spacer(modifier = Modifier.height(20.dp))
-            MyPasswordFieldComponent(labelValue = stringResource(id = R.string.password), leadingIcon = Icons.Default.Lock)
+            MyPasswordFieldComponent(value = senha, labelValue = stringResource(id = R.string.password), leadingIcon = Icons.Default.Lock)
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -58,7 +65,7 @@ fun LoginScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            ButtonComponenent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
+            ButtonComponent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
 
             Spacer(modifier = Modifier.height(20.dp))
 

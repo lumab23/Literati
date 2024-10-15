@@ -2,6 +2,7 @@ package com.aula.literatiapp.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -12,9 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
+import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.CategorySection
-import com.aula.literatiapp.components.MenorDashboard
 import com.aula.literatiapp.components.ScrollableBookColumn
 import com.aula.literatiapp.navigation.Screen
 
@@ -32,8 +33,8 @@ fun ReleaseDateScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(value = stringResource(id = R.string.decada), navController = navController, modifier = Modifier)
-                 },
+            BackNavigationDashboard(value = stringResource(id = R.string.decada), navController = navController)
+        },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
@@ -42,13 +43,14 @@ fun ReleaseDateScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .padding(paddingValues)
+                .fillMaxSize()
         ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
-                    .align(Alignment.TopCenter) //
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.TopCenter)
             ) {
 
                 CategorySection(
@@ -93,11 +95,7 @@ fun AVirScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.a_vir),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "A Vir", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -140,11 +138,7 @@ fun Screen2020s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.decada),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "2020s", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -170,11 +164,7 @@ fun Screen2010s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.ano_10),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "2010s", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -199,11 +189,7 @@ fun Screen2000s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.ano_200),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "2000s", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -229,11 +215,7 @@ fun Screen1990s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.ano_90),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "1990s", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
@@ -258,11 +240,7 @@ fun Screen1980s(navController: NavController) {
 
     Scaffold(
         topBar = {
-            MenorDashboard(
-                value = stringResource(id = R.string.ano_80),
-                navController = navController,
-                modifier = Modifier
-            )
+            BackNavigationDashboard(value = "1980s", navController = navController)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)

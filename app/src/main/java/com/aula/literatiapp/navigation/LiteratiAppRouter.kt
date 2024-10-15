@@ -13,6 +13,7 @@ sealed class Screen(val route: String) {
     data object ProfileScreen: Screen("profile_screen")
     data object ReleaseDateScreen: Screen("release_date_screen")
     data object GenresScreen: Screen("genres_screen")
+    data object MetasScreen: Screen("metas_screen")
 
     // generos
     data object RomanceScreen : Screen("romance_screen")
@@ -36,15 +37,21 @@ sealed class Screen(val route: String) {
 
     // settings
     data object SettingsScreen : Screen("settings_screen")
-    data object AltEmailSenhaScreen : Screen("alt_email_e_senha")
+    data object AltEmailScreen : Screen("alt_email_e_senha")
+    data object AltSenhaScreen : Screen("alt_senha")
     data object AltUserScreen : Screen("alt_user")
     data object EnableNotifScreen : Screen("enable_notif")
-    data object IdiomasScreen : Screen("idiomas_screen")
     data object AcessibilityScreen : Screen("acessibility_screen")
 
 
     data object MessageScreen : Screen("messages_screen")
     data object ChatScreen : Screen("chat_screen")
+    data object MaisPopular : Screen("mais_popular")
+    data object MenorAvaliado : Screen("menor_avaliado")
+
+    // comunidade
+    data object EspCommunityScreen: Screen("community_especifica")
+    data object CreateCommunityScreen: Screen("create_community")
 
 }
 

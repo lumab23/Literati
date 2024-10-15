@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Colors -->
-    <color name="primary">#FF4C662B</color>
+    <color name="primary">#59A679</color>
     <color name="secondary">#FF586249</color>
     <color name="tertiary">#FF4C662B</color>
 
     <!-- Primary Container Colors -->
-    <color name="primary_container">#FFcdeda3</color>
+    <color name="primary_container">#59A679</color>
     <color name="secondary_container">#FFdce7c8</color>
     <color name="tertiary_container">#FFcdeda3</color>
 
