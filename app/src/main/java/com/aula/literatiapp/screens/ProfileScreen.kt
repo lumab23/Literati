@@ -17,7 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,9 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.CategorySection
+import com.aula.literatiapp.components.ProfileImageComponent
 import com.aula.literatiapp.components.ScrollableBookRow
 import com.aula.literatiapp.components.SectionNameMenor
 import com.aula.literatiapp.navigation.Screen
@@ -131,13 +136,10 @@ fun ProfileScreen(navController: NavController) {
                     onCategoryClick = { selectedSection ->
                         when (selectedSection) {
                             "Reviews" -> {
-
-                            }
-                            "Lista de leitura" -> {
-
+                                navController.navigate(Screen.ReviewsScreen.route)
                             }
                             "Tags" -> {
-
+                                navController.navigate(Screen.TagsScreen.route)
                             }
                         }
 
@@ -159,16 +161,18 @@ fun TopBar(navController: NavController) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        // Ícone de configurações
         IconButton(onClick = { navController.navigate(Screen.SettingsScreen.route) }) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "settings")
         }
 
+        Spacer(modifier = Modifier.weight(1f)) // Adiciona um espaçador
+
+        // Box central com imagem e texto
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .offset(y = 50.dp)
-                .height(180.dp),
-            contentAlignment = Alignment.TopCenter
+                .size(120.dp), // Tamanho fixo para a Box central
+            contentAlignment = Alignment.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -176,34 +180,42 @@ fun TopBar(navController: NavController) {
             ) {
 
                 Image(
-                    painter = painterResource(id = R.drawable.profile_picture),
+                    painter = rememberAsyncImagePainter(model = "https://i.pinimg.com/enabled_hi/564x/35/d8/3d/35d83d2e796d5ae4558396ba4adf2cc8.jpg"),
                     contentDescription = "profile picture",
                     modifier = Modifier
                         .size(80.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, Color.Gray, CircleShape)
-                        .align(Alignment.CenterHorizontally)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.FillBounds
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Amanda",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = "Amanda",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
 
-        IconButton(onClick = { navController.navigate(Screen.MessageScreen.route) }) {
-            Icon(imageVector = Icons.Default.ChatBubble, contentDescription = "chat")
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Spacer(modifier = Modifier.weight(0.5f)) // Adiciona outro espaçador
+
+        // Ícones de notificação e chat
+        Row {
+            IconButton(onClick = { navController.navigate(Screen.NotificationScreen.route) }) {
+                Icon(imageVector = Icons.Default.NotificationsNone, contentDescription = "notification")
+            }
+
+            IconButton(onClick = { navController.navigate(Screen.MessageScreen.route) }) {
+                Icon(imageVector = Icons.Default.ChatBubbleOutline, contentDescription = "chat")
+            }
         }
     }
 }
+
+
 
 
 

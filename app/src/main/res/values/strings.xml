@@ -59,7 +59,18 @@
     <string name="challenges">Metas</string>
     <string name="bookshelv">Meus Livros</string>
     <string name="desafio">Desafio</string>
-    <string name="avaliacoes">Avaliacões</string>
-    <string name="av">324 avaliacões</string>
+    <string name="avaliacoes">Avaliações</string>
+    <string name="av">324 avaliações</string>
     <string name="genres">Gêneros</string>
+    <string name="reviews">Reviews</string>
+    <string name="comunidaderomance">Comunidade de Romance</string>
+    <string name="notif">Notificações</string>
+    <string name="dialogTitle">Defina a sua meta</string>
+    <string name="digitemeta">Digite sua meta</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="postar">Postar</string>
+    <string name="janeAustencom">Amantes de Jane Austen</string>
+    <string name="meuslivros">Meus Livros</string>
+    <string name="tags">Tags</string>
 </resources>

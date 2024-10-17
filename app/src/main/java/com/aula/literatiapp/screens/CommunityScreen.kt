@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,13 +48,25 @@ import com.aula.literatiapp.components.MyTextFieldComponent
 import com.aula.literatiapp.components.ScrollableCommunityColumn
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.CommunityImageSelection
+import com.aula.literatiapp.components.ListOfCommunitiesComponent
 import com.aula.literatiapp.components.MainDashboard
+import com.aula.literatiapp.components.ReviewComponent
+import com.aula.literatiapp.components.ScrollablePostList
+import com.aula.literatiapp.model.Post
 import com.aula.literatiapp.ui.theme.gradientBrush
 import com.aula.literatiapp.ui.theme.lightGreen
 
@@ -138,10 +152,17 @@ fun CommunityScreen(navController: NavController) {
 
 @Composable
 fun EspCommunityScreen(navController: NavController) {
+    val isMember = true
+
+    val posts = listOf(
+        Post("1", "@Alice", "https://example.com/avatar1.png", "Recomendação de leitura..."),
+        Post("2", "@Bob", "https://example.com/avatar2.png", "Alguém recomenda um livro de fantasia?")
+    )
+
     Scaffold(
         topBar = {
             BackNavigationDashboard(
-                value = stringResource(R.string.nome_comunidade),
+                value = stringResource(R.string.janeAustencom),
                 navController = navController
             )
         },
@@ -150,14 +171,116 @@ fun EspCommunityScreen(navController: NavController) {
         }
     ) { paddingValues ->
 
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize() // Certifica-se de que a Box ocupe todo o espaço disponível
+        ) {
+            // Conteúdo principal da tela (posts)
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize()
+            ) {
+                ScrollablePostList(posts, isMember, navController)
+            }
+
+            // Botão flutuante no canto inferior direito
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screen.CreatePostScreen.route)
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .width(140.dp)
+                    .height(60.dp),
+                containerColor = Color.Transparent
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(brush = gradientBrush)
+                ) {
+                    Text(
+                        text = "Criar Post",
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CreatePostScreen(navController: NavController) {
+    var postContent: String = ""
+
+    Scaffold(
+        topBar = {
+            BackNavigationDashboard(
+                value = stringResource(R.string.postar),
+                navController = navController
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding()
-        ) {  }
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                AsyncImage(
+                    model = painterResource(id = R.drawable.profile_picture),
+                    contentDescription = "Foto de Perfil",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "O que está acontecendo?",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            }
 
+            TextField(
+                value = postContent,
+                onValueChange = { postContent = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                placeholder = { Text("Escreva seu post...") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(onClick = { /* Abrir galeria para adicionar imagem */ }) {
+                    Icon(imageVector = Icons.Default.Image, contentDescription = "Imagem")
+                }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
     }
 }
+
 
 @Composable
 fun CreateCommunityScreen(navController: NavController) {
@@ -228,6 +351,54 @@ fun CreateCommunityScreen(navController: NavController) {
         }
     }
 }
+
+@Composable
+fun CommunityList(navController: NavController) {
+
+    val communities = remember {
+        listOf(
+            Community(
+                nome = "Amantes de Jane Austen",
+                imagemUri = "https://i.pinimg.com/564x/47/b5/47/47b547ad30201ad69099c2cb6faff682.jpg",
+                descricao = "Comunidade para todos que amam as obras de Jane Austen!",
+                categoria = "Romance"
+            ),
+            Community(
+                nome = "Percy Jackson",
+                imagemUri = "https://i.pinimg.com/564x/51/62/fc/5162fcdd104398741191ad9dfd123c12.jpg",
+                descricao = "Para fãs de Percy Jackson!",
+                categoria = "Aventura"
+            )
+        )
+    }
+    Scaffold(
+        topBar = {
+            BackNavigationDashboard(value = stringResource(id = R.string.comunidaderomance), navController = navController)
+        },
+        bottomBar = {
+            BottomNavigation(modifier = Modifier, navController = navController)
+        }
+    ) { paddingValues ->
+
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(8.dp)
+        ) {
+            items(communities.size) { index ->
+                ListOfCommunitiesComponent(community = communities[index], navController = navController)
+
+                // Exibe o divisor abaixo de cada review, exceto após o último item
+                if (index < communities.size - 1) {
+                    HorizontalDivider()
+                }
+            }
+        }
+
+    }
+}
+
+
 
 @Preview(
     showSystemUi = true,

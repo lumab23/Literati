@@ -37,12 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.model.Message
@@ -123,12 +124,13 @@ fun ChatHeader(navController: NavController) {
                     .padding(vertical = 16.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.profile_picture),
+                    painter = rememberAsyncImagePainter(model = "https://i.pinimg.com/enabled_hi/564x/35/d8/3d/35d83d2e796d5ae4558396ba4adf2cc8.jpg"),
                     contentDescription = "profile_picture",
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
                         .shadow(elevation = 8.dp),
+                    contentScale = ContentScale.FillBounds
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(text = stringResource(id = R.string.username))

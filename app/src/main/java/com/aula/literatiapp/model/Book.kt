@@ -5,7 +5,11 @@ data class Book(
     val authors: List<String>?,
     val publisher: String?,
     val description: String?,
-    val imageLinks: ImageLinks?,
+    val imageUrl: String,
     val tags: String?,
-    val genres: List<String>?
+    val genres: List<String>?,
+    val id: String,
+    val volumeInfo: String?,
+    val pages: String?,
+    val review: String
 )

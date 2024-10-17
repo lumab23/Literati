@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.R
 import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.BottomNavigation
@@ -48,12 +50,13 @@ fun MessageComponent(navController: NavController) {
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.profile_picture),
+                painter = rememberAsyncImagePainter(model = "https://i.pinimg.com/enabled_hi/564x/35/d8/3d/35d83d2e796d5ae4558396ba4adf2cc8.jpg"),
                 contentDescription = "profile_picture",
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .shadow(elevation = 8.dp)
+                    .shadow(elevation = 8.dp),
+                contentScale = ContentScale.FillBounds
             )
 
             Spacer(modifier = Modifier.width(8.dp))

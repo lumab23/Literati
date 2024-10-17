@@ -15,8 +15,10 @@ import com.aula.literatiapp.screens.BiografiaScreen
 import com.aula.literatiapp.screens.BookScreen
 import com.aula.literatiapp.screens.ChatScreen
 import com.aula.literatiapp.screens.ClassicosScreen
+import com.aula.literatiapp.screens.CommunityList
 import com.aula.literatiapp.screens.CommunityScreen
 import com.aula.literatiapp.screens.CreateCommunityScreen
+import com.aula.literatiapp.screens.CreatePostScreen
 import com.aula.literatiapp.screens.EnableNotifScreen
 import com.aula.literatiapp.screens.EspCommunityScreen
 import com.aula.literatiapp.screens.FantasiaScreen
@@ -30,11 +32,14 @@ import com.aula.literatiapp.screens.MenorAvaliado
 import com.aula.literatiapp.screens.MessageScreen
 import com.aula.literatiapp.screens.MetasScreen
 import com.aula.literatiapp.screens.MisterioScreen
+import com.aula.literatiapp.screens.MyBooksList
 import com.aula.literatiapp.screens.MyBooksScreen
 import com.aula.literatiapp.screens.NaoFiccaoScreen
+import com.aula.literatiapp.screens.NotificationScreen
 import com.aula.literatiapp.screens.PoesiaScreen
 import com.aula.literatiapp.screens.ProfileScreen
 import com.aula.literatiapp.screens.ReleaseDateScreen
+import com.aula.literatiapp.screens.ReviewsScreen
 import com.aula.literatiapp.screens.RomanceScreen
 import com.aula.literatiapp.screens.Screen1980s
 import com.aula.literatiapp.screens.Screen1990s
@@ -44,6 +49,7 @@ import com.aula.literatiapp.screens.Screen2020s
 import com.aula.literatiapp.screens.SearchScreen
 import com.aula.literatiapp.screens.SettingsScreen
 import com.aula.literatiapp.screens.SignUpScreen
+import com.aula.literatiapp.screens.TagsScreen
 import com.aula.literatiapp.screens.TerrorScreen
 import com.aula.literatiapp.screens.YoungAdultScreen
 
@@ -242,6 +248,30 @@ fun Navigation() {
         
         composable(route = Screen.MetasScreen.route) {
             MetasScreen(navController = navController)
+        }
+
+        composable(route = Screen.ReviewsScreen.route) {
+            ReviewsScreen(navController = navController)
+        }
+        
+        composable(route = Screen.CommunityList.route) { 
+            CommunityList(navController = navController)
+        }
+        
+        composable(route = Screen.NotificationScreen.route) { 
+            NotificationScreen(navController = navController)
+        }
+        
+        composable(route = Screen.MyBooksList.route) { 
+            MyBooksList(navController = navController)
+        }
+        
+        composable(route = Screen.CreatePostScreen.route) { 
+            CreatePostScreen(navController = navController)
+        }
+
+        composable(route = Screen.TagsScreen.route) {
+            TagsScreen(navController = navController)
         }
 
 

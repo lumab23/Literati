@@ -63,6 +63,7 @@ import com.aula.literatiapp.components.BackNavigationDashboard
 import com.aula.literatiapp.components.BottomNavigation
 import com.aula.literatiapp.components.ButtonComponent
 import com.aula.literatiapp.components.CategorySection
+import com.aula.literatiapp.components.CategorySectionAccessibility
 import com.aula.literatiapp.components.EnableNotificationBox
 import com.aula.literatiapp.components.MyPasswordFieldComponent
 import com.aula.literatiapp.components.MyTextFieldComponent
@@ -251,7 +252,7 @@ fun AltEmailScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController)
+            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController, modifier = Modifier)
 
         }
     }
@@ -287,7 +288,7 @@ fun AltSenhaScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController)
+            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController, modifier = Modifier)
 
         }
     }
@@ -316,7 +317,7 @@ fun AltUserScreen(navController: NavController) {
             MyTextFieldComponent(value = newUsername,labelValue = "Novo nome de usuário", leadingIcon = Icons.Default.Person)
             Spacer(modifier = Modifier.height(16.dp))
 
-            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController)
+            ButtonComponent(value = "Confirmar", route = Screen.SettingsScreen.route, navController = navController, modifier = Modifier)
 
         }
     }
@@ -357,14 +358,28 @@ fun EnableNotifScreen(navController: NavController) {
 
 @Composable
 fun AcessibilityScreen(navController: NavController) {
-    var fontSize by remember { mutableStateOf(16) } // Controle de tamanho da fonte
-    var isHighContrast by remember { mutableStateOf(false) } // Controle de contraste
-    var brightness by remember { mutableStateOf(1f) } // Controle de brilho
 
-    // Para o Dropdown
     var expanded by remember { mutableStateOf(false) }
     val fontSizes = listOf(12, 14, 16, 18, 20, 22, 24, 26, 28, 30)
+    val op = listOf(
+        "Contraste",
+        "Tamanho da fonte",
+        "Tema"
+    )
 
+    Scaffold(
+        topBar = {
+            BackNavigationDashboard(value = "Acessibilidade", navController = navController)
+        }
+    ){ paddingValues ->
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth()
+            .padding(paddingValues)
+        ){
+            CategorySectionAccessibility(categories = op)
+        }
+    }
 }
 
 @Preview(

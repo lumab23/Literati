@@ -65,7 +65,7 @@ fun SignUpScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
             MyPasswordFieldComponent(value = confirmarSenha, labelValue = stringResource(id = R.string.password_again), leadingIcon = Icons.Default.Lock)
 
-            ButtonComponent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController)
+            ButtonComponent(value = stringResource(id = R.string.entrar), route = Screen.MainScreen.route, navController = navController, modifier = Modifier)
 
             Spacer(modifier = Modifier.height(20.dp))
 

@@ -1,8 +1,15 @@
 package com.aula.literatiapp.components
 
-import android.media.Rating
-import android.net.Uri
+import android.app.AlertDialog
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Down
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Up
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,40 +41,48 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.CurrencyExchange
 import androidx.compose.material.icons.filled.DoNotDisturbAlt
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PermIdentity
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -75,9 +90,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -99,27 +114,29 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.aula.literatiapp.R
 import com.aula.literatiapp.model.Book
 import com.aula.literatiapp.model.Community
 import com.aula.literatiapp.model.Notification
+import com.aula.literatiapp.model.Post
 import com.aula.literatiapp.navigation.Screen
 import com.aula.literatiapp.ui.theme.darkGreen
 import com.aula.literatiapp.ui.theme.gradientBrush
 import com.aula.literatiapp.ui.theme.lightGreen
 import com.aula.literatiapp.ui.theme.secondaryContainer
-import com.aula.literatiapp.ui.theme.surfaceDim
 import com.aula.literatiapp.ui.theme.tertiaryContainer
 import com.aula.literatiapp.ui.theme.textColor
-import kotlinx.coroutines.selects.select
 
 @Composable
 fun NormalTextComponent(
@@ -369,7 +386,7 @@ fun MyPasswordFieldComponent(
 
 
 @Composable
-fun ButtonComponent(value: String, route: String, navController: NavController) {
+fun ButtonComponent(value: String, route: String, navController: NavController, modifier: Modifier) {
     val gradientBrush = Brush.horizontalGradient(
         listOf(
             Color(0xFF5BDF92),
@@ -826,8 +843,13 @@ fun BackNavigationDashboard(value: String, navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBookDashboard(navController: NavController) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false
+    )
     Column(
         Modifier
             .height(80.dp)
@@ -860,7 +882,7 @@ fun MyBookDashboard(navController: NavController) {
             }
 
             IconButton(
-                onClick = {  },
+                onClick = { showBottomSheet = true },
                 modifier = Modifier
                     .size(50.dp)
                     .constrainAs(moreIcon) {
@@ -876,6 +898,25 @@ fun MyBookDashboard(navController: NavController) {
                 )
             }
 
+        }
+
+        val categories = listOf("Review", "Adicione uma tag", "Compartilhar")
+        
+        // bottom sheet
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                modifier = Modifier.fillMaxHeight(),
+                sheetState = sheetState,
+                onDismissRequest = { showBottomSheet = false }
+            ) {
+
+                CategorySection(
+                    title = "",
+                    categories = categories,
+                    onCategoryClick = {}
+                )
+                
+            }
         }
     }
 }
@@ -985,56 +1026,6 @@ fun SectionNameMenor(value: String) {
     }
 }
 
-@Composable
-fun EnableNotificationBox(
-    value: String
-) {
-
-    var checked by remember { mutableStateOf(true) }
-
-    Column {
-
-        HorizontalDivider()
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 2.dp)
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = value,
-                    fontSize = 15.sp
-                )
-
-                Switch(
-                    modifier = Modifier.scale(0.8f),
-                    checked = checked,
-                    onCheckedChange = {
-                        checked = it
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = darkGreen,
-                        checkedTrackColor = tertiaryContainer,
-                        uncheckedThumbColor = lightGreen,
-                        uncheckedTrackColor = secondaryContainer
-                    )
-                )
-            }
-        }
-
-        HorizontalDivider()
-
-    }
-}
 
 @Composable
 fun CommunityCard(comunidade: Community, onClick: () -> Unit) {
@@ -1107,7 +1098,7 @@ fun ScrollableCommunityColumn(
                 comunidade = comunidade,
                 onClick = {
                     // Navega para a tela da comunidade específica
-                    navController.navigate(Screen.EspCommunityScreen.route)
+                    navController.navigate(Screen.CommunityList.route)
                 }
             )
         }
@@ -1135,271 +1126,74 @@ fun CommunityImageSelection() {
     }
 }
 
-@Composable
-fun UserListItem(notification: Notification){
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 8.dp)
-            .fillMaxWidth()
-            .animateContentSize()
-            .fillMaxWidth()
-            .padding(3.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                expanded = !expanded
-            },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
-        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-        colors = CardDefaults.cardColors(
-            //containerColor = Color.Gray.copy(alpha = 0.2f), //fundo do card
-            //contentColor = Color.White
-        )
-    ){
-        Row(Modifier.padding(4.dp)) {
-            UserImage(notification = notification)
-            Column (
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically)
-            ){
-                Text(text = notification.name)
-                if(expanded){
-                    Row(modifier = Modifier.padding(horizontal = 2.dp, vertical = 6.dp))  {
-                        Text(
-                            text = "Curtiu sua resenha"
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "liked",
-                            tint = Color.Red,
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Text(text = "Ver detalhes",
-                            style = TextStyle(
-                                textDecoration = TextDecoration.Underline
-                            )
-                        )
-                    }
-                }else{
-                    Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(vertical = 6.dp)) {
-                        Image(
-                            painter = painterResource(R.drawable._984),
-                            contentDescription = "Livro 1984",
-                            Modifier.size(82.dp)
-                        )
-                        Column (modifier = Modifier.padding(vertical = 5.dp)){
-                            Text(
-                                text = "\"Esse livro abriu minha mente! Amei muito\""
-                            )
-                            Row {
-                                Text(
-                                    text = "Curtiu sua resenha",
-                                    modifier = Modifier.padding(horizontal = 2.dp),
-                                    style = TextStyle(
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                )
-                                Icon(
-                                    imageVector = Icons.Filled.Favorite,
-                                    contentDescription = "liked",
-                                    tint = Color.Red,
-                                    modifier = Modifier.size(12.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-@Composable
-fun UserImage(notification: Notification){
-    Image(
-        painter = painterResource(R.drawable.profile_picture),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .padding(4.dp)
-            .size(50.dp)
-            .clip(RoundedCornerShape(corner = CornerSize(50.dp)))
-    )
-}
 
 @Composable
 fun ChallengeComponent(navController: NavController) {
-
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate(Screen.MetasScreen.route) }
-            .border(
-                width = 1.dp,
-                color = Color.Gray,
-                shape = RectangleShape
-            )
-            .padding(8.dp)
     ) {
-        Row(
+        HorizontalDivider()
+
+        // Conteúdo do ChallengeComponent
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .clickable { navController.navigate(Screen.MetasScreen.route) }
+                .padding(8.dp)
         ) {
-
-            Text(
-                text = stringResource(id = R.string.metas),
-                fontSize = 16.sp
-            )
-
-            IconButton(onClick = {  }) {
-                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "right arrow")
-            }
-
-        }
-    }
-
-}
-
-@Composable
-fun NoChallenges(navController: NavController){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(22.dp),
-        contentAlignment = Alignment.Center
-    ){
-        Column(modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(imageVector = Icons.Default.DoNotDisturbAlt,
-                contentDescription = "without challenges",
-                modifier = Modifier
-                    .size(80.dp))
-            Text(
-                text = "Sem metas por agora",
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(10.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun IconsBookshelv(){
-    var clicked by remember { mutableStateOf(true) }
-
-    Box(
-        modifier = Modifier
-            .background(color = colorResource(R.color.secondary_container))
-            .height(50.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ){
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Bookmarks,
-                contentDescription = "saved books",
-                //implementar o clickable, quando clicar na bookshelv já acessa os livros salvos, ai o icon fica marcado
-                //sinalizando que está na seção salvo
-            )
-            Icon(
-                imageVector = Icons.Filled.AttachMoney,
-                contentDescription = "wanna buy books"
-            )
-            Icon(
-                imageVector = Icons.Filled.Favorite,
-                contentDescription = "favorite books"
-            )
-            Icon(
-                imageVector = Icons.Filled.CurrencyExchange,
-                contentDescription = "changed books"
-            )
-        }
-    }
-}
-
-@Composable
-fun ChallengeBox(modifier: Modifier){
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .height(150.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.surface)
-        ),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.desafio),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(14.dp)
-            )
-
             Row(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_picture),
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(90.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                Text(
+                    text = stringResource(id = R.string.metas),
+                    fontWeight = FontWeight.Normal
                 )
 
-                Spacer(modifier = Modifier.width(15.dp))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                        //.padding(13.dp),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("0/0", modifier = Modifier
-                        .padding(8.dp))
-                    CustomProgressBar(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .height(20.dp),
-                        width = 200.dp,
-                        backgroundColor = Color.LightGray,
-                        foregroundColor = Brush.horizontalGradient(
-                            listOf(
-                                Color(0xF0288D21),
-                                Color(0xF055CA4D)
-                            )
-                        ),
-                        percent = 0,
-                        isShownText = true)
+                IconButton(onClick = {navController.navigate(Screen.MetasScreen.route)}) {
+                    Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "right arrow")
                 }
-
             }
+        }
+
+        HorizontalDivider()
+    }
+}
+
+
+@Composable
+fun EstadoMetas(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(22.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Nenhum livro lido ainda!",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(10.dp)
+            )
+            Text(
+                text = "Adicione uma meta para começar a acompanhar sua leitura.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(10.dp)
+            )
+
         }
     }
 }
+
 
 @Composable
 fun CustomProgressBar(
@@ -1539,20 +1333,149 @@ fun AvaliacaoComponent(navController: NavController) {
     }
 }
 
-enum class BookTabs(
-    val selectedTab: String,
-    val unselectedTab: String,
-    val text: String
-) {
+@Composable
+fun BookScreenWithTabs(book: Book) {
+    var selectedTab by remember { mutableStateOf("Detalhes") }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Barra de navegação com tabs
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            TabButton(
+                title = "Detalhes",
+                selected = selectedTab == "Detalhes",
+                onClick = { selectedTab = "Detalhes" }
+            )
+            TabButton(
+                title = "Gêneros",
+                selected = selectedTab == "Gêneros",
+                onClick = { selectedTab = "Gêneros" }
+            )
+        }
+
+
+        AnimatedContent(
+            targetState = selectedTab,
+            transitionSpec = {
+                slideIntoContainer(
+                    animationSpec = tween(300, easing = EaseIn),
+                    towards = Up
+                ).togetherWith(
+                    slideOutOfContainer(
+                        animationSpec = tween(300, easing = EaseOut),
+                        towards = Down
+                    )
+                )
+            }
+        ) { tab ->
+            when (tab) {
+                "Detalhes" -> BookDetailsContent(book = book)
+                "Gêneros" -> BookGenresContent(book = book)
+            }
+        }
+    }
 }
 
 @Composable
-fun BookDetailsComponent(
+fun TabButton(title: String, selected: Boolean, onClick: () -> Unit) {
+    val backgroundColor = Color.White
+    val borderColor = if (selected) Color.Black else Color.LightGray
 
-) {
-
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .border(
+                width = 2.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .background(backgroundColor)
+            .clickable { onClick() }
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+    ) {
+        Text(
+            text = title,
+            color = Color.Black,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            textAlign = TextAlign.Center
+        )
+    }
 }
+
+@Composable
+fun BookDetailsContent(book: Book) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Publicadores: " + book.publisher,
+            fontSize = 12.sp,
+            color = textColor,
+            modifier = Modifier.padding(4.dp)
+        )
+        HorizontalDivider()
+        Text(
+            text = "Volume: " + book.volumeInfo,
+            fontSize = 12.sp,
+            color = textColor,
+            modifier = Modifier.padding(4.dp)
+        )
+        HorizontalDivider()
+        Text(
+            text = "Quantidade de páginas: " + book.pages,
+            fontSize = 12.sp,
+            color = textColor,
+            modifier = Modifier.padding(4.dp)
+        )
+    }
+}
+
+@Composable
+fun BookGenresContent(book: Book) {
+    // Lista de botões representando gêneros
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaçamento vertical entre linhas
+    ) {
+        val genres = book.genres
+
+        if (genres != null) {
+            genres.chunked(3).forEach { rowGenres ->  // Agrupa 3 gêneros por linha
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp) // Espaçamento horizontal entre botões
+                ) {
+                    rowGenres.forEach { genre ->
+                        Button(
+                            onClick = { /* Ação ao clicar */ },
+                            colors = ButtonDefaults.buttonColors(
+                                Color.Transparent
+                            ),
+                            border = BorderStroke(0.5.dp, lightGreen),
+                        ) {
+                            Text(
+                                text = genre,
+                                color = textColor,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun StarRatingBar(
@@ -1563,7 +1486,6 @@ fun StarRatingBar(
 ) {
     val density = LocalDensity.current.density
     val starSpacing = (0.5f * density).dp
-
     Row(
         modifier = Modifier.selectableGroup(),
         verticalAlignment = Alignment.CenterVertically
@@ -1597,65 +1519,704 @@ fun StarRatingBar(
     }
 }
 
-
+// adicionar component para a review
+// TODO: Deixar esse Box clicável
 @Composable
-fun DropDownDemo() {
-    val isDropDownExpanded = remember {
-        mutableStateOf(true)
-    }
-    val itemPosition = remember {
-        mutableStateOf(0)
-    }
-    val op = listOf(
-        "Quero ler",
-        "Abandonei",
-        "Já li",
-        "Troco"
-    )
-    Column(
+fun ReviewComponent(book: Book, navController: NavController) {
+
+    var rating by remember { mutableStateOf(4f) }
+
+    Box(
         modifier = Modifier
-            .height(200.dp)
-            .width(200.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        //verticalArrangement = Arrangement.Center
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(colorResource(R.color.primary_container))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    isDropDownExpanded.value = true
-                }
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
             ) {
-                Text(text = op[itemPosition.value],
+                BookCard(
+                    painter = painterResource(id = R.drawable.thehandmaidstale),
+                    onBookClick = { navController.navigate(Screen.BookScreen.route) },
+                    navController = navController,
                     modifier = Modifier
-                        .padding(10.dp))
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "drop down"
                 )
             }
-            DropdownMenu(
-                expanded = isDropDownExpanded.value,
-                onDismissRequest = {
-                    isDropDownExpanded.value = false
-                }) {
-                op.forEachIndexed { index, op ->
-                    DropdownMenuItem(text = {
-                        Text(text = op)
-                    },
-                        onClick = {
-                            isDropDownExpanded.value = false
-                            itemPosition.value = index
-                        })
+
+            Column(
+                modifier = Modifier
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = book.title,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Start,
+                        color = textColor
+                    )
+
+                    StarRatingBar(
+                        maxStars = 5,
+                        rating = rating,
+                        onRatingChanged = {newRating ->
+                            rating = newRating
+                        }
+                    )
+
+
+                }
+
+                Text(
+                    text = book.authors?.joinToString(", ") ?: "Unknown Authors",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Start,
+                    color = textColor
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = book.review,
+                    fontWeight = FontWeight.Normal,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Start,
+                    color = textColor
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun EspCommunityCard(
+    painter: Painter,
+    onBookClick: () -> Unit,
+    navController: NavController,
+    modifier: Modifier
+) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        modifier = Modifier
+            .size(width = 75.dp, height = 110.dp),
+        onClick = { onBookClick() }
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = "null",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+// TODO: Depois adicionar expansão a descrição da comunidade (ler mais)
+@Composable
+fun ListOfCommunitiesComponent(community: Community, navController: NavController) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .clickable { navController.navigate(Screen.EspCommunityScreen.route) }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+            ) {
+                EspCommunityCard(
+                    painter = rememberAsyncImagePainter(model = community.imagemUri),
+                    onBookClick = { navController.navigate(Screen.EspCommunityScreen.route) },
+                    navController = navController,
+                    modifier = Modifier
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+
+                Text(
+                    text = community.nome,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    color = textColor
+                )
+
+                Text(
+                    text = community.descricao,
+                    fontWeight = FontWeight.Normal,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Start,
+                    color = textColor
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfileImageComponent(
+    painter: Painter,
+    onProfileClick: () -> Unit,
+    navController: NavController,
+    modifier: Modifier
+) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
+        modifier = Modifier
+            .size(35.dp)
+            .clip(CircleShape),
+        onClick = { onProfileClick() }
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = "null",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+        )
+    }
+}
+
+@Composable
+fun NotificationComponent(notifInfo: Notification, navController: NavController) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top
+        ) {
+            ProfileImageComponent(
+                painter = rememberAsyncImagePainter(model = notifInfo.userImageUrl),
+                onProfileClick = { },
+                navController = navController,
+                modifier = Modifier
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            Text(
+                text = notifInfo.name + notifInfo.action + notifInfo.nomeLivroOuComunidade,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun MyBooksBoxComponent(book: Book, navController: NavController) {
+
+    Card(
+        elevation = CardDefaults.elevatedCardElevation(6.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.surface)
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = "Go to all the books",
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Screen.MyBooksList.route)
+                        }
+                )
+
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                repeat(3) {
+                    BookCard(
+                        painter = rememberAsyncImagePainter(model = book.imageUrl),
+                        onBookClick = { navController.navigate(Screen.BookScreen.route) },
+                        navController = navController,
+                        modifier = Modifier
+                    )
+                }
+
+            }
+        }
+    }
+
+}
+
+
+@Composable
+fun ChallengeBoxComponent(modifier: Modifier, meta: String) {
+    Card(
+        elevation = CardDefaults.elevatedCardElevation(6.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.surface)
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            // Primeiro Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.desafio),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+
+            // Espaçamento entre o título e o conteúdo
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Segundo Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp), // Espaçamento entre a imagem e a coluna
+                verticalAlignment = Alignment.CenterVertically // Alinha os elementos ao centro verticalmente
+            ) {
+
+                // Imagem de perfil
+                ProfileImageComponent(
+                    painter = rememberAsyncImagePainter(model = "https://i.pinimg.com/enabled_hi/564x/35/d8/3d/35d83d2e796d5ae4558396ba4adf2cc8.jpg"),
+                    onProfileClick = { },
+                    navController = rememberNavController(),
+                    modifier = Modifier.alignBy { it.measuredHeight } // Alinha pela altura da segunda coluna
+                )
+
+                // Texto e Barra de Progresso
+                Column(
+                    modifier = Modifier.alignBy { it.measuredHeight } // Alinha pela altura da imagem
+                ) {
+                    Text(
+                        text = meta,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+
+                    CustomProgressBar(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .height(20.dp),
+                        width = 200.dp,
+                        backgroundColor = Color.LightGray,
+                        foregroundColor = Brush.horizontalGradient(
+                            listOf(
+                                Color(0xF0288D21),
+                                Color(0xF055CA4D)
+                            )
+                        ),
+                        percent = 0,
+                        isShownText = true
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun AlertDialogComponent(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogInput: String,
+    onValueChange: (String) -> Unit
+) {
+
+    var inputValue by remember {
+        mutableStateOf(dialogInput)
+    }
+
+    AlertDialog(
+        icon = {
+            Icon(imageVector = Icons.Default.Book, contentDescription = "book icon")
+        },
+        title = {
+            Text(
+                text = stringResource(id = R.string.dialogTitle),
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+        },
+        text = {
+            Column {
+                Spacer(modifier = Modifier.height(5.dp))
+                TextField(
+                    value = inputValue,
+                    onValueChange = { newValue ->
+                        if (newValue.all { it.isDigit() }) {
+                            inputValue = newValue
+                            onValueChange(newValue)
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.digitemeta)
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedTrailingIconColor = lightGreen
+                    )
+                )
+            }
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.confirm),
+                    color = lightGreen
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                onDismissRequest()
+            }) {
+                Text(
+                    text = stringResource(id = R.string.cancel),
+                    color = lightGreen
+                )
+            }
+        },
+    )
+
+}
+
+@Composable
+fun EnableNotificationBox(
+    value: String
+) {
+
+    Column {
+
+        HorizontalDivider()
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp)
+        ) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = value,
+                    fontSize = 15.sp
+                )
+
+                Switch()
+            }
+        }
+
+        HorizontalDivider()
 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDown() {
+    val context = LocalContext.current
+    val tamanho = arrayOf(
+        "10 px",
+        "14 px",
+        "16 px",
+        "20 px"
+    )
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    var selectedText by remember {
+        mutableStateOf(tamanho[0])
+    }
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        ExposedDropdownMenuBox(
+            expanded = true,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ){
+            TextField(
+                modifier = Modifier
+                    .menuAnchor()
+                    .width(110.dp)
+                    .height(50.dp),
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)}
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {expanded = false},
+                modifier = Modifier.width(150.dp)
+            ) {
+                tamanho.forEachIndexed{ index, text ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = text)
+                        },
+                        onClick = {
+                            selectedText = tamanho[index]
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
+        //  Text(text = "Selecionado: $selectedText")
+    }
+}
+
+@Composable
+fun Switch() {
+    var checked by remember { mutableStateOf(true) }
+
+    Switch(
+        modifier = Modifier.scale(0.8f),
+        checked = checked,
+        onCheckedChange = {
+            checked = it
+        },
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = darkGreen,
+            checkedTrackColor = tertiaryContainer,
+            uncheckedThumbColor = lightGreen,
+            uncheckedTrackColor = secondaryContainer
+        )
+    )
+
+}
+
+@Composable
+fun CategorySectionAccessibility(
+    categories: List<String>
+    //onCategoryClick: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 10.dp)
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        categories.forEachIndexed { index, category ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 2.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = category,
+                        fontSize = 15.sp,
+                        color = colorResource(id = R.color.text_color),
+                        modifier = Modifier.weight(1f) // Occupies available space
+                    )
+
+                    when (category) {
+                        "Tema" -> {
+                            Switch()
+                        }
+                        "Tamanho da fonte" -> {
+                            DropDown()
+                        }
+                        "Contraste" -> {
+                            Switch()
+                        }
+                    }
+                }
+            }
+
+
+            if (index < categories.size - 1) {
+                Spacer(modifier = Modifier.height(2.dp))
+                HorizontalDivider()
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+fun CommunityPost(post: Post, isMember: Boolean) {
+    var likes by remember { mutableStateOf(post.likes) }
+    var isLiked by remember { mutableStateOf(post.isLiked) }
+    var commentText by remember { mutableStateOf("") }
+    val comments = remember { post.comments }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.surface)
+        ),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Exibe o avatar e o conteúdo do post
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                    model = post.avatarUrl,
+                    contentDescription = "Avatar de ${post.author}",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(text = post.author, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(5.dp)) // Espaço entre o nome e a postagem
+                    Text(text = post.content)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Ícones de Curtir e Comentar (para membros)
+            if (isMember) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(
+                            onClick = {
+                                isLiked = !isLiked
+                                if (isLiked) likes++ else likes--
+                            }
+                        ) {
+                            Icon(
+                                imageVector = if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "Curtir"
+                            )
+                        }
+                        Text(text = "$likes curtidas")
+                    }
+
+                    IconButton(onClick = { /* Lógica para comentar */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Comment,
+                            contentDescription = "Comentar"
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Exibe os Comentários
+                comments.forEach { comment ->
+                    Text(text = comment, modifier = Modifier.padding(4.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ScrollablePostList(
+    postList: List<Post>,
+    isMember: Boolean,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        // Exibe cada post na lista
+        items(postList) { post ->
+            CommunityPost(
+                post = post,
+                isMember = isMember,
+            )
+        }
+    }
+}
 
