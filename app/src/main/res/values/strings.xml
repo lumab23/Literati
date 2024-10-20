@@ -73,4 +73,9 @@
     <string name="janeAustencom">Amantes de Jane Austen</string>
     <string name="meuslivros">Meus Livros</string>
     <string name="tags">Tags</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="postPlaceholder">O que está acontecendo?</string>
+    <string name="enviar_review">Enviar</string>
+    <string name="rate_book">Avalie o livro</string>
+    <string name="reviewPlaceholder">Adicione uma review...</string>
 </resources>

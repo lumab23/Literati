@@ -57,8 +57,9 @@ sealed class Screen(val route: String) {
     data object CommunityList: Screen(route = "community_list")
     data object NotificationScreen : Screen("notification_screen")
     data object MyBooksList : Screen("my_books_list")
-    data object CreatePostScreen : Screen("create_post")
     data object TagsScreen : Screen("tags_screen")
+    data object MakePostScreen : Screen("make_post_screen")
+    data object MakeReviewScreen : Screen("make_review_screen")
 
 }
 

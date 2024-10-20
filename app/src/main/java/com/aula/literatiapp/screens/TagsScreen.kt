@@ -19,7 +19,8 @@ fun TagsScreen(navController: NavController) {
         "Quero Ler",
         "Abandonei",
         "Estou lendo",
-        "Quero Trocar"
+        "Quero Trocar",
+        "Completo"
     )
 
     Scaffold(

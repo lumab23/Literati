@@ -1,5 +1,6 @@
 package com.aula.literatiapp.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -50,12 +50,18 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -188,24 +194,24 @@ fun EspCommunityScreen(navController: NavController) {
             // Botão flutuante no canto inferior direito
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(Screen.CreatePostScreen.route)
+                    navController.navigate(Screen.MakePostScreen.route)
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
-                    .width(140.dp)
+                    .width(60.dp)
                     .height(60.dp),
                 containerColor = Color.Transparent
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(brush = gradientBrush)
+                        .background(brush = gradientBrush),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Criar Post",
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
+                    Icon(
+                        imageVector = Icons.Default.Create,
+                        contentDescription = "post"
                     )
                 }
             }
@@ -213,73 +219,93 @@ fun EspCommunityScreen(navController: NavController) {
     }
 }
 
-
 @Composable
-fun CreatePostScreen(navController: NavController) {
-    var postContent: String = ""
+fun MakePostScreen(
+    onCancel: () -> Unit,
+    onPost: (String) -> Unit
+) {
+    var postText by remember { mutableStateOf("") }
+    val maxPostLength = 200
 
-    Scaffold(
-        topBar = {
-            BackNavigationDashboard(
-                value = stringResource(R.string.postar),
-                navController = navController
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextButton(onClick = { onCancel() }) {
+                Text(
+                    text = stringResource(id = R.string.cancelar),
+                    color = lightGreen
+                )
+            }
+
+            Button(
+                onClick = { onPost(postText) },
+                enabled = postText.isNotEmpty() && postText.length <= maxPostLength,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = lightGreen
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.postar)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            verticalAlignment = Alignment.Top
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(model = "https://i.pinimg.com/enabled_hi/564x/35/d8/3d/35d83d2e796d5ae4558396ba4adf2cc8.jpg"),
+                contentDescription = "profile picture",
+                modifier = Modifier
+                    .size(45.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            OutlinedTextField(
+                value = postText,
+                onValueChange = { text ->
+                    if (text.length <= maxPostLength) postText = text
+                },
+                placeholder = {Text(text = stringResource(id = R.string.postPlaceholder))},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .weight(1f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent
+                )
             )
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(16.dp)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                AsyncImage(
-                    model = painterResource(id = R.drawable.profile_picture),
-                    contentDescription = "Foto de Perfil",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "O que está acontecendo?",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-            }
-
-            TextField(
-                value = postContent,
-                onValueChange = { postContent = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                placeholder = { Text("Escreva seu post...") },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.Transparent
-                )
+            Text(
+                text = "${postText.length}/$maxPostLength",
+                color = if (postText.length > maxPostLength) Color.Red else Color.Gray
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = { /* Abrir galeria para adicionar imagem */ }) {
-                    Icon(imageVector = Icons.Default.Image, contentDescription = "Imagem")
-                }
-                Spacer(modifier = Modifier.weight(1f))
-            }
         }
     }
 }
+
 
 
 @Composable
@@ -338,11 +364,9 @@ fun CreateCommunityScreen(navController: NavController) {
                 }
             }
 
-            // Botão para criar a comunidade
             Button(
                 onClick = {
-                    // Lógica para criar a comunidade
-                    navController.popBackStack() // Volta para a tela anterior
+                    navController.popBackStack()
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

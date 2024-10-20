@@ -18,7 +18,6 @@ import com.aula.literatiapp.screens.ClassicosScreen
 import com.aula.literatiapp.screens.CommunityList
 import com.aula.literatiapp.screens.CommunityScreen
 import com.aula.literatiapp.screens.CreateCommunityScreen
-import com.aula.literatiapp.screens.CreatePostScreen
 import com.aula.literatiapp.screens.EnableNotifScreen
 import com.aula.literatiapp.screens.EspCommunityScreen
 import com.aula.literatiapp.screens.FantasiaScreen
@@ -28,6 +27,8 @@ import com.aula.literatiapp.screens.GenresScreen
 import com.aula.literatiapp.screens.LoginScreen
 import com.aula.literatiapp.screens.MainScreen
 import com.aula.literatiapp.screens.MaisPopular
+import com.aula.literatiapp.screens.MakePostScreen
+import com.aula.literatiapp.screens.MakeReviewScreen
 import com.aula.literatiapp.screens.MenorAvaliado
 import com.aula.literatiapp.screens.MessageScreen
 import com.aula.literatiapp.screens.MetasScreen
@@ -265,14 +266,30 @@ fun Navigation() {
         composable(route = Screen.MyBooksList.route) { 
             MyBooksList(navController = navController)
         }
-        
-        composable(route = Screen.CreatePostScreen.route) { 
-            CreatePostScreen(navController = navController)
-        }
 
         composable(route = Screen.TagsScreen.route) {
             TagsScreen(navController = navController)
         }
+
+        composable(route = "make_post_screen") {
+            MakePostScreen(
+                onCancel = { navController.popBackStack() }, // Volta para a tela anterior
+                onPost = { postContent ->
+                    // Lógica para enviar o post
+                    navController.popBackStack() // Volta para a tela anterior após postar
+                }
+            )
+        }
+
+        composable(route = "make_review_screen") {
+            MakeReviewScreen(
+                onCancel = { navController.popBackStack() },
+                onSubmitReview = { reviewContent, rating ->
+                    navController.popBackStack()
+                }
+            )
+        }
+
 
 
     }
