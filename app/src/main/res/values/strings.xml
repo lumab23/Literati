@@ -1,17 +1,17 @@
 <resources>
     <string name="app_name">LiteratiApp</string>
-    <string name="hello">Oi, </string>
-    <string name="create_acc">Crie uma Conta</string>
-    <string name="email">Email</string>
-    <string name="password">Senha</string>
-    <string name="nome">Usuário</string>
-    <string name="password_again">Repita a Senha</string>
-    <string name="terms_and_conditions">Li e estou de acordo com o Termo de Uso e Política de Privacidade</string>
-    <string name="terms_and_cond">Terms of Use</string>
-    <string name="remember_me">Lembre-se de mim\n</string>
-    <string name="entrar">Entrar</string>
-    <string name="welcome_back">Bem Vindo de volta\n</string>
-    <string name="alternatives">Ou cadastre-se com</string>
-    <string name="login_alt">Já tem uma conta? </string>
-    <string name="link_login">Login</string>
+    <string name="bem_vindo_volta">Bem Vindo de Volta!</string>
+    <string name="email">Digite seu email</string>
+    <string name="password">Digite sua senha</string>
+    <string name="forgot_password">Esqueceu a Senha?</string>
+    <string name="registration_with_google">Ou entre com</string>
+    <string name="no_account">Ainda não tem conta?</string>
+    <string name="cadastre_se">Cadastre-se</string>
+    <string name="login">Entrar</string>
+    <string name="has_an_account">Já tem uma conta?</string>
+    <string name="do_the_login">Login</string>
+    <string name="crie_conta">Crie uma Conta</string>
+    <string name="username">Usuário</string>
+    <string name="repita_senha">Confirme a senha</string>
+    <string name="registration_with_google_cadastro">Ou cadastre-se com</string>
 </resources>
