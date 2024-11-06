@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -35,9 +37,9 @@ import com.aula.literatiapp.presentation.screens.registration.viewModels.SignUpV
 @Composable
 fun SignUpScreen(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: SignUpViewModel = viewModel()
 ) {
-    var viewModel: SignUpViewModel = viewModel()
     val signUpState = viewModel.signUpState
 
     Surface(
@@ -51,6 +53,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
 
             Spacer(modifier = Modifier.height(20.dp))

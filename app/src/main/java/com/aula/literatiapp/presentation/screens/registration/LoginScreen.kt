@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -15,7 +17,6 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,10 +36,10 @@ import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginVi
 @Composable
 fun LoginScreen(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel()
 ) {
 
-    val viewModel by viewModels<LoginViewModel>()
     val loginState = viewModel.loginState
 
     Surface(
@@ -52,6 +53,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
 
             Spacer(modifier = Modifier.height(20.dp))
