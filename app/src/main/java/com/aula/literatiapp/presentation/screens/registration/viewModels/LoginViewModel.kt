@@ -5,9 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
+
+    val auth = Firebase.auth
 
     var email by mutableStateOf("")
         private set
@@ -36,12 +40,14 @@ class LoginViewModel : ViewModel() {
     fun login() {
         loginState = LoginState.Loading
         viewModelScope.launch {
-            val isSuccess = email == "test@example.com" && password == "password123"
-            loginState = if (isSuccess) {
-                LoginState.Success
-            } else {
-                LoginState.Error("Entrada inválida")
-            }
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    loginState = if (task.isSuccessful) {
+                        LoginState.Success
+                    } else {
+                        LoginState.Error("Login failed: ${task.exception?.message}")
+                    }
+                }
         }
     }
 

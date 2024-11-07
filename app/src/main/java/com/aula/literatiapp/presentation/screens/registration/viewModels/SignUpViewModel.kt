@@ -5,10 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SignUpViewModel : ViewModel() {
+
+    val auth = Firebase.auth
 
     var username by mutableStateOf("")
         private set
@@ -67,17 +71,15 @@ class SignUpViewModel : ViewModel() {
     fun signUp() {
         if (validateInput()) {
             signUpState = SignUpState.Loading
-            viewModelScope.launch {
-                try {
-                    // simulando uma network call com delay
-                    delay(2000)
+            Firebase.auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        signUpState = SignUpState.Success
 
-                    // se o sign up for um sucesso
-                    signUpState = SignUpState.Success
-                } catch (e: Exception) {
-                    signUpState = SignUpState.Error("Sign-up failed: ${e.message}")
+                    } else {
+                        signUpState = SignUpState.Error("Sign-up failed: ${task.exception?.message}")
+                    }
                 }
-            }
         }
     }
 

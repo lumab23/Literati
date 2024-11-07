@@ -32,6 +32,8 @@ import com.aula.literatiapp.presentation.common.sharedComponents.TextField
 import com.aula.literatiapp.presentation.screens.registration.components.ForgotPasswordLink
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginState
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun LoginScreen(
@@ -39,6 +41,10 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = viewModel()
 ) {
+
+    //authentication
+    val auth = Firebase.auth
+    auth.currentUser
 
     val loginState = viewModel.loginState
 

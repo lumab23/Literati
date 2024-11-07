@@ -1,7 +1,7 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
-    implementation("androidx.compose.material:material-icons-extended:1.5.1")
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -71,6 +70,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // material icons
+    implementation("androidx.compose.material:material-icons-extended:1.5.1")
+
     // ViewModel dependencies
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1") // For ViewModel Compose support
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    // for images
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // firebase authentication
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-auth:23.1.0")
 }

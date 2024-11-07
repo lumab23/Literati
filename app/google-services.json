@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "771995403131",
+    "project_id": "literatiapp-authentication",
+    "storage_bucket": "literatiapp-authentication.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771995403131:android:de8e1f1851368d3f6df3de",
+        "android_client_info": {
+          "package_name": "com.aula.literatiapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsp57zKhXEqIVg8c-O8MhdkJBNfU2uUUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

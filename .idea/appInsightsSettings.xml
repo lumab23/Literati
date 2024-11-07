@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.aula.literatiapp" />
+                  <option name="mobileSdkAppId" value="1:771995403131:android:de8e1f1851368d3f6df3de" />
+                  <option name="projectId" value="literatiapp-authentication" />
+                  <option name="projectNumber" value="771995403131" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
