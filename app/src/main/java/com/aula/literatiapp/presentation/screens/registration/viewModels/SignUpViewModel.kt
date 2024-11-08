@@ -1,12 +1,16 @@
 package com.aula.literatiapp.presentation.screens.registration.viewModels
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aula.literatiapp.domain.model.User
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -75,7 +79,6 @@ class SignUpViewModel : ViewModel() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         signUpState = SignUpState.Success
-
                     } else {
                         signUpState = SignUpState.Error("Sign-up failed: ${task.exception?.message}")
                     }
@@ -103,6 +106,17 @@ class SignUpViewModel : ViewModel() {
             }
             else -> true
         }
+    }
+
+    fun saveUserToFirestore(user: User) {
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("users").document(user.id).set(user)
+            .addOnSuccessListener {
+                Log.d(TAG, "User successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error writing user", e)
+            }
     }
 
 }

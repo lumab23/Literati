@@ -12,7 +12,20 @@
           "package_name": "com.aula.literatiapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "771995403131-d4bbtigj5ej0gcihfah1rk45qtm06ib7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aula.literatiapp",
+            "certificate_hash": "239891e80bf8193aaa29ee18ce47b1b49c6daeda"
+          }
+        },
+        {
+          "client_id": "771995403131-qjp2n6ebn23s7s1c2uoq9bjqv7qgn814.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBsp57zKhXEqIVg8c-O8MhdkJBNfU2uUUU"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771995403131-qjp2n6ebn23s7s1c2uoq9bjqv7qgn814.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

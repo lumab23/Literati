@@ -139,8 +139,8 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             AlternativeOptionGoogle(
-                onIconClick = {},
-                value =  stringResource(R.string.registration_with_google_cadastro)
+                value =  stringResource(R.string.registration_with_google_cadastro),
+                modifier = Modifier
             )
 
             Spacer(modifier = Modifier.height(20.dp))

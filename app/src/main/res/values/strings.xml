@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">LiteratiApp</string>
+    <string name="web_client_id">771995403131-qjp2n6ebn23s7s1c2uoq9bjqv7qgn814.apps.googleusercontent.com</string>
     <string name="bem_vindo_volta">Bem Vindo de Volta!</string>
     <string name="email">Digite seu email</string>
     <string name="password">Digite sua senha</string>
@@ -14,4 +15,9 @@
     <string name="username">Usuário</string>
     <string name="repita_senha">Confirme a senha</string>
     <string name="registration_with_google_cadastro">Ou cadastre-se com</string>
+    <string name="encontre_comunidades">Encontre comunidades</string>
+    <string name="comunidades">Comunidades</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="postar">Postar</string>
+    <string name="postPlaceholder">O que está pensando?</string>
 </resources>

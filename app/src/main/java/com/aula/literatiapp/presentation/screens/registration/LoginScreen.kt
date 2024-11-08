@@ -1,5 +1,6 @@
 package com.aula.literatiapp.presentation.screens.registration
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +18,13 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
@@ -32,8 +36,11 @@ import com.aula.literatiapp.presentation.common.sharedComponents.TextField
 import com.aula.literatiapp.presentation.screens.registration.components.ForgotPasswordLink
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginState
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginViewModel
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+
+private const val TAG = "MainActivity"
 
 @Composable
 fun LoginScreen(
@@ -44,6 +51,7 @@ fun LoginScreen(
 
     //authentication
     val auth = Firebase.auth
+    Log.i(TAG, "onCreate: ${auth.currentUser}")
     auth.currentUser
 
     val loginState = viewModel.loginState
@@ -127,9 +135,10 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
+
             AlternativeOptionGoogle(
-                onIconClick = {},
-                value =  stringResource(R.string.registration_with_google)
+                value =  stringResource(R.string.registration_with_google),
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(20.dp))

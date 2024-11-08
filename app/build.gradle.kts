@@ -62,6 +62,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,6 +73,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     // material icons
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
@@ -84,4 +90,13 @@ dependencies {
     // firebase authentication
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-auth:23.1.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    // credentials
+    //implementation("androidx.credentials:credentials:1.5.0-alpha05")
+    //implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha05")
+    implementation("androidx.credentials:credentials:1.1.1")
+    implementation("androidx.credentials:credentials-play-services-auth:1.1.1")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
 }
