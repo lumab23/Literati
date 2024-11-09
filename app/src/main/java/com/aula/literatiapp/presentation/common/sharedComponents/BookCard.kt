@@ -1,4 +1,4 @@
-package com.aula.literatiapp.presentation.screens.bookDetails.components
+package com.aula.literatiapp.presentation.common.sharedComponents
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
-fun BiggerBookCard(
+fun BookCard(
     imageUrl: String,
     onBookClick: () -> Unit,
     modifier: Modifier
@@ -21,7 +21,7 @@ fun BiggerBookCard(
             defaultElevation = 6.dp
         ),
         modifier = modifier
-            .size(width = 110.dp, height = 150.dp),
+            .size(width = 75.dp, height = 110.dp),
         onClick = { onBookClick() }
     ) {
         AsyncImage(

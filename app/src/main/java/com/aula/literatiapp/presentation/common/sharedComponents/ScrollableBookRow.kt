@@ -9,11 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aula.literatiapp.presentation.screens.bookDetails.components.BookCard
 
 @Composable
 fun ScrollableBookRow(
-    bookList: List<Int>,
+    bookList: List<String>,
     navController: NavController
 ) {
     LazyRow(

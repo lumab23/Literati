@@ -12,6 +12,7 @@ data class Book(
     val averageRating: Double? = null,
     val ratingsCount: Int? = null,
     val language: String? = null,
-    val thumbnail: String? = null,
+    val thumbnail: String,
     val previewLink: String? = null,
+    val userReview: String? = null
 )

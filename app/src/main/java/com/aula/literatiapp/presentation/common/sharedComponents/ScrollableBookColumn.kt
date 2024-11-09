@@ -7,12 +7,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aula.literatiapp.domain.model.Book
-import com.aula.literatiapp.presentation.screens.bookDetails.components.BookCard
 
 @Composable
 fun ScrollableBookColumn(
-    bookList: List<Book>,
+    bookList: List<String>,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
