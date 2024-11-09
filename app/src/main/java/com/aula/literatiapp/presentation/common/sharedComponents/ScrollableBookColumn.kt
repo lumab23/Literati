@@ -7,10 +7,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aula.literatiapp.domain.model.Book
 
 @Composable
 fun ScrollableBookColumn(
-    bookList: List<String>,
+    bookList: List<Book>,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -27,7 +28,7 @@ fun ScrollableBookColumn(
 
                 rowItems.forEach { book ->
                     BookCard(
-                        imageUrl = book.thumbnail ?: "",
+                        imageUrl = book.thumbnail,
                         onBookClick = {
                             navController.navigate("book_screen")
                         },

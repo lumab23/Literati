@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.ScrollableBookColumn
@@ -14,10 +15,40 @@ import com.aula.literatiapp.presentation.common.sharedComponents.ScrollableBookC
 fun BooksListScreen(navController: NavController, type: String) {
     val books = when (type) {
         "popular" -> listOf(
-            ""
+            Book(
+                id = "1",
+                title = "Book 1",
+                authors = listOf("Author A"),
+                publisher = "Publisher X",
+                publishedDate = "2021",
+                description = "A great book",
+                pageCount = 320,
+                categories = listOf("Fiction"),
+                averageRating = 4.5,
+                ratingsCount = 100,
+                language = "en",
+                thumbnail = "https://example.com/image1.jpg",
+                previewLink = "https://example.com/book1",
+                userReview = "Loved it!"
+            )
         )
         "highRated" -> listOf(
-            ""
+            Book(
+                id = "1",
+                title = "Book 1",
+                authors = listOf("Author A"),
+                publisher = "Publisher X",
+                publishedDate = "2021",
+                description = "A great book",
+                pageCount = 320,
+                categories = listOf("Fiction"),
+                averageRating = 4.5,
+                ratingsCount = 100,
+                language = "en",
+                thumbnail = "https://example.com/image1.jpg",
+                previewLink = "https://example.com/book1",
+                userReview = "Loved it!"
+            )
         )
         else -> emptyList()
     }
