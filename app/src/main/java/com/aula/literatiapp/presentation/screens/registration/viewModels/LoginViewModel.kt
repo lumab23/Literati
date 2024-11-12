@@ -1,6 +1,7 @@
 package com.aula.literatiapp.presentation.screens.registration.viewModels
 
 import android.net.wifi.hotspot2.pps.Credential
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -44,6 +45,7 @@ class LoginViewModel : ViewModel() {
 
     private fun fetchUserFromFirestore(uid: String, onSuccess: (User) -> Unit, onFailure: (Exception) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
+        Log.d("contentAuth", "uid: $uid ")
         firestore.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
@@ -64,7 +66,9 @@ class LoginViewModel : ViewModel() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        Log.d("contentAuth", "signInWithEmail:success")
                         val uid = auth.currentUser?.uid ?: return@addOnCompleteListener
+
                         fetchUserFromFirestore(
                             uid,
                             onSuccess = { user ->
@@ -75,6 +79,8 @@ class LoginViewModel : ViewModel() {
                             }
                         )
                     } else {
+                        Log.d("contentAuth", "signInWithEmail:failure")
+
                         loginState = LoginState.Error("Login failed: ${task.exception?.message}")
                     }
                 }

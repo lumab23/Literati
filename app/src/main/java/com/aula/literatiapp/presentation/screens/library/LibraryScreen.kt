@@ -45,7 +45,7 @@ fun LibraryScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            MyBooksBoxComponent(book = bookImages, navController = navController)
+            //MyBooksBoxComponent(book = bookImages, navController = navController)
             Spacer(modifier = Modifier.height(20.dp))
             ChallengeSection(navController = navController)
         }

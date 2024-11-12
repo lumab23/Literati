@@ -9,10 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aula.literatiapp.domain.model.Book
 
 @Composable
 fun ScrollableBookRow(
-    bookList: List<String>,
+    bookList: List<Book>,
     navController: NavController
 ) {
     LazyRow(
@@ -22,12 +23,11 @@ fun ScrollableBookRow(
     ) {
         items(bookList.size) { index ->
             BookCard(
-                imageUrl = bookList[index].toString(),
+                book = bookList[index],
                 onBookClick = {
                     navController.navigate("book_screen")
                 },
                 modifier = Modifier
-                    .height(200.dp)
                     .padding(horizontal = 4.dp)
             )
         }

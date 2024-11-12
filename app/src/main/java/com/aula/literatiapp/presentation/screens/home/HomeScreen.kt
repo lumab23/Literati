@@ -51,6 +51,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
+            /**
             item {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -102,6 +103,8 @@ fun HomeScreen(navController: NavController) {
             item {
                 ScrollableBookRow(bookList = classics, navController = navController)
             }
+
+            **/
         }
     }
 }

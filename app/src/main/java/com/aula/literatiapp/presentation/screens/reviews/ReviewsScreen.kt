@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.domain.model.ImageLinks
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.screens.reviews.components.ReviewComponent
@@ -33,9 +34,8 @@ fun ReviewsScreen(navController: NavController) {
                 averageRating = 4.5,
                 ratingsCount = 2000,
                 language = "en",
-                thumbnail = "",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
                 previewLink = "https://example.com/preview",
-                userReview = "Muito bom!!"
             ),
             Book(
                 id = "2",
@@ -49,9 +49,8 @@ fun ReviewsScreen(navController: NavController) {
                 averageRating = 4.7,
                 ratingsCount = 3500,
                 language = "en",
-                thumbnail = "",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
                 previewLink = "https://example.com/preview",
-                userReview = "Excelente leitura!"
             )
         )
     }

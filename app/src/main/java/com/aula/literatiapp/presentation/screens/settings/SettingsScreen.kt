@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.User
@@ -20,17 +22,28 @@ import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationD
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
 import com.aula.literatiapp.presentation.screens.settings.components.EditProfileCard
+import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.getTextColor
 import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
 
 @Composable
 fun SettingsScreen(navController: NavController) {
 
+    val settingsViewModel: SettingsViewModel = viewModel()
+
+    LaunchedEffect(Unit) {
+        settingsViewModel.fetchUserData()
+    }
+
+    val userName = settingsViewModel.userName
+    val userEmail = settingsViewModel.userEmail
+    val userProfilePictureUrl = settingsViewModel.userProfilePictureUrl
+
     val user = User(
         id = "1",
+        name = "Luma",
         username = "@mrdarcy",
         email = "",
-        password = "",
         profilePictureUrl = "https://example.com/profile.jpg"
     )
 
@@ -70,7 +83,13 @@ fun SettingsScreen(navController: NavController) {
 
                 EditProfileCard(
                     navController = navController,
-                    user = user,
+                    user = User(
+                        id = "1",
+                        name = userName,
+                        username = "@$userName",
+                        email = userEmail,
+                        profilePictureUrl = userProfilePictureUrl
+                    ),
                     gradientBrush = gradientBrushLight,
                     textColor = getTextColor()
                 )
@@ -97,10 +116,12 @@ fun SettingsScreen(navController: NavController) {
                             }
                             // depois adicionar um pop up para confirmação
                             "Sair" -> {
+                                settingsViewModel.signOut()
                                 navController.navigate("login_screen")
                             }
                             // depois alterar para aparecer um pop up
                             "Excluir conta" -> {
+                                settingsViewModel.deleteAccount()
                                 navController.navigate("signup_screen")
                             }
                         }

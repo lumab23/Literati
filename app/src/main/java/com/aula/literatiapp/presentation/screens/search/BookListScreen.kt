@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.domain.model.ImageLinks
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.ScrollableBookColumn
@@ -27,9 +28,8 @@ fun BooksListScreen(navController: NavController, type: String) {
                 averageRating = 4.5,
                 ratingsCount = 100,
                 language = "en",
-                thumbnail = "https://example.com/image1.jpg",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/image1.jpg"),
                 previewLink = "https://example.com/book1",
-                userReview = "Loved it!"
             )
         )
         "highRated" -> listOf(
@@ -45,9 +45,8 @@ fun BooksListScreen(navController: NavController, type: String) {
                 averageRating = 4.5,
                 ratingsCount = 100,
                 language = "en",
-                thumbnail = "https://example.com/image1.jpg",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/image1.jpg"),
                 previewLink = "https://example.com/book1",
-                userReview = "Loved it!"
             )
         )
         else -> emptyList()

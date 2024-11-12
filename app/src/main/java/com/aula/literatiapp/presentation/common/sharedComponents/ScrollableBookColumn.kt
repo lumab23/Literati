@@ -28,13 +28,9 @@ fun ScrollableBookColumn(
 
                 rowItems.forEach { book ->
                     BookCard(
-                        imageUrl = book.thumbnail,
-                        onBookClick = {
-                            navController.navigate("book_screen")
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(150.dp)
+                        book = book,
+                        onBookClick = { navController.navigate("book_screen") },
+                        modifier = Modifier.weight(1f)
                     )
                 }
 

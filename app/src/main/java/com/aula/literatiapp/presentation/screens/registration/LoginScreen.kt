@@ -23,10 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.presentation.common.sharedComponents.AlternativeOptionAccount
 import com.aula.literatiapp.presentation.common.sharedComponents.AlternativeOptionGoogle
@@ -48,6 +50,7 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = viewModel()
 ) {
+
 
     //authentication
     val auth = Firebase.auth
@@ -110,7 +113,7 @@ fun LoginScreen(
                 }
 
                 is LoginState.Success -> {
-                    navController.navigate("home")
+                    navController.navigate("home_screen")
                 }
 
                 is LoginState.Error -> {
@@ -157,4 +160,12 @@ fun LoginScreen(
     }
 
 
+}
+
+
+@PreviewLightDark
+@Composable
+fun LoginScreenPreview() {
+    val navController = rememberNavController()
+    LoginScreen(modifier = Modifier, navController = navController)
 }

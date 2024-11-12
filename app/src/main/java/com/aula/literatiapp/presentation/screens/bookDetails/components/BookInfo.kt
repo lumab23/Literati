@@ -41,7 +41,7 @@ fun BookInfo(book: Book, navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BiggerBookCard(
-            imageUrl = book.thumbnail,
+            imageUrl = book.imageLinks?.thumbnail ?: "",
             onBookClick = {  },
             modifier = Modifier
                 .size(150.dp)
