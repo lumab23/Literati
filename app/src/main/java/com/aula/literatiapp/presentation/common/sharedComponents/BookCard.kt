@@ -34,7 +34,6 @@ fun BookCard(
             contentDescription = "book image",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize(),
-
         )
     }
 }

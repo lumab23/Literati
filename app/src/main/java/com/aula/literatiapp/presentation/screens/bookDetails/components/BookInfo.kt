@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.presentation.common.sharedComponents.BiggerBookCard
+import com.aula.literatiapp.presentation.common.sharedComponents.BookCard
 import com.aula.literatiapp.presentation.ui.theme.primaryLight
 
 @Composable
@@ -40,6 +41,14 @@ fun BookInfo(book: Book, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        BookCard(
+            book = book,
+            onBookClick = { },
+            modifier = Modifier
+        )
+
+        /**
         BiggerBookCard(
             imageUrl = book.imageLinks?.thumbnail ?: "",
             onBookClick = {  },
@@ -47,6 +56,7 @@ fun BookInfo(book: Book, navController: NavController) {
                 .size(150.dp)
                 .align(Alignment.CenterHorizontally)
         )
+        **/
 
         Spacer(modifier = Modifier.height(16.dp))
 

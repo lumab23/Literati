@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -57,17 +58,14 @@ fun SearchBarComponent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .height(48.dp)
-            .background(color = Color.Gray.copy(alpha = 0.05f), shape = MaterialTheme.shapes.small)
-            .onKeyEvent { keyEvent ->
-                if (keyEvent.nativeKeyEvent.keyCode == Key.Enter.nativeKeyCode) {
-                    onSearch()
-                    true
-                } else {
-                    false
-                }
-            },
+            .background(color = Color.Gray.copy(alpha = 0.05f), shape = MaterialTheme.shapes.small),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onSearch()
+            }
         ),
         singleLine = true,
         decorationBox = { innerTextField ->

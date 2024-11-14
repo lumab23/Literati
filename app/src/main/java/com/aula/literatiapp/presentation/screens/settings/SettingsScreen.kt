@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -133,4 +135,10 @@ fun SettingsScreen(navController: NavController) {
         }
 
     }
+}
+
+@Preview
+@Composable
+fun SettingsScreenPreview() {
+    SettingsScreen(navController = NavController(LocalContext.current))
 }

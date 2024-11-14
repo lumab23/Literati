@@ -41,8 +41,8 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         composable(Screen.Home.route) {
             HomeScreen(navController)
         }
-
-
-
+        composable(Screen.BookScreen.route) {
+            BookScreen(navController)
+        }
     }
 }

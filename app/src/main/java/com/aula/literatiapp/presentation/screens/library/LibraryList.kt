@@ -74,7 +74,7 @@ fun MyBooksList(navController: NavController) {
             publisher = "Publisher X",
             publishedDate = "2021",
             description = "A great book",
-            pageCount = 320,
+            pageCount = "320",
             categories = listOf("Fiction"),
             averageRating = 4.5,
             ratingsCount = 100,

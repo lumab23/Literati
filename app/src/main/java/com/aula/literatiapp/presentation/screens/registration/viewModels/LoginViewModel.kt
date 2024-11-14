@@ -1,6 +1,5 @@
 package com.aula.literatiapp.presentation.screens.registration.viewModels
 
-import android.net.wifi.hotspot2.pps.Credential
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
