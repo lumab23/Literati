@@ -41,7 +41,7 @@ fun BookList(
                     editor.putString( "authors","${book.authors}")
                     editor.putString( "publisher","${book.publisher}")
                     editor.putString( "description","${book.description}")
-                    editor.putString("imageLinks", book.imageLinks?.thumbnail ?: "")
+                    editor.putString("imageLink", book.imageLinks?.thumbnail ?: "")
                     editor.putString( "categories","${book.categories}")
                     editor.putString( "pageCount","${book.pageCount}")
                     editor.putString( "publishedDate","${book.publishedDate}")
@@ -52,7 +52,7 @@ fun BookList(
                     editor.putString("categories","${book.categories}")
                     editor.apply()
                     navController.navigate("book_screen")
-                    Toast.makeText(context,"${book.toString()}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context,"${book.toString()}", Toast.LENGTH_SHORT).show()
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))

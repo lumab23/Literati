@@ -42,21 +42,13 @@ fun BookInfo(book: Book, navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        BookCard(
-            book = book,
-            onBookClick = { },
-            modifier = Modifier
-        )
 
-        /**
         BiggerBookCard(
             imageUrl = book.imageLinks?.thumbnail ?: "",
             onBookClick = {  },
             modifier = Modifier
-                .size(150.dp)
                 .align(Alignment.CenterHorizontally)
         )
-        **/
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -73,7 +65,7 @@ fun BookInfo(book: Book, navController: NavController) {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = book.authors?.joinToString(", ") ?: "Unknown Authors",
+                text = book.authors.joinToString(", ") ?: "Unknown Authors",
                 fontWeight = FontWeight.Medium,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center
@@ -92,6 +84,7 @@ fun BookInfo(book: Book, navController: NavController) {
                 Text(
                     text = " leia mais",
                     color = primaryLight,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.clickable { isExpanded = true }
                 )
             }
