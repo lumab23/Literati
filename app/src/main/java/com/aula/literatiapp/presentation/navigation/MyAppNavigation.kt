@@ -1,6 +1,7 @@
 package com.aula.literatiapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
@@ -19,7 +20,11 @@ import com.aula.literatiapp.presentation.screens.registration.LoginScreen
 import com.aula.literatiapp.presentation.screens.registration.SignUpScreen
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginViewModel
 import com.aula.literatiapp.presentation.screens.registration.viewModels.SignUpViewModel
+import com.aula.literatiapp.presentation.screens.search.DecadeScreen
+import com.aula.literatiapp.presentation.screens.search.GenresScreen
+import com.aula.literatiapp.presentation.screens.search.ReleaseDateScreen
 import com.aula.literatiapp.presentation.screens.search.SearchScreen
+import com.aula.literatiapp.presentation.screens.search.SpecificGenreScreen
 import com.aula.literatiapp.presentation.screens.search.viewModels.SearchViewModel
 
 @Composable
@@ -44,5 +49,31 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         composable(Screen.BookScreen.route) {
             BookScreen(navController)
         }
+
+        composable(Screen.GenresScreen.route) {
+            GenresScreen(navController)
+        }
+
+        composable(
+            route = "genre_screen/{genreName}",
+            arguments = listOf(navArgument("genreName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val genreName = backStackEntry.arguments?.getString("genreName") ?: ""
+            val bookList = searchViewModel.getBooksByGenre(genreName)
+            SpecificGenreScreen(navController, genreName, bookList)
+        }
+
+        composable("release_date_screen") {
+            ReleaseDateScreen(navController = navController, searchViewModel = searchViewModel)
+        }
+
+        composable("decade_screen/{decadeName}") { backStackEntry ->
+            val decadeName = backStackEntry.arguments?.getString("decadeName") ?: "Unknown"
+            val books = searchViewModel.bookList.collectAsState().value
+            DecadeScreen(navController = navController, decadeName = decadeName, bookList = books)
+        }
+
+
+
     }
 }

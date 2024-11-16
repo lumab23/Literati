@@ -39,9 +39,11 @@ fun BookScreen(
             publisher = bookSp.getString("publisher","").toString(),
             description = bookSp.getString("description","").toString(),
             imageLinks = ImageLinks(thumbnail = bookSp.getString("imageLink", "").orEmpty()),
-            categories = listOf(bookSp.getString("categories","").toString()),
+            categories = bookSp.getString("categories", "")?.split(",") ?: emptyList(),
             pageCount = bookSp.getString("pageCount","").toString(),
             publishedDate = bookSp.getString("publishedDate","").toString(),
+            averageRating = bookSp.getString("averageRating", null)?.toDoubleOrNull(),
+            ratingsCount = bookSp.getString("ratingsCount", null)?.toIntOrNull()
             )
     }
 

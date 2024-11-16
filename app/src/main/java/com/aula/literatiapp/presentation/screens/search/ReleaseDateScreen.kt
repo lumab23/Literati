@@ -16,17 +16,23 @@ import com.aula.literatiapp.R
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
+import com.aula.literatiapp.presentation.screens.search.viewModels.SearchViewModel
 
 @Composable
-fun ReleaseDateScreen(navController: NavController) {
+fun ReleaseDateScreen(
+    navController: NavController,
+    searchViewModel: SearchViewModel
+) {
 
     val decades = listOf(
-        "A Vir",
-        "2020s",
-        "2010s",
-        "2000s",
-        "1990s",
-        "1980s"
+        "2020s" to Pair(2020, 2029),
+        "2010s" to Pair(2010, 2019),
+        "2000s" to Pair(2000, 2009),
+        "1990s" to Pair(1990, 1999),
+        "1980s" to Pair(1980, 1989),
+        "1970s" to Pair(1970, 1979),
+        "1960s" to Pair(1960, 1969),
+        "1950s" to Pair(1950, 1959)
     )
 
     Scaffold(
@@ -53,11 +59,12 @@ fun ReleaseDateScreen(navController: NavController) {
 
                 CategorySection(
                     "",
-                    categories = decades,
+                    categories = decades.map { it.first },
                     onCategoryClick = { selectedDecade ->
-                        navController.navigate("decade_screen" + "/$selectedDecade") {
-                            // Pop up to the top of the navigation stack to avoid multiple instances of the same screen
-                            popUpTo("decade_screen") { inclusive = true }
+                        val years = decades.find { it.first == selectedDecade }?.second
+                        if (years != null) {
+                            searchViewModel.getBooksByDateRange(years.first, years.second)
+                            navController.navigate("decade_screen/${selectedDecade}")
                         }
                     }
                 )

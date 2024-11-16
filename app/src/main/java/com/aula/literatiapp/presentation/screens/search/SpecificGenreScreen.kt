@@ -14,7 +14,7 @@ import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigatio
 import com.aula.literatiapp.presentation.common.sharedComponents.ScrollableBookColumn
 
 @Composable
-fun GenreScreen(
+fun SpecificGenreScreen(
     navController: NavController,
     genreName: String,
     bookList: List<Book>

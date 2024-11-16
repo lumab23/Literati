@@ -13,6 +13,15 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile_screen")
     object SearchScreen : Screen("search_screen")
     object BookScreen : Screen("book_screen")
+    object GenresScreen : Screen("genres_screen")
+    object SpecificGenreScreen : Screen("genre_screen/{genreName}") {
+        fun createRoute(genreName: String) = "genre_screen/$genreName"
+    }
+
+    object ReleaseDateScreen : Screen("release_date_screen")
+    object DecadeScreen : Screen("decade_screen/{decadeName}") {
+        fun createRoute(decadeName: String) = "decade_screen/$decadeName"
+    }
 
 
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
 import com.aula.literatiapp.BuildConfig
+import com.aula.literatiapp.domain.model.BookItem
 
 
 class SearchViewModel : ViewModel() {
@@ -74,4 +75,28 @@ class SearchViewModel : ViewModel() {
             }
         }
     }
+
+    fun getBooksByGenre(genre: String): List<Book> {
+        return _bookList.value.filter { book ->
+            book.categories.contains(genre)
+        }
+    }
+
+    fun getBooksByDateRange(startYear: Int, endYear: Int) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val query = "published: after:$startYear before:$endYear"
+                val response = RetrofitInstance.api.searchBooks(query = query, apiKey = apiKey)
+                _bookList.value = response.items.map { it.volumeInfo }
+            } catch (e: Exception) {
+                _bookList.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
+
 }
