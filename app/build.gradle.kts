@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
 }
 
@@ -51,7 +52,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.generativeai)
+    val nav_version = "2.8.0"
 
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation(libs.navigation.compose)
+    implementation ("com.google.code.gson:gson:2.8.8") // Ou a versão mais recente
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

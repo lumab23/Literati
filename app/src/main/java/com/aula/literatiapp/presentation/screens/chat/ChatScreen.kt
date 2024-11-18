@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,18 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Message
-import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
+import com.aula.literatiapp.presentation.common.sharedComponents.TextField
 import com.aula.literatiapp.presentation.screens.chat.components.ChatHeader
 import com.aula.literatiapp.presentation.screens.chat.components.ChatInputField
 import com.aula.literatiapp.presentation.screens.chat.components.ChatMessageItem
+import com.google.ai.client.generativeai.type.content
 
 @Composable
 fun ChatScreen(
     messages: List<Message>,
     onMessageSend: (String) -> Unit,
     navController: NavController,
-    user: User) {
+    user: String?
+) {
 
     var messageText by remember { mutableStateOf("") }
 
@@ -70,6 +74,5 @@ fun ChatScreen(
                 }
             )
         }
-
     }
 }
