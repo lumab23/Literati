@@ -47,8 +47,7 @@ fun SearchScreen(
     val categories = listOf(
         "Data de lançamento",
         "Gêneros",
-        "Mais popular",
-        "Menor avaliado"
+        "Mais popular"
     )
 
     Scaffold(
@@ -91,7 +90,7 @@ fun SearchScreen(
                                 "Data de lançamento" -> navController.navigate("release_date_screen")
                                 "Gêneros" -> navController.navigate("genres_screen")
                                 "Mais popular" -> navController.navigate("book_list_screen?type=popular")
-                                "Menor avaliado" -> navController.navigate("book_list_screen?type=lowRated")
+
                             }
                         }
                     )

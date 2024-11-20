@@ -21,17 +21,17 @@ fun GenresScreen(
     navController: NavController
 ) {
     val genres = listOf(
-        "Romance",
-        "Não-Ficção",
-        "Poesia",
-        "Ficção Científica",
-        "Terror",
-        "Biografia",
-        "Mistério",
-        "Fantasia",
-        "Clássicos",
-        "Young Adult",
-        "Fiction"
+        "Romance", //ok
+        "Literary Collections", // ok
+        "History", // ok
+        "Psychology", // ok
+        "Drama", // ok
+        "Juvenile Fiction",
+        "Computers", // ok
+        "Self-Help", // ok
+        "Literary Criticism", // ok
+        "Fiction", // ok
+        "Law"
     )
 
     Scaffold(
@@ -56,8 +56,7 @@ fun GenresScreen(
                     title = "",
                     categories = genres,
                     onCategoryClick = { selectedGenre ->
-
-                        navController.navigate("genre_screen/$selectedGenre")
+                        navController.navigate("genre_screen/${selectedGenre}")
                     }
                 )
             }

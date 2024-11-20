@@ -22,6 +22,7 @@ sealed class Screen(val route: String) {
     object DecadeScreen : Screen("decade_screen/{decadeName}") {
         fun createRoute(decadeName: String) = "decade_screen/$decadeName"
     }
+    object GeminiChatScreen : Screen("gemini_chat")
 
 
 

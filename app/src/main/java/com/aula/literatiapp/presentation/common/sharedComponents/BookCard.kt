@@ -26,7 +26,7 @@ fun BookCard(
         ),
         modifier = modifier
             .size(width = 75.dp, height = 110.dp),
-        onClick = { onBookClick(book.id) }
+        onClick = { onBookClick(book.id+"") }
     ) {
 
         AsyncImage(

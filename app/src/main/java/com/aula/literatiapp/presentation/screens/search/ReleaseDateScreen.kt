@@ -27,12 +27,7 @@ fun ReleaseDateScreen(
     val decades = listOf(
         "2020s" to Pair(2020, 2029),
         "2010s" to Pair(2010, 2019),
-        "2000s" to Pair(2000, 2009),
-        "1990s" to Pair(1990, 1999),
-        "1980s" to Pair(1980, 1989),
-        "1970s" to Pair(1970, 1979),
-        "1960s" to Pair(1960, 1969),
-        "1950s" to Pair(1950, 1959)
+        "2000s" to Pair(2000, 2009)
     )
 
     Scaffold(

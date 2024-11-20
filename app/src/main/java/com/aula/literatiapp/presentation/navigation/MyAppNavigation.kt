@@ -13,13 +13,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
-import com.aula.literatiapp.presentation.screens.bookDetails.viewModels.BookScreenViewModel
+import com.aula.literatiapp.presentation.screens.gemini.GeminiChatScreen
+import com.aula.literatiapp.presentation.screens.gemini.viewModels.GeminiChatViewModel
 import com.aula.literatiapp.presentation.screens.home.HomeScreen
 import com.aula.literatiapp.presentation.screens.profile.ProfileScreen
 import com.aula.literatiapp.presentation.screens.registration.LoginScreen
 import com.aula.literatiapp.presentation.screens.registration.SignUpScreen
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginViewModel
 import com.aula.literatiapp.presentation.screens.registration.viewModels.SignUpViewModel
+import com.aula.literatiapp.presentation.screens.search.BooksListScreen
 import com.aula.literatiapp.presentation.screens.search.DecadeScreen
 import com.aula.literatiapp.presentation.screens.search.GenresScreen
 import com.aula.literatiapp.presentation.screens.search.ReleaseDateScreen
@@ -49,18 +51,12 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         composable(Screen.BookScreen.route) {
             BookScreen(navController)
         }
-
         composable(Screen.GenresScreen.route) {
             GenresScreen(navController)
         }
 
-        composable(
-            route = "genre_screen/{genreName}",
-            arguments = listOf(navArgument("genreName") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val genreName = backStackEntry.arguments?.getString("genreName") ?: ""
-            val bookList = searchViewModel.getBooksByGenre(genreName)
-            SpecificGenreScreen(navController, genreName, bookList)
+        composable(Screen.GeminiChatScreen.route) {
+            GeminiChatScreen(navController = navController, viewModel = viewModel())
         }
 
         composable("release_date_screen") {
@@ -70,8 +66,29 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         composable("decade_screen/{decadeName}") { backStackEntry ->
             val decadeName = backStackEntry.arguments?.getString("decadeName") ?: "Unknown"
             val books = searchViewModel.bookList.collectAsState().value
-            DecadeScreen(navController = navController, decadeName = decadeName, bookList = books)
+            DecadeScreen(navController = navController, decadeName = decadeName)
         }
+
+        composable("book_list_screen?type={type}",
+            arguments = listOf(navArgument("type") { type = NavType.StringType }))
+        { backStackEntry ->
+            val type = backStackEntry.arguments?.getString("type") ?: "popular"
+            BooksListScreen(navController = navController, type = type, searchViewModel = searchViewModel)
+        }
+
+        composable("genres_screen") {
+            GenresScreen(navController = navController)
+        }
+
+        composable("genre_screen/{genreName}") { backStackEntry ->
+            val genreName = backStackEntry.arguments?.getString("genreName") ?: ""
+            SpecificGenreScreen(
+                navController = navController,
+                genreName = genreName,
+                searchViewModel = searchViewModel
+            )
+        }
+
 
 
 
