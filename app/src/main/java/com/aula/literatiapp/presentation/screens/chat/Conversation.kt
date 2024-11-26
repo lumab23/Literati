@@ -69,6 +69,7 @@ fun Conversation(navController: NavController, channelId: String) {
             val messages = viewModel.messages.collectAsState()
 
             ChatMessages(
+                //chanelName = chanelName,
                 messages = messages.value,
                 onSendMessage = { message ->
                     viewModel.sendMessage(channelId, message)

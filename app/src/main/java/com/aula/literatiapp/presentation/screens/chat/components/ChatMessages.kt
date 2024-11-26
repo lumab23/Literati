@@ -35,7 +35,9 @@ import com.aula.literatiapp.presentation.ui.theme.DarkGrey
 
 @Composable
 
-fun ChatMessages(messages: List<Message>,
+fun ChatMessages(//
+// chanelName: String,
+                 messages: List<Message>,
                  onSendMessage: (String) -> Unit,
                  onImageClicked:() -> Unit) {
     val hideKeyboardController = LocalSoftwareKeyboardController.current

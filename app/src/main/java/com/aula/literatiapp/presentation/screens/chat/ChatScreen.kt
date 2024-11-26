@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.aula.literatiapp.presentation.screens.chat.components.AddChannelDialog
+import com.aula.literatiapp.presentation.screens.chat.components.ChannelItem
 import com.aula.literatiapp.presentation.screens.chat.viewModels.ChatScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,78 +122,4 @@ fun ChatScreen(
     }
 }
 
-@Composable
-fun ChannelItem(channelName: String, onClick: () -> Unit    ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 2.dp)
-        .clip(RoundedCornerShape(16.dp))
-        .background(Color.DarkGray)
-        ,
-        verticalAlignment = Alignment.CenterVertically)
-    {
-        Box(modifier = Modifier
-            .padding(8.dp)
-            .size(70.dp)
-            .clip(CircleShape)
-            .background(Color.Yellow)
-            .clickable { onClick() }
-        ){
-            Text(text = channelName[0].toString(),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(70.dp)
-                    .clip(CircleShape)
-                    .align(Alignment.Center)
-                    .background(Color.Yellow),
-                fontSize = 35.sp,
-                color = Color.White,
-                style = TextStyle(fontSize = 35.sp),
-                textAlign = TextAlign.Center
-            )
-            Text(text = channelName,
-                modifier = Modifier
-                    .padding(8.dp),
-                color = Color.White
-            )
-        }
-    }
-}
 
-
-@Composable
-fun AddChannelDialog(onAddChannel: (String) -> Unit) {
-    val channelName = remember {
-        mutableStateOf("")
-    }
-    Column(
-        modifier = Modifier
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(text = "Add channel")
-        Spacer(modifier = Modifier.padding(8.dp))
-        OutlinedTextField(
-            value = channelName.value,
-            onValueChange = { channelName.value = it },
-            label = { Text(text = "Channel Name") },
-            maxLines = 1, // Substitui singleLine
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.padding(8.dp))
-        Button(onClick = {
-            onAddChannel(channelName.value)
-        },
-        modifier = Modifier
-            .fillMaxWidth()) {
-            Text(text = "Add")
-        }
-    }
-}
-
-
-@Preview
-@Composable
-fun ChatScreenPreview() {
-    ChannelItem(channelName = "Teste",{})}
