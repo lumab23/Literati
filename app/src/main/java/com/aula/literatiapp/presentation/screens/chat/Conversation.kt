@@ -24,8 +24,10 @@ import androidx.navigation.NavController
 import com.aula.literatiapp.presentation.screens.chat.components.ChatMessages
 import com.aula.literatiapp.presentation.screens.chat.components.ContentSlectionDialog
 import android.os.Environment
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.FileProvider
-import com.aula.literatiapp.Manifest
+import androidx.navigation.compose.rememberNavController
+
 import com.aula.literatiapp.presentation.screens.chat.viewModels.ConversationViewModel
 import java.io.File
 import java.text.SimpleDateFormat
@@ -34,27 +36,29 @@ import java.util.Locale
 
 
 @Composable
-fun Conversation(navController: NavController, channelId: String) {
+fun Conversation(navController: NavController,
+                 channelId: String) {
+    //voltado a câmera
+    //declarando variaveis
+    val chooserDialog = remember {
+        //define se a seleção de escolha da câmara ou galeria será exibida
+        mutableStateOf(false)
+    }
+    val cameraImageUri = remember {
+        mutableStateOf<Uri?>(null)
+    }
+    val camerImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+    ) {sucess ->
+        if(sucess){
+            cameraImageUri.value?.let {
+            }
+        }
+    }
 
     Scaffold(
         containerColor = Color.Black
     ) {
-        val chooserDialog = remember {
-            mutableStateOf(false)
-        }
-        val cameraImageUri = remember {
-            mutableStateOf<Uri?>(null)
-        }
-        val camerImageLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.TakePicture(),
-        ) {sucess ->
-            if(sucess){
-                cameraImageUri.value?.let {
-
-                }
-            }
-        }
-
 
         Column(
             modifier = Modifier
@@ -63,6 +67,7 @@ fun Conversation(navController: NavController, channelId: String) {
         ){
             val viewModel: ConversationViewModel = hiltViewModel()
             LaunchedEffect (key1 = true){
+                //Escuta mensagens no canal especificado
                 viewModel.listenForMessages(channelId)
             }
 
@@ -80,6 +85,7 @@ fun Conversation(navController: NavController, channelId: String) {
             )
         }
 
+        //função para implementação futura de envio de imagem
         fun createImageUri(): android.net.Uri {
             val context = navController.context
             val timeStamp = SimpleDateFormat("yyyyMMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -103,11 +109,15 @@ fun Conversation(navController: NavController, channelId: String) {
                 cameraImageUri.value = uri // Isso permanece sendo android.net.Uri
             }
         }
+
+        //permissão da câmera
         val permissionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
             if(isGranted){
                 camerImageLauncher.launch(createImageUri())
             }
         }
+
+        //Renderiza um diálogo para o usuário escolher entre câmera ou galeria.
         if (chooserDialog.value) {
             ContentSlectionDialog(onCameraSelected = {
                 chooserDialog.value = false
@@ -121,4 +131,11 @@ fun Conversation(navController: NavController, channelId: String) {
                 })
         }
     }
+}
+
+@Preview
+@Composable
+private fun ConversationPrev() {
+    val navController = rememberNavController()
+    Conversation(navController = navController, "Teste")
 }

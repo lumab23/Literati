@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,8 +32,9 @@ import com.aula.literatiapp.presentation.screens.chat.viewModels.ChatScreenViewM
 fun ChatScreen(
     navController: NavController
 ) {
-    val viewModel = hiltViewModel<ChatScreenViewModel>()
-    val channels = viewModel.channels.collectAsState()
+
+    val viewModel = hiltViewModel<ChatScreenViewModel>()//
+    val channels = viewModel.channels.collectAsState()//lista de canais observadas pela viewmodel
     val searchQuery = remember { mutableStateOf("") }
     val addChannel = remember{
         mutableStateOf(false)
@@ -122,4 +124,9 @@ fun ChatScreen(
     }
 }
 
+@Preview
+@Composable
+private fun ChatPrev() {
+    ChatScreen(navController = NavController(LocalContext.current))
+}
 

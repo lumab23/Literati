@@ -7,9 +7,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ContentSlectionDialog(onCameraSelected: () -> Unit, onGallerySelected: () -> Unit) {
+    //pop up que deixa o usuário escolher entre gallery e câmera
     AlertDialog(onDismissRequest = { },
         confirmButton = {
             TextButton(onClick = onCameraSelected) {
@@ -23,4 +25,10 @@ fun ContentSlectionDialog(onCameraSelected: () -> Unit, onGallerySelected: () ->
         },
         title = { Text(text = "Select your source?") },
         text = { Text(text = "Would you like to pick an image from the gallery or use the") })
+}
+
+@Preview
+@Composable
+private fun ContentPrev() {
+    ContentSlectionDialog(onCameraSelected = {}, onGallerySelected = {})
 }

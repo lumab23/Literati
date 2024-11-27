@@ -37,4 +37,4 @@ class ChatScreenViewModel@Inject constructor() : ViewModel()  {
             getChannels()
             }
         }
-    }
+}
