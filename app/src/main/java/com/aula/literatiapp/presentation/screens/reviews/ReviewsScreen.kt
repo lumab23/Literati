@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.domain.model.ImageLinks
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.screens.reviews.components.ReviewComponent
@@ -28,14 +29,13 @@ fun ReviewsScreen(navController: NavController) {
                 publisher = "Penguin Random House",
                 publishedDate = "1985",
                 description = "Offred is a Handmaid in the Republic of Gilead...",
-                pageCount = 400,
+                pageCount = "400",
                 categories = listOf("Clássicos", "Literatura", "Fantasia", "Ficção Científica"),
                 averageRating = 4.5,
                 ratingsCount = 2000,
                 language = "en",
-                thumbnail = "",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
                 previewLink = "https://example.com/preview",
-                userReview = "Muito bom!!"
             ),
             Book(
                 id = "2",
@@ -44,14 +44,13 @@ fun ReviewsScreen(navController: NavController) {
                 publisher = "Penguin Books",
                 publishedDate = "1949",
                 description = "A dystopian social science fiction novel and cautionary tale...",
-                pageCount = 328,
+                pageCount = "328",
                 categories = listOf("Dystopian", "Science Fiction"),
                 averageRating = 4.7,
                 ratingsCount = 3500,
                 language = "en",
-                thumbnail = "",
+                imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
                 previewLink = "https://example.com/preview",
-                userReview = "Excelente leitura!"
             )
         )
     }

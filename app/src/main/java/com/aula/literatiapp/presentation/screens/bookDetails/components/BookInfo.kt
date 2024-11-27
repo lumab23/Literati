@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.presentation.common.sharedComponents.BiggerBookCard
+import com.aula.literatiapp.presentation.common.sharedComponents.BookCard
 import com.aula.literatiapp.presentation.ui.theme.primaryLight
 
 @Composable
@@ -40,11 +41,12 @@ fun BookInfo(book: Book, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+
         BiggerBookCard(
-            imageUrl = book.thumbnail,
+            imageUrl = book.imageLinks?.thumbnail ?: "",
             onBookClick = {  },
             modifier = Modifier
-                .size(150.dp)
                 .align(Alignment.CenterHorizontally)
         )
 
@@ -63,7 +65,7 @@ fun BookInfo(book: Book, navController: NavController) {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = book.authors?.joinToString(", ") ?: "Unknown Authors",
+                text = book.authors.joinToString(", ") ?: "Unknown Authors",
                 fontWeight = FontWeight.Medium,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center
@@ -82,6 +84,7 @@ fun BookInfo(book: Book, navController: NavController) {
                 Text(
                     text = " leia mais",
                     color = primaryLight,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.clickable { isExpanded = true }
                 )
             }

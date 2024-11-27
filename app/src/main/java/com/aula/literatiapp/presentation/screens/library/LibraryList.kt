@@ -15,6 +15,7 @@ import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.CurrencyExchange
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.domain.model.ImageLinks
 import com.aula.literatiapp.domain.model.TabItem
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
@@ -72,14 +74,13 @@ fun MyBooksList(navController: NavController) {
             publisher = "Publisher X",
             publishedDate = "2021",
             description = "A great book",
-            pageCount = 320,
+            pageCount = "320",
             categories = listOf("Fiction"),
             averageRating = 4.5,
             ratingsCount = 100,
             language = "en",
-            thumbnail = "https://example.com/image1.jpg",
+            imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
             previewLink = "https://example.com/book1",
-            userReview = "Loved it!"
         )
     )
 
@@ -119,7 +120,7 @@ fun MyBooksList(navController: NavController) {
 
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = TabRowDefaults.primaryContainerColor
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 tabItems.forEachIndexed { index, item ->
                     Tab(

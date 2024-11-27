@@ -19,22 +19,23 @@ import com.aula.literatiapp.presentation.ui.theme.secondaryContainerLight
 
 @Composable
 fun BookGenresContent(book: Book) {
-    // Lista de botões representando gêneros
+
+    val genres = book.categories.map { it.ifBlank { "Sem categorias" } }.ifEmpty { listOf("Sem categorias") }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaçamento vertical entre linhas
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val genres = book.categories
 
         if (genres != null) {
-            genres.chunked(3).forEach { rowGenres ->  // Agrupa 3 gêneros por linha
+            genres.chunked(3).forEach { rowGenres ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp) // Espaçamento horizontal entre botões
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     rowGenres.forEach { genre ->
                         Button(
-                            onClick = { /* Ação ao clicar */ },
+                            onClick = {  },
                             colors = ButtonDefaults.buttonColors(
                                 Color.Transparent
                             ),

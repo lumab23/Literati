@@ -17,11 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.presentation.common.sharedComponents.BookCard
 import com.aula.literatiapp.presentation.ui.theme.surfaceDimLight
 
 @Composable
-fun MyBooksBoxComponent(book: String, navController: NavController) {
+fun MyBooksBoxComponent(book: Book, navController: NavController) {
 
     Card(
         elevation = CardDefaults.elevatedCardElevation(6.dp),
@@ -63,7 +64,7 @@ fun MyBooksBoxComponent(book: String, navController: NavController) {
                 repeat(3) {
                     BookCard(
                         // TODO: Passar a imagem do livro da api (os últimos livros adicionados pelo user)
-                        imageUrl = "image",
+                        book = book,
                         onBookClick = { navController.navigate("book_screen") },
                         modifier = Modifier
                     )

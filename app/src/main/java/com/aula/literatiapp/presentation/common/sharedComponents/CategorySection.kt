@@ -32,7 +32,8 @@ fun CategorySection(
             style = MaterialTheme.typography.titleLarge,
             text = title,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -48,7 +49,7 @@ fun CategorySection(
                     text = category,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(vertical = 8.dp),
-                    color = if (category == "Excluir Conta") MaterialTheme.colorScheme.error else getTextColor()
+                    color = if (category == "Excluir Conta") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                 )
             }
 

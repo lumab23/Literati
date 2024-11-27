@@ -9,60 +9,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aula.literatiapp.domain.model.User
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
-
-    val auth = Firebase.auth
+class SignUpViewModel(
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+) : ViewModel() {
 
     var username by mutableStateOf("")
-        private set
-
     var email by mutableStateOf("")
-        private set
-
     var password by mutableStateOf("")
-        private set
-
     var confirmPassword by mutableStateOf("")
-        private set
-
     var passwordVisible by mutableStateOf(false)
-        private set
-
     var confirmPasswordVisible by mutableStateOf(false)
-        private set
-
     var signUpState by mutableStateOf<SignUpState>(SignUpState.Idle)
-        private set
 
-    fun onUsernameChange(newUsername: String) {
-        username = newUsername
-    }
-
-    fun onEmailChange(newEmail: String) {
-        email = newEmail
-    }
-
-    fun onPasswordChange(newPassword: String) {
-        password = newPassword
-    }
-
+    fun onUsernameChange(newUsername: String) { username = newUsername }
+    fun onEmailChange(newEmail: String) { email = newEmail }
+    fun onPasswordChange(newPassword: String) { password = newPassword }
     fun onConfirmPasswordChange(newConfirmPassword: String) {
         confirmPassword = newConfirmPassword
         validatePasswordMatch()
     }
 
-    fun togglePasswordVisibility() {
-        passwordVisible = !passwordVisible
-    }
-
-    fun toggleConfirmPasswordVisibility() {
-        confirmPasswordVisible = !confirmPasswordVisible
-    }
+    fun togglePasswordVisibility() { passwordVisible = !passwordVisible }
+    fun toggleConfirmPasswordVisibility() { confirmPasswordVisible = !confirmPasswordVisible }
 
     private fun validatePasswordMatch() {
         if (password != confirmPassword) {
@@ -75,9 +50,12 @@ class SignUpViewModel : ViewModel() {
     fun signUp() {
         if (validateInput()) {
             signUpState = SignUpState.Loading
-            Firebase.auth.createUserWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
+                        val user = User(id = userId, name = username, username = username, email = email, profilePictureUrl = "")
+                        saveUserToFirestore(user)
                         signUpState = SignUpState.Success
                     } else {
                         signUpState = SignUpState.Error("Sign-up failed: ${task.exception?.message}")
@@ -108,17 +86,16 @@ class SignUpViewModel : ViewModel() {
         }
     }
 
-    fun saveUserToFirestore(user: User) {
-        val firestore = FirebaseFirestore.getInstance()
+    private fun saveUserToFirestore(user: User) {
         firestore.collection("users").document(user.id).set(user)
             .addOnSuccessListener {
-                Log.d(TAG, "User successfully written!")
+                Log.d("SignUpViewModel", "User successfully written!")
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error writing user", e)
+                Log.w("SignUpViewModel", "Error writing user", e)
+                signUpState = SignUpState.Error("Failed to save user to Firestore: ${e.message}")
             }
     }
-
 }
 
 sealed class SignUpState {

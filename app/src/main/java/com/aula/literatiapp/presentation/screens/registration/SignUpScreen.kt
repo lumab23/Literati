@@ -42,6 +42,14 @@ fun SignUpScreen(
 ) {
     val signUpState = viewModel.signUpState
 
+    LaunchedEffect(signUpState) {
+        if (signUpState is SignUpState.Success) {
+            navController.navigate("home_screen") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
+
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier
@@ -116,7 +124,7 @@ fun SignUpScreen(
                 }
                 is SignUpState.Success -> {
                     LaunchedEffect(Unit) {
-                        navController.navigate("login")
+                        navController.navigate("home_screen")
                     }
                 }
                 is SignUpState.Error -> {

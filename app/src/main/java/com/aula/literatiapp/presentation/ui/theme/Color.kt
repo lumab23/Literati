@@ -217,6 +217,8 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF161D18)
 val surfaceContainerDarkHighContrast = Color(0xFF1A211C)
 val surfaceContainerHighDarkHighContrast = Color(0xFF252C26)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF2F3630)
+val DarkGrey= Color(0XFF1F1F1F)
+val Purple = Color(0XFF830EF7)
 
 // text colors
 

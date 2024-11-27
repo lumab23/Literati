@@ -80,7 +80,9 @@ fun CommunityScreen(navController: NavController) {
                     .fillMaxSize()
             ) {
                 SearchBarComponent(
-                    value = stringResource(id = R.string.encontre_comunidades),
+                    query = "",
+                    onQueryChange = {},
+                    onSearch = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp)

@@ -48,7 +48,7 @@ fun ReviewComponent(book: Book, navController: NavController) {
                     .padding(8.dp)
             ) {
                 BookCard(
-                    imageUrl = book.thumbnail,
+                    book = book,
                     onBookClick = { navController.navigate("book_screen") },
                     modifier = Modifier
                 )
@@ -92,7 +92,7 @@ fun ReviewComponent(book: Book, navController: NavController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = book.userReview ?: "No review available",
+                    text = "",
                     fontWeight = FontWeight.Normal,
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Start,

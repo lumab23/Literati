@@ -17,7 +17,9 @@ import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigatio
 import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
 
 @Composable
-fun GenresScreen(navController: NavController) {
+fun GenresScreen(
+    navController: NavController
+) {
     val genres = listOf(
         "Romance",
         "Não-Ficção",
@@ -28,7 +30,8 @@ fun GenresScreen(navController: NavController) {
         "Mistério",
         "Fantasia",
         "Clássicos",
-        "Young Adult"
+        "Young Adult",
+        "Fiction"
     )
 
     Scaffold(
@@ -54,13 +57,7 @@ fun GenresScreen(navController: NavController) {
                     categories = genres,
                     onCategoryClick = { selectedGenre ->
 
-                        val bookList = when (selectedGenre) {
-
-                            else -> {}
-                        }
-                        navController.navigate("genre_screen" + "/$selectedGenre") {
-                            popUpTo("genre_screen") { inclusive = true }
-                        }
+                        navController.navigate("genre_screen/$selectedGenre")
                     }
                 )
             }

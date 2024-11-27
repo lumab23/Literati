@@ -1,10 +1,12 @@
 package com.aula.literatiapp.presentation.common.sharedComponents
 
+import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Book
@@ -15,6 +17,7 @@ fun ScrollableBookColumn(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -28,13 +31,11 @@ fun ScrollableBookColumn(
 
                 rowItems.forEach { book ->
                     BookCard(
-                        imageUrl = book.thumbnail,
+                        book = book,
                         onBookClick = {
                             navController.navigate("book_screen")
                         },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(150.dp)
+                        modifier = Modifier.weight(1f)
                     )
                 }
 
