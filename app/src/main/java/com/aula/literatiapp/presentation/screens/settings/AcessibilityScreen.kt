@@ -16,7 +16,7 @@ import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationD
 import com.aula.literatiapp.presentation.screens.settings.components.CategorySectionAccessibility
 
 @Composable
-fun AcessibilityScreen(navController: NavController) {
+fun AccessibilityScreen(navController: NavController) {
 
     var expanded by remember { mutableStateOf(false) }
     val fontSizes = listOf(12, 14, 16, 18, 20, 22, 24, 26, 28, 30)

@@ -1,5 +1,7 @@
 package com.aula.literatiapp.presentation.navigation
 
+import android.util.Log
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -16,6 +18,7 @@ import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
 import com.aula.literatiapp.presentation.screens.gemini.GeminiChatScreen
 import com.aula.literatiapp.presentation.screens.gemini.viewModels.GeminiChatViewModel
 import com.aula.literatiapp.presentation.screens.home.HomeScreen
+import com.aula.literatiapp.presentation.screens.library.LibraryScreen
 import com.aula.literatiapp.presentation.screens.profile.ProfileScreen
 import com.aula.literatiapp.presentation.screens.registration.LoginScreen
 import com.aula.literatiapp.presentation.screens.registration.SignUpScreen
@@ -28,11 +31,21 @@ import com.aula.literatiapp.presentation.screens.search.ReleaseDateScreen
 import com.aula.literatiapp.presentation.screens.search.SearchScreen
 import com.aula.literatiapp.presentation.screens.search.SpecificGenreScreen
 import com.aula.literatiapp.presentation.screens.search.viewModels.SearchViewModel
+import com.aula.literatiapp.presentation.screens.settings.AccessibilityScreen
+import com.aula.literatiapp.presentation.screens.settings.AltEmailScreen
+import com.aula.literatiapp.presentation.screens.settings.AltPasswordScreen
+import com.aula.literatiapp.presentation.screens.settings.AltUserScreen
+import com.aula.literatiapp.presentation.screens.settings.EnableNotifScreen
+import com.aula.literatiapp.presentation.screens.settings.SettingsScreen
+import com.aula.literatiapp.presentation.screens.settings.UploadProfilePicture
+import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val searchViewModel: SearchViewModel = viewModel()
+    val settingsViewModel: SettingsViewModel = viewModel()
+    val geminiChatViewModel: GeminiChatViewModel = viewModel()
 
 
     NavHost(navController = navController, startDestination = "search_screen") {
@@ -55,8 +68,17 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             GenresScreen(navController)
         }
 
-        composable(Screen.GeminiChatScreen.route) {
-            GeminiChatScreen(navController = navController, viewModel = viewModel())
+        composable(Screen.Profile.route) {
+            ProfileScreen(navController = navController)
+        }
+
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = navController)
+        }
+
+        composable("gemini_chat") {
+            Log.d("AppNavHost", "Navigating to Gemini Chat screen.")
+            GeminiChatScreen(navController = navController, viewModel = geminiChatViewModel)
         }
 
         composable("release_date_screen") {
@@ -89,6 +111,38 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
+        composable("updateEmail_screen") {
+            AltEmailScreen(navController = navController, settingsViewModel = settingsViewModel)
+        }
+
+        composable("updatePassword_screen") {
+            AltPasswordScreen(navController = navController, settingsViewModel = settingsViewModel)
+        }
+
+        composable("updateUser_screen") {
+            AltUserScreen(navController = navController, settingsViewModel = settingsViewModel)
+        }
+
+        composable("enableNotifications_screen") {
+            EnableNotifScreen(navController = navController)
+        }
+
+        composable("accessibility_screen") {
+            AccessibilityScreen(navController = navController)
+        }
+
+        composable("uploadProfilePicture_screen") {
+            UploadProfilePicture(
+                navController = navController,
+                settingsViewModel = settingsViewModel,
+                hostState = remember { SnackbarHostState() }
+            )
+        }
+
+
+        composable("library_screen") {
+            LibraryScreen(navController = navController)
+        }
 
 
 

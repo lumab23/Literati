@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,14 +26,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
+import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.bookDetails.components.tags.SelectTagDialog
 import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyBookDashboard(navController: NavController) {
+fun MyBookDashboard(
+    navController: NavController,
+    bookId: Book
+) {
+    val selectedTag: TagsViewModel = viewModel()
     var showBottomSheet by remember { mutableStateOf(false) }
     var showTagDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
@@ -88,7 +96,7 @@ fun MyBookDashboard(navController: NavController) {
 
         }
 
-        val categories = listOf("Review", "Adicione uma tag", "Compartilhar")
+        val categories = listOf("Review", "Adicione na biblioteca")
 
         // bottom sheet
         if (showBottomSheet) {
@@ -106,7 +114,7 @@ fun MyBookDashboard(navController: NavController) {
                             "Review" -> {
                                 navController.navigate("make_review_screen")
                             }
-                            "Adicione uma tag" -> {
+                            "Adicione na biblioteca" -> {
                                 showBottomSheet = false
                                 showTagDialog = true
                             }
@@ -118,12 +126,22 @@ fun MyBookDashboard(navController: NavController) {
         }
 
         if (showTagDialog) {
+
+            val booksByTag = selectedTag.booksByTag.collectAsState().value
+
+            val initialTags = booksByTag
+                .filterValues { it.contains(bookId.id) }
+                .keys
+                .toList()
+
             SelectTagDialog(
                 onDismissRequest = { showTagDialog = false },
-                onTagSelected = { tag ->
-                    println("Tag selecionada: $tag")
+                onTagSelected = { updatedTags ->
+                    selectedTag.updateTagsForBook(updatedTags, bookId.id)
                     showTagDialog = false
-                }
+                },
+                bookId = bookId.id,
+                initialTags =initialTags
             )
         }
     }

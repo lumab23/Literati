@@ -25,15 +25,25 @@ class GeminiChatViewModel : ViewModel() {
     var resposta = mutableStateOf("")
         private set
 
+    var messages = mutableStateListOf<MessageModel>()
+        private set
+
+
     fun callIA(value: String) {
         prompt.value = value
+
+        messages.add(MessageModel(message = value, role = "user"))
 
         viewModelScope.launch {
             try {
                 val result = GeminiIA(value)
+                Log.d("GeminiChatViewModel", "Gemini IA response: $result")
+
+                messages.add(MessageModel(message = result, role = "model"))
                 resposta.value = result
 
             } catch (e: Exception) {
+                Log.e("GeminiChatViewModel", "Error calling Gemini IA: ${e.message}")
                 resposta.value = "Error: ${e.message}"
                 e.printStackTrace()
             }
@@ -43,11 +53,15 @@ class GeminiChatViewModel : ViewModel() {
     private suspend fun GeminiIA(value: String): String {
         val generativeModel = GenerativeModel(
             modelName = "gemini-1.5-flash",
-            apiKey = BuildConfig.GEMINI_API_KEY
+            apiKey = ""
         )
 
         val response = generativeModel.generateContent(value)
         return response.text.toString()
+    }
+
+    fun clearChatHistoy() {
+        messages.clear()
     }
 
 }

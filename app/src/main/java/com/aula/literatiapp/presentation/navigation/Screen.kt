@@ -7,6 +7,7 @@ sealed class Screen(val route: String) {
     object Home : Screen("home_screen")
     object ForgotPassword : Screen("forgotPassword")
     object Community : Screen("community")
+    object Settings : Screen("settings_screen")
     object SpecificCommunity : Screen("specificCommunity/{categoryId}") {
         fun createRoute(categoryId: String) = "specificCommunity/$categoryId"
     }
@@ -23,7 +24,14 @@ sealed class Screen(val route: String) {
         fun createRoute(decadeName: String) = "decade_screen/$decadeName"
     }
     object GeminiChatScreen : Screen("gemini_chat")
+    object AltEmailScreen : Screen("updateEmail_screen")
+    object AltPasswordScreen : Screen("updatePassword_screen")
+    object AltUsernameScreen : Screen("updateUser_screen")
+    object EnableNotificationsScreen : Screen("enableNotifications_screen")
+    object AccessibilityScreen : Screen("accessibility_screen")
+    object UploadProfilePictureScreen : Screen("uploadProfilePicture_screen")
 
+    object LibraryScreen : Screen("library_screen")
 
 
 }

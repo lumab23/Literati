@@ -7,9 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,11 +36,14 @@ import com.aula.literatiapp.presentation.screens.settings.components.EditProfile
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.getTextColor
 import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-
     val settingsViewModel: SettingsViewModel = viewModel()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         settingsViewModel.fetchUserData()
@@ -40,14 +52,6 @@ fun SettingsScreen(navController: NavController) {
     val userName = settingsViewModel.userName
     val userEmail = settingsViewModel.userEmail
     val userProfilePictureUrl = settingsViewModel.userProfilePictureUrl
-
-    val user = User(
-        id = "1",
-        name = "Luma",
-        username = "@mrdarcy",
-        email = "",
-        profilePictureUrl = "https://example.com/profile.jpg"
-    )
 
     val settings = listOf(
         "Alterar email",
@@ -61,13 +65,15 @@ fun SettingsScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            BackNavigationDashboard(value = stringResource(id = R.string.settings), navController = navController)
+            BackNavigationDashboard(
+                value = stringResource(id = R.string.settings),
+                navController = navController
+            )
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
     ) { paddingValues ->
-
         Box(
             modifier = Modifier
                 .padding(paddingValues)
@@ -79,18 +85,16 @@ fun SettingsScreen(navController: NavController) {
                     .padding(horizontal = 16.dp)
                     .align(Alignment.TopCenter)
             ) {
-
                 Spacer(modifier = Modifier.height(16.dp))
-
 
                 EditProfileCard(
                     navController = navController,
                     user = User(
                         id = "1",
-                        name = userName,
+                        name = userName.toString(),
                         username = "@$userName",
-                        email = userEmail,
-                        profilePictureUrl = userProfilePictureUrl
+                        email = userEmail.toString(),
+                        profilePictureUrl = userProfilePictureUrl.toString()
                     ),
                     gradientBrush = gradientBrushLight,
                     textColor = getTextColor()
@@ -99,43 +103,79 @@ fun SettingsScreen(navController: NavController) {
                 CategorySection(
                     title = "",
                     categories = settings,
-                    onCategoryClick = {selectedSetting ->
+                    onCategoryClick = { selectedSetting ->
                         when (selectedSetting) {
                             "Alterar email" -> {
-                                navController.navigate("alterar_email")
+                                navController.navigate("updateEmail_screen")
                             }
                             "Alterar senha" -> {
-                                navController.navigate("alterar_senha")
+                                navController.navigate("updatePassword_screen")
                             }
                             "Alterar nome de usuário" -> {
-                                navController.navigate("alterar_username")
+                                navController.navigate("updateUser_screen")
                             }
                             "Notificações" -> {
-                                navController.navigate("enable_notif")
+                                navController.navigate("enableNotifications_screen")
                             }
                             "Acessibilidade" -> {
-                                navController.navigate("acessibility_screen")
+                                navController.navigate("accessibility_screen")
                             }
-                            // depois adicionar um pop up para confirmação
                             "Sair" -> {
                                 settingsViewModel.signOut()
-                                navController.navigate("login_screen")
+                                navController.navigate("login") {
+                                    popUpTo("login") { inclusive = true }
+                                }
                             }
-                            // depois alterar para aparecer um pop up
-                            "Excluir conta" -> {
-                                settingsViewModel.deleteAccount()
-                                navController.navigate("signup_screen")
+                            "Excluir Conta" -> {
+                                showDeleteDialog = true
                             }
                         }
-
                     }
                 )
-
             }
         }
 
+
+        if (showDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = { showDeleteDialog = false },
+                title = { Text(text = "Excluir Conta") },
+                text = { Text(text = "Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            settingsViewModel.deleteAccount(
+                                password = "",
+                                onComplete = { success, errorMessage ->
+                                    if (success) {
+                                        navController.navigate("signUp") {
+                                            popUpTo("signUp") { inclusive = true }
+                                        }
+                                    } else {
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(
+                                                message = errorMessage ?: "Erro ao excluir a conta"
+                                            )
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    ) {
+                        Text(text = "Confirmar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteDialog = false }) {
+                        Text(text = "Cancelar")
+                    }
+                }
+            )
+        }
     }
 }
+
 
 @Preview
 @Composable

@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,17 +25,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aula.literatiapp.R
+import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 
 // TODO: Adicionar tag personalizada
 @Composable
 fun SelectTagDialog(
     onDismissRequest: () -> Unit,
-    onTagSelected: (String) -> Unit
+    onTagSelected: (List<String>) -> Unit,
+    bookId: String,
+    initialTags: List<String>
 ) {
+    val selectedTag: TagsViewModel = viewModel()
     // Lista de tags predefinidas
-    val predefinedTags = listOf("Quero ler", "Abandonei", "Estou lendo", "Quero trocar", "Completo")
-    var selectedTag by remember { mutableStateOf("") }  // Guardar a tag selecionada
+    val predefinedTags = listOf("Quero ler", "Abandonei", "Estou lendo", "Quero trocar", "Completo", "Favoritos")
+    val selectedTags = remember { mutableStateListOf(*initialTags.toTypedArray()) }
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
@@ -58,9 +65,13 @@ fun SelectTagDialog(
                     items(predefinedTags) { tag ->
                         SelectableChip(
                             text = tag,
-                            isSelected = tag == selectedTag,
+                            isSelected = tag in selectedTags,
                             onSelected = { isSelected ->
-                                selectedTag = if (isSelected) tag else ""
+                                if (isSelected) {
+                                    selectedTags.add(tag)
+                                } else {
+                                    selectedTags.remove(tag)
+                                }
                             }
                         )
                     }
@@ -80,10 +91,8 @@ fun SelectTagDialog(
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     TextButton(onClick = {
-                        if (selectedTag.isNotEmpty()) {
-                            onTagSelected(selectedTag)
-                            onDismissRequest()
-                        }
+                        onTagSelected(selectedTags.toList())
+                        onDismissRequest()
                     }) {
                         Text(
                             text = stringResource(id = R.string.ok)

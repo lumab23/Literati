@@ -11,8 +11,5 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GoogleBooksApi::class.java)
-
     }
-
-
 }

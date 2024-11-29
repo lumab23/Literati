@@ -17,7 +17,7 @@ data class Book(
     val imageLinks: ImageLinks?,
     val previewLink: String? = null,
     val popularity: Int = 0,
-    val tags: List<String> = emptyList()
+    val addedAt: Long = System.currentTimeMillis()
 )
 {
     override fun toString(): String {

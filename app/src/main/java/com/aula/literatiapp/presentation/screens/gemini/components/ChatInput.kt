@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ChatInput(onMessageSend: (String) -> Unit) {
+fun ChatInput(
+    onMessageSend: (String) -> Unit,
+    onClearChat: () -> Unit
+) {
 
     var message by remember { mutableStateOf("") }
 
@@ -34,7 +38,7 @@ fun ChatInput(onMessageSend: (String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .clip(RoundedCornerShape(8.dp)),
-            singleLine = true,
+            //singleLine = true,
             value = message,
             onValueChange = { message = it },
             label = {
@@ -45,13 +49,26 @@ fun ChatInput(onMessageSend: (String) -> Unit) {
 
         IconButton(
             onClick = {
-                onMessageSend(message)
-                message = ""
+                if (message.isNotEmpty()) {
+                    onMessageSend(message)
+                    message = ""
+                }
             }
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Send,
                 contentDescription = "Enviar"
+            )
+        }
+
+        IconButton(
+            onClick = {
+                onClearChat()
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = "Delete"
             )
         }
     }

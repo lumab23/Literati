@@ -1,5 +1,6 @@
 package com.aula.literatiapp.presentation.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +52,7 @@ fun HomeScreen(navController: NavController) {
         floatingActionButton = {
             SmallFloatingActionButton(
                 onClick = {
+                    Log.d("HomeScreen", "FloatingActionButton clicked, navigating to gemini_chat.")
                     navController.navigate("gemini_chat")
                 },
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,

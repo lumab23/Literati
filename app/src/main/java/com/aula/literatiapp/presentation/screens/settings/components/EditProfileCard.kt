@@ -48,6 +48,8 @@ fun EditProfileCard(
     textColor: androidx.compose.ui.graphics.Color
 ) {
 
+    val defaultImage = "default_image.jpg"
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,7 +67,12 @@ fun EditProfileCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(user.profilePictureUrl.ifEmpty { R.drawable.default_image })
+                    .data(
+                        if (user.profilePictureUrl.isEmpty() || user.profilePictureUrl == defaultImage){
+                            R.drawable.default_image
+                        } else {
+                            user.profilePictureUrl
+                        })
                     .crossfade(true)
                     .build(),
                 contentDescription = "Profile picture",
@@ -97,7 +104,9 @@ fun EditProfileCard(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = {  },
+                    onClick = {
+                        navController.navigate("uploadProfilePicture_screen")
+                    },
                     modifier = Modifier
                         .width(130.dp)
                         .height(40.dp),
@@ -114,7 +123,8 @@ fun EditProfileCard(
                             .clip(RoundedCornerShape(18.dp))
                     ) {
                         Text(
-                            text = "Edit Profile",
+
+                            text = if (user.profilePictureUrl.isEmpty() && user.profilePictureUrl == defaultImage) "Adicione uma foto" else "Atualizar foto",
                             color = getTextColor(),
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.align(Alignment.Center)
