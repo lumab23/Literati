@@ -59,4 +59,5 @@
     <string name="bookshelv">Biblioteca</string>
     <string name="meuslivros">Meus Livros</string>
     <string name="chatGemini">Chat with Gemini</string>
+    <string name="upload_profile_picture">Foto</string>
 </resources>

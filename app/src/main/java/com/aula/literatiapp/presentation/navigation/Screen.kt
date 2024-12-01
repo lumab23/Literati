@@ -27,7 +27,6 @@ sealed class Screen(val route: String) {
     object AltEmailScreen : Screen("updateEmail_screen")
     object AltPasswordScreen : Screen("updatePassword_screen")
     object AltUsernameScreen : Screen("updateUser_screen")
-    object EnableNotificationsScreen : Screen("enableNotifications_screen")
     object AccessibilityScreen : Screen("accessibility_screen")
     object UploadProfilePictureScreen : Screen("uploadProfilePicture_screen")
 

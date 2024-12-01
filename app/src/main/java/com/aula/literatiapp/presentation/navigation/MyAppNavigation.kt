@@ -14,12 +14,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aula.literatiapp.domain.model.User
+import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
 import com.aula.literatiapp.presentation.screens.gemini.GeminiChatScreen
 import com.aula.literatiapp.presentation.screens.gemini.viewModels.GeminiChatViewModel
 import com.aula.literatiapp.presentation.screens.home.HomeScreen
 import com.aula.literatiapp.presentation.screens.library.LibraryScreen
 import com.aula.literatiapp.presentation.screens.profile.ProfileScreen
+import com.aula.literatiapp.presentation.screens.profile.viewModels.ProfileViewModel
 import com.aula.literatiapp.presentation.screens.registration.LoginScreen
 import com.aula.literatiapp.presentation.screens.registration.SignUpScreen
 import com.aula.literatiapp.presentation.screens.registration.viewModels.LoginViewModel
@@ -35,7 +37,6 @@ import com.aula.literatiapp.presentation.screens.settings.AccessibilityScreen
 import com.aula.literatiapp.presentation.screens.settings.AltEmailScreen
 import com.aula.literatiapp.presentation.screens.settings.AltPasswordScreen
 import com.aula.literatiapp.presentation.screens.settings.AltUserScreen
-import com.aula.literatiapp.presentation.screens.settings.EnableNotifScreen
 import com.aula.literatiapp.presentation.screens.settings.SettingsScreen
 import com.aula.literatiapp.presentation.screens.settings.UploadProfilePicture
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
@@ -46,6 +47,8 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
     val searchViewModel: SearchViewModel = viewModel()
     val settingsViewModel: SettingsViewModel = viewModel()
     val geminiChatViewModel: GeminiChatViewModel = viewModel()
+    val tagsViewModel: TagsViewModel = viewModel()
+    val profileViewModel: ProfileViewModel = viewModel()
 
 
     NavHost(navController = navController, startDestination = "search_screen") {
@@ -69,7 +72,9 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         }
 
         composable(Screen.Profile.route) {
-            ProfileScreen(navController = navController)
+            ProfileScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.Settings.route) {
@@ -121,10 +126,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
 
         composable("updateUser_screen") {
             AltUserScreen(navController = navController, settingsViewModel = settingsViewModel)
-        }
-
-        composable("enableNotifications_screen") {
-            EnableNotifScreen(navController = navController)
         }
 
         composable("accessibility_screen") {

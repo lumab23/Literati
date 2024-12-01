@@ -122,7 +122,7 @@ class SettingsViewModel : ViewModel() {
             return
         }
 
-        val storageRef = storage.reference.child("profile_pictures/${user?.uid}.jpg")
+        val storageRef = storage.reference.child("profile_pictures/${user.uid}.jpg")
 
         viewModelScope.launch {
             try {

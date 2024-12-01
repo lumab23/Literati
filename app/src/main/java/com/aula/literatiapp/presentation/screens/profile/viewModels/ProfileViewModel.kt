@@ -37,9 +37,11 @@ class ProfileViewModel : ViewModel() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             firestore.collection("users").document(currentUser.uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    document.toObject(User::class.java)?.let { user ->
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        return@addSnapshotListener
+                    }
+                    snapshot?.toObject(User::class.java)?.let { user ->
                         _user.value = user
                     }
                 }

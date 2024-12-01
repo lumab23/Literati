@@ -60,15 +60,6 @@ fun ProfileScreenDashboard(navController: NavController) {
             Icon(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("notification_screen")
-                    },
-                imageVector = Icons.Default.Notifications,
-                contentDescription = "notifications",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-            Icon(
-                modifier = Modifier
-                    .clickable {
                         navController.navigate("chat_screen")
                     },
                 imageVector = Icons.Default.ChatBubbleOutline,

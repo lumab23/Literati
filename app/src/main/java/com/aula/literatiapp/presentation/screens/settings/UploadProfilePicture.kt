@@ -31,10 +31,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import com.aula.literatiapp.R
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.AppTheme
@@ -60,7 +62,7 @@ fun UploadProfilePicture(
 
     Scaffold(
         topBar = {
-            BackNavigationDashboard(value = "Configurações de Perfil", navController = navController)
+            BackNavigationDashboard(value = stringResource(R.string.upload_profile_picture), navController = navController)
         }
     ) { paddingValues ->
         Box(
@@ -103,12 +105,19 @@ fun UploadProfilePicture(
                                 imageUri = uri,
                                 onComplete = { success, message ->
                                     val snackBarMessage = if (success) {
-                                        "Profile picture updated successfully"
+                                        "Foto de perfil atualizada com sucesso"
                                     } else {
-                                        "Error: $message"
+                                        "Erro: $message"
                                     }
+
+                                    // Mostrar Snackbar
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        hostState.showSnackbar(message)
+                                        hostState.showSnackbar(snackBarMessage)
+                                    }
+
+                                    // Se o upload foi bem-sucedido, volte para a tela anterior
+                                    if (success) {
+                                        navController.popBackStack()  // Retorna à tela anterior
                                     }
                                 }
                             )
