@@ -1,6 +1,9 @@
 package com.aula.literatiapp.presentation.common.sharedViewModels
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,12 +14,14 @@ import com.aula.literatiapp.domain.model.Book
 import com.aula.literatiapp.domain.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class TagsViewModel : ViewModel() {
+class TagsViewModel(
+) : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -31,6 +36,7 @@ class TagsViewModel : ViewModel() {
 
     init {
         loadTags()
+        reloadBooks()
     }
 
     // Carregar tags do Firestore
@@ -50,6 +56,13 @@ class TagsViewModel : ViewModel() {
             .addOnFailureListener { e ->
                 println("Erro ao carregar tags: ${e.message}")
             }
+    }
+
+    private fun reloadBooks() {
+        viewModelScope.launch {
+            val allBookIds = _booksByTag.value.values.flatten().distinct()
+            fetchBooksByIds(allBookIds)
+        }
     }
 
     private fun fetchBooksByIds(bookIds: List<String>) {
@@ -163,6 +176,12 @@ class TagsViewModel : ViewModel() {
             fetchBooksByIds(booksToLoad)
         }
     }
+
+    fun getBooksForTag(tag: String): List<Book> {
+        val bookIds = _booksByTag.value[tag] ?: return emptyList()
+        return bookshelf.value?.filter { book -> bookIds.contains(book.id) } ?: emptyList()
+    }
+
 
 
 

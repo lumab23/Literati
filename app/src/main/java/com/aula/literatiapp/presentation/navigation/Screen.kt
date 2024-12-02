@@ -40,4 +40,7 @@ sealed class Screen(val route: String) {
     object MakePostScreen: Screen("create_post_screen/{parentCommunityId}/{communityId}?parentPostId={parentPostId}")
 
 
+    object TagsScreen: Screen("tags_screen")
+    object SpecificTagScreen: Screen("tag_screen/{tag}")
+
 }
