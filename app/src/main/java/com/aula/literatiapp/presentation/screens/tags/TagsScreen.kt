@@ -50,8 +50,8 @@ fun TagsScreen(
             items(predefinedTags) { tag ->
                 val count = booksByTag[tag]?.size ?: 0
                 CategorySection(
-                    title = "$tag ($count)",
-                    categories = listOf(tag),
+                    title = "",
+                    categories = listOf("$tag ($count)"),
                     onCategoryClick = {
                         navController.navigate("tag_screen/$tag")
                     }

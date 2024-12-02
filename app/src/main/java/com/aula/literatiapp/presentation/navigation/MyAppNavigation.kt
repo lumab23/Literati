@@ -40,6 +40,8 @@ import com.aula.literatiapp.presentation.screens.settings.AltUserScreen
 import com.aula.literatiapp.presentation.screens.settings.SettingsScreen
 import com.aula.literatiapp.presentation.screens.settings.UploadProfilePicture
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
+import com.aula.literatiapp.presentation.screens.tags.SpecificTagScreen
+import com.aula.literatiapp.presentation.screens.tags.TagsScreen
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier) {
@@ -140,7 +142,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
-
         composable("library_screen") {
             LibraryScreen(
                 navController = navController,
@@ -148,6 +149,18 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
+        composable(Screen.TagsScreen.route) {
+            TagsScreen(navController = navController)
+        }
+
+        composable("tag_screen/{tag}") { backStackEntry ->
+            val tag = backStackEntry.arguments?.getString("tag") ?: ""
+            SpecificTagScreen(
+                tag = tag,
+                navController = navController
+            )
+
+        }
 
 
     }

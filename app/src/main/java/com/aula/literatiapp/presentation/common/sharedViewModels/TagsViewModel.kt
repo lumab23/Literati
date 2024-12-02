@@ -164,6 +164,11 @@ class TagsViewModel : ViewModel() {
         }
     }
 
+    fun getBooksForTag(tag: String): List<Book> {
+        val bookIds = _booksByTag.value[tag] ?: return emptyList()
+        return bookshelf.value?.filter { book -> bookIds.contains(book.id) } ?: emptyList()
+    }
+
 
 
 }
