@@ -123,10 +123,3 @@ fun ChatScreen(
         }
     }
 }
-
-@Preview
-@Composable
-private fun ChatPrev() {
-    ChatScreen(navController = NavController(LocalContext.current))
-}
-

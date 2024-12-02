@@ -25,7 +25,6 @@ googleid = "1.1.1"
 constraintlayout = "2.2.0"
 composeNavigation = "2.8.0-alpha08"
 serialization = "1.6.3"
-generativeai = "0.9.0"
 dagger-hilt ="2.51"
 firebaseCrashlyticsBuildtools = "2.9.9"
 hilt-compose = "1.2.0"
@@ -72,7 +71,6 @@ googleid = { group = "com.google.android.libraries.identity.googleid", name = "g
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
-generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
 dagger-hilt-android = {module ="com.google.dagger:hilt-android", version.ref = "dagger-hilt"}
 dagger-hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt"}
 dagger-hilt-compose  = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose"}
