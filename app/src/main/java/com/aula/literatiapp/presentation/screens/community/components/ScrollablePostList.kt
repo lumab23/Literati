@@ -13,6 +13,8 @@ import com.aula.literatiapp.domain.model.CommunityPost
 
 @Composable
 fun ScrollablePostList(
+    parentCommunityId: String,
+    communityId: String,
     postList: List<CommunityPost>,
     isMember: Boolean,
     navController: NavController,
@@ -25,7 +27,9 @@ fun ScrollablePostList(
     ) {
 
         items(postList) { post ->
-            CommunityPost(
+            CommunityPostCard(
+                parentCommunityId = parentCommunityId,
+                communityId = communityId,
                 post = post,
                 isMember = isMember
             )

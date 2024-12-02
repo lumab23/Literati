@@ -56,6 +56,10 @@
     <string name="new_username">Novo usernmae</string>
     <string name="settings">Configuracões</string>
     <string name="challenges">Metas</string>
-    <string name="bookshelv">BookShelf</string>
+    <string name="bookshelv">Biblioteca</string>
     <string name="meuslivros">Meus Livros</string>
+    <string name="chatGemini">Chat with Gemini</string>
+    <string name="upload_profile_picture">Foto</string>
+    <string name="defaultTitle">Comunidade</string>
+    <string name="no_books_found">Nenhum livro na biblioteca.</string>
 </resources>

@@ -48,6 +48,8 @@ fun EditProfileCard(
     textColor: androidx.compose.ui.graphics.Color
 ) {
 
+    val defaultImage = "default_image.jpg"
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,7 +67,12 @@ fun EditProfileCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(user.profilePictureUrl.ifEmpty { R.drawable.default_image })
+                    .data(
+                        if (user.profilePictureUrl.isEmpty() || user.profilePictureUrl == defaultImage){
+                            R.drawable.default_image
+                        } else {
+                            user.profilePictureUrl
+                        })
                     .crossfade(true)
                     .build(),
                 contentDescription = "Profile picture",
@@ -84,43 +91,18 @@ fun EditProfileCard(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Amanda",
+                    text = user.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = getTextColor()
                 )
                 //Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "@mrdarcy",
+                    text = user.username,
                     fontSize = 14.sp,
                     color = getTextColor()
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = {  },
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = surfaceDimLight
-                    ),
-                    shape = RoundedCornerShape(18.dp),
-                    contentPadding = PaddingValues()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(brush = gradientBrush)
-                            .clip(RoundedCornerShape(18.dp))
-                    ) {
-                        Text(
-                            text = "Edit Profile",
-                            color = getTextColor(),
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                }
+
             }
         }
     }

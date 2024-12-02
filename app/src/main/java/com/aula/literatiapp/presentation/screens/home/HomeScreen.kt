@@ -1,15 +1,20 @@
 package com.aula.literatiapp.presentation.screens.home
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +48,22 @@ fun HomeScreen(navController: NavController) {
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController)
+        },
+        floatingActionButton = {
+            SmallFloatingActionButton(
+                onClick = {
+                    Log.d("HomeScreen", "FloatingActionButton clicked, navigating to gemini_chat.")
+                    navController.navigate("gemini_chat")
+                },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.secondary
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.google_gemini_icon),
+                    contentDescription = "gemini chat",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
@@ -51,60 +72,9 @@ fun HomeScreen(navController: NavController) {
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            /**
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = stringResource(id = R.string.recomendacao),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
 
-            item {
-                ScrollableBookRow(bookList = stephenKingBooksRec, navController = navController)
-                Spacer(modifier = Modifier.height(40.dp))
-            }
 
-            item {
-                Text(
-                    text = stringResource(id = R.string.trend_fantasy),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
 
-            item {
-                ScrollableBookRow(bookList = fantasy, navController = navController)
-                Spacer(modifier = Modifier.height(40.dp))
-            }
-
-            item {
-                Text(
-                    text = stringResource(id = R.string.trend_romance),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-            item {
-                ScrollableBookRow(bookList = romance, navController = navController)
-                Spacer(modifier = Modifier.height(40.dp))
-            }
-
-            item {
-                Text(
-                    text = stringResource(id = R.string.trend_classics),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-            item {
-                ScrollableBookRow(bookList = classics, navController = navController)
-            }
-
-            **/
         }
     }
 }

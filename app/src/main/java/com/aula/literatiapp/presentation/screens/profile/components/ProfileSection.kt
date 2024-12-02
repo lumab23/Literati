@@ -1,5 +1,6 @@
 package com.aula.literatiapp.presentation.screens.profile.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ fun ProfileSection(user: User) {
                 .background(MaterialTheme.colorScheme.surface),
         )
 
+        Log.d("username", user.username)
         Text(
             text = user.name,
             style = MaterialTheme.typography.titleMedium,

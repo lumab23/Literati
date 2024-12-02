@@ -19,7 +19,13 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        buildConfigField("String", "GOOGLE_API_KEY", "\"${project.findProperty("GOOGLE_API_KEY") ?: ""}\"")
+        // Access the API keys
+        val googleApiKey = project.findProperty("GOOGLE_API_KEY")?.toString() ?: ""
+        val geminiApiKey = project.findProperty("GEMINI_API_KEY")?.toString() ?: ""
+
+        // Pass them to BuildConfig
+        buildConfigField("String", "GOOGLE_API_KEY", "\"$googleApiKey\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -92,6 +98,8 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -135,6 +143,13 @@ dependencies {
     implementation ("androidx.compose.ui:ui:1.4.0")
     implementation ("androidx.compose.material:material:1.4.0")
     implementation(kotlin("script-runtime"))
+
+    // gemini
+    implementation(libs.generativeai)
+
+
+
+
 
 
 }

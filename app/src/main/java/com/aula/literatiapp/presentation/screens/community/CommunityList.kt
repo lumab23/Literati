@@ -1,47 +1,51 @@
 package com.aula.literatiapp.presentation.screens.community
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.Community
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.screens.community.components.SpecificCommunityListItem
+import com.google.firebase.firestore.FirebaseFirestore
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
+import androidx.compose.runtime.getValue
+import com.aula.literatiapp.presentation.screens.community.components.ScrollableSpecificCommunityColumn
 
 @Composable
-fun CommunityList(navController: NavController) {
+fun CommunityList(
+    navController: NavController,
+    parentCommunityId: String?,
+    viewModel: CommunityViewModel = viewModel()
+) {
+    val communities by viewModel.communities.collectAsState(initial = emptyList())
+    val parentCommunityName by viewModel.parentCommunityName.collectAsState()
 
-    val communities = remember {
-        listOf(
-            Community(
-                id = "1",
-                name = "Amantes de Jane Austen",
-                imageUrl = "https://i.pinimg.com/564x/47/b5/47/47b547ad30201ad69099c2cb6faff682.jpg",
-                description = "Comunidade para todos que amam as obras de Jane Austen!",
-                specificCommunityName = "Romance",
-                categories = listOf("Romance")
-            ),
-            Community(
-                id = "2",
-                name = "Percy Jackson",
-                imageUrl = "https://i.pinimg.com/564x/51/62/fc/5162fcdd104398741191ad9dfd123c12.jpg",
-                description = "Para fãs de Percy Jackson!",
-                specificCommunityName = "Aventura",
-                categories = listOf("Aventura")
-            )
-        )
+    LaunchedEffect(parentCommunityId) {
+        if (parentCommunityId != null) {
+            viewModel.loadParentCommunityName(parentCommunityId)
+            viewModel.loadSpecificCommunities(parentCommunityId)
+        }
     }
+
+    Log.d("Community Debug", communities.toString())
 
     Scaffold(
         topBar = {
             BackNavigationDashboard(
-                value = communities.first().name,
+                value = parentCommunityName ?: stringResource(R.string.defaultTitle),
                 navController = navController
             )
         },
@@ -49,26 +53,29 @@ fun CommunityList(navController: NavController) {
             BottomNavigation(modifier = Modifier, navController = navController)
         }
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(8.dp)
         ) {
+            // Use ScrollableSpecificCommunityColumn to display the communities
+            ScrollableSpecificCommunityColumn(
+                communityList = communities,
+                navController = navController,
+                modifier = Modifier.weight(1f)
+            )
 
-            LazyColumn(
+            Button(
+                onClick = {
+                    navController.navigate("create_community_screen/${parentCommunityId}")
+                },
                 modifier = Modifier
-                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
             ) {
-                items(communities.size) { index ->
-                    SpecificCommunityListItem(community = communities[index], navController = navController)
-
-                    if (index < communities.size - 1) {
-                        HorizontalDivider()
-                    }
-                }
+                Text(text = "Criar Comunidade")
             }
-
         }
     }
 }
+

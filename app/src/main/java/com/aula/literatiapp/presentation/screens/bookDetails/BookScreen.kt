@@ -49,7 +49,7 @@ fun BookScreen(
 
     Scaffold(
         topBar = {
-            MyBookDashboard(navController = navController)
+            MyBookDashboard(navController = navController, bookId = book)
         },
         bottomBar = {
             BottomNavigation(modifier = Modifier, navController = navController)

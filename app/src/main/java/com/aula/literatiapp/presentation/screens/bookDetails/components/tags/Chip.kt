@@ -7,6 +7,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aula.literatiapp.presentation.ui.theme.getTextColor
 
@@ -14,7 +15,7 @@ import com.aula.literatiapp.presentation.ui.theme.getTextColor
 fun Chip(text: String) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.primary,
+        color = Color.White,
         modifier = Modifier.padding(4.dp)
     ) {
         Text(

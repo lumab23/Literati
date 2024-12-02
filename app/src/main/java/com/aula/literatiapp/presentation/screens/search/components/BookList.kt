@@ -35,6 +35,7 @@ fun BookList(
             BookListItem(
                 book = book,
                 onBookClick = {
+
                     var editor = context.getSharedPreferences("arquivo",MODE_PRIVATE).edit()
                     editor.putString( "id","${book.id}")
                     editor.putString( "tittle","${book.title}")

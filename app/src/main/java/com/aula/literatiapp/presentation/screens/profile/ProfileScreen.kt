@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +26,7 @@ import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
 import com.aula.literatiapp.presentation.common.sharedComponents.ScrollableBookRow
+import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.profile.components.ProfileScreenDashboard
 import com.aula.literatiapp.presentation.screens.profile.components.ProfileSection
 import com.aula.literatiapp.presentation.screens.profile.viewModels.ProfileViewModel
@@ -32,14 +34,20 @@ import com.aula.literatiapp.presentation.screens.profile.viewModels.ProfileViewM
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(),
-    navController: NavController)
+    navController: NavController,
+    tagsViewModel: TagsViewModel = viewModel()
+    )
 {
 
     val user by viewModel.user.collectAsState()
-    val favorites by viewModel.favorites.collectAsState()
-    val recentReads by viewModel.recentReads.collectAsState()
-    val swaps by viewModel.exchange.collectAsState()
+    val booksByTag by tagsViewModel.booksByTag.collectAsState()
+    val bookshelf by tagsViewModel.bookshelf.observeAsState(emptyList())
 
+    val favorites = bookshelf.filter { book -> booksByTag["Favoritos"]?.contains(book.id) == true }
+    val swaps = bookshelf.filter { book -> booksByTag["Quero trocar"]?.contains(book.id) == true }
+    val recentReads = bookshelf.filter { book ->
+        booksByTag.values.flatten().contains(book.id)
+    }.distinct().takeLast(4)
 
 
     val listas = listOf(
@@ -81,7 +89,7 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    //ScrollableBookRow(bookList = favorites, navController = navController)
+                    ScrollableBookRow(bookList = favorites, navController = navController)
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(15.dp))
@@ -96,7 +104,7 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    //ScrollableBookRow(bookList = recentReads, navController = navController)
+                    ScrollableBookRow(bookList = recentReads, navController = navController)
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider()
                     Spacer(modifier = Modifier.height(15.dp))
@@ -111,7 +119,7 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    //ScrollableBookRow(bookList = swaps, navController = navController)
+                    ScrollableBookRow(bookList = swaps, navController = navController)
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider()
                 }
