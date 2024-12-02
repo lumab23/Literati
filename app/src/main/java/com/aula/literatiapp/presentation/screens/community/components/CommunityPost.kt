@@ -18,17 +18,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.CommunityPost
+import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
 import java.util.Date
 
 @Composable
-fun CommunityPost(post: CommunityPost, isMember: Boolean) {
+fun CommunityPostCard(parentCommunityId: String, communityId: String, post: CommunityPost, isMember: Boolean, viewModel: CommunityViewModel = viewModel()) {
     var likes by remember { mutableStateOf(post.likesCount) }
     var isLiked by remember { mutableStateOf(false) }  // Initial liked state should be handled here or via a parameter
     var commentText by remember { mutableStateOf("") }
-    var comments by remember { mutableStateOf(post.comments) }
+    val comments by viewModel.comments.collectAsState(initial = emptyList())
+
+    LaunchedEffect(post.id) {
+        viewModel.loadAllComments(parentCommunityId, communityId, post.id)
+    }
 
     Card(
         modifier = Modifier
@@ -93,8 +99,12 @@ fun CommunityPost(post: CommunityPost, isMember: Boolean) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 comments.forEach { comment ->
-                    Text(text = comment, modifier = Modifier.padding(4.dp))
+                    Text(
+                        text = comment.content ?: "No comment",
+                        modifier = Modifier.padding(4.dp)
+                    )
                 }
+
             }
         }
     }

@@ -29,8 +29,6 @@ fun CommunityScreen(navController: NavController) {
             name = "Fantasia",
             description = "Para aqueles que gostam de fantasia",
             imageUrl = "https://i.pinimg.com/564x/4e/be/d6/4ebed6d42634cb724ce5bcfbc95bbf41.jpg",
-            specificCommunityImageUrl = "https://i.pinimg.com/564x/4e/be/d6/4ebed6d42634cb724ce5bcfbc95bbf41.jpg",
-            specificCommunityName = "Fantasia Fans",
             categories = listOf("Fantasia", "Magia", "Aventura")
         ),
         Community(
@@ -38,8 +36,6 @@ fun CommunityScreen(navController: NavController) {
             name = "Romance",
             description = "Para aqueles que gostam de romance",
             imageUrl = "https://i.pinimg.com/564x/5a/9b/43/5a9b439115de910523c3474a0a728f78.jpg",
-            specificCommunityImageUrl = "https://i.pinimg.com/564x/5a/9b/43/5a9b439115de910523c3474a0a728f78.jpg",
-            specificCommunityName = "Romance Readers",
             categories = listOf("Romance", "Drama", "Ficção")
         ),
         Community(
@@ -47,8 +43,6 @@ fun CommunityScreen(navController: NavController) {
             name = "Ficção Científica",
             description = "Para aqueles que gostam de Ficção Científica",
             imageUrl = "https://i.pinimg.com/564x/05/10/b2/0510b2703f70284c8ea255fb9f77ee28.jpg",
-            specificCommunityImageUrl = "https://i.pinimg.com/564x/05/10/b2/0510b2703f70284c8ea255fb9f77ee28.jpg",
-            specificCommunityName = "Sci-Fi Society",
             categories = listOf("Ficção Científica", "Tecnologia", "Exploração")
         ),
         Community(
@@ -56,9 +50,21 @@ fun CommunityScreen(navController: NavController) {
             name = "Comics",
             description = "Para aqueles que gostam de livros Comics",
             imageUrl = "https://i.pinimg.com/736x/c3/0e/20/c30e2025aeaf8bc13ca35182db791b7f.jpg",
-            specificCommunityImageUrl = "https://i.pinimg.com/736x/c3/0e/20/c30e2025aeaf8bc13ca35182db791b7f.jpg",
-            specificCommunityName = "Comic Book Club",
             categories = listOf("Comics", "Super-Heróis", "Ação")
+        ),
+        Community(
+            id = "5",
+            name = "Mangá",
+            description = "Para aqueles que gostam de mangás",
+            imageUrl = null,
+            categories = listOf("Comics")
+        ),
+        Community(
+            id = "6",
+            name = "Esportes",
+            description = "Para aqueles que gostam de livros de Esportes",
+            imageUrl = null,
+            categories = listOf("Esportes")
         )
     )
 
@@ -97,34 +103,6 @@ fun CommunityScreen(navController: NavController) {
                         .weight(1f)
                 )
             }
-
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate("make_a_post")
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .size(60.dp),
-                containerColor = Color.Transparent
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(brush = gradientBrushLight),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Create,
-                        contentDescription = "Create Post"
-                    )
-                }
-            }
-
         }
-
-
-
-
     }
 }

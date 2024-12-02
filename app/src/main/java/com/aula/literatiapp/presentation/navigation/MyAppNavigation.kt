@@ -142,7 +142,10 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
 
 
         composable("library_screen") {
-            LibraryScreen(navController = navController)
+            LibraryScreen(
+                navController = navController,
+                tagsViewModel = tagsViewModel
+            )
         }
 
 

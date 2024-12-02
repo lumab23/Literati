@@ -22,12 +22,11 @@ fun ScrollableCommunityColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        items(communityList) { communities ->
+        items(communityList) { community ->
             CommunityCard(
-                community = communities,
+                community = community,
                 onClick = {
-
-                    navController.navigate("community_list")
+                    navController.navigate("community_list/${community.id}")
                 }
             )
         }

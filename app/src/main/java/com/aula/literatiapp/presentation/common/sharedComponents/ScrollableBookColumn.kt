@@ -34,6 +34,7 @@ fun ScrollableBookColumn(
                 modifier = Modifier.fillMaxWidth()
             ) {
 
+
                 rowItems.forEach { book ->
                     BookCard(
                         book = book,
@@ -56,7 +57,7 @@ fun ScrollableBookColumn(
                             editor.putString("categories","${book.categories}")
                             editor.apply()
                             navController.navigate("book_screen")
-                            Toast.makeText(context,"${book.toString()}", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(context,"${book.toString()}", Toast.LENGTH_SHORT).show()
                         },
                         modifier = Modifier.weight(1f)
 

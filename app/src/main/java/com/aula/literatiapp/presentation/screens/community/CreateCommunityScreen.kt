@@ -1,6 +1,7 @@
 package com.aula.literatiapp.presentation.screens.community
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.*
@@ -33,36 +34,40 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.screens.community.components.CommunityTextField
 import com.aula.literatiapp.presentation.screens.community.components.MyDescriptionField
+import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
 
 // TODO: Adicionar botão para confirmar nova comunidade
 // TODO: Adicionar seção para adicionar moderadores
 @Composable
-fun CreateCommunityScreen(navController: NavController) {
-    var community by remember { mutableStateOf(
-        Community(
-            id = "1",
-            name = "Romance",
-            description = "para amantes de romance",
-            imageUrl = null,
-            specificCommunityImageUrl = null,
-            specificCommunityName = "jane austen"
+fun CreateCommunityScreen(navController: NavController, parentCommunityId: String?, viewModel: CommunityViewModel = viewModel()) {
+    var community by remember {
+        mutableStateOf(
+            Community(
+                id = "",
+                name = "",
+                description = "",
+                imageUrl = null,
+            )
         )
-    )}
+    }
 
-
-    val communityCategories = listOf("Fantasia", "Romance", "Ficção Científica", "Comics", "Mangá", "Esportes", "Tecnologia")
+    val communityCategories = listOf("Fantasia", "Romance", "Ficção Científica", "Comics", "Mangá", "Esportes")
     val selectedCategories = remember { mutableStateOf(setOf<String>()) }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val context = LocalContext.current
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             if (uri != null) {
-                community = community.copy(specificCommunityImageUrl = uri.toString())
+                community = community.copy(imageUrl = uri.toString())
                 Toast.makeText(context, "Image selected!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
@@ -93,17 +98,22 @@ fun CreateCommunityScreen(navController: NavController) {
                 }
             )
 
+            Log.d("Community Debug", community.imageUrl.toString())
+
             CommunityTextField(
                 labelValue = "Nome da comunidade",
-                value = community.specificCommunityName,
-                onValueChange = { community = community.copy(specificCommunityName = it) }
+                value = community.name,
+                onValueChange = { community = community.copy(name = it) }
             )
+            Log.d("Community Debug",community.name.toString())
 
             MyDescriptionField(
                 labelValue = "Descrição da comunidade",
                 value = community.description,
                 onValueChange = { community = community.copy(description = it) }
             )
+
+            Log.d("Community Debug",community.description.toString())
 
             Text(text = "Categorias", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
@@ -117,18 +127,23 @@ fun CreateCommunityScreen(navController: NavController) {
                             checked = selectedCategories.value.contains(category),
                             onCheckedChange = { isChecked ->
                                 selectedCategories.value = if (isChecked) {
-                                    selectedCategories.value + category
+                                    selectedCategories.value + category // Add the category
                                 } else {
-                                    selectedCategories.value - category
+                                    selectedCategories.value - category // Remove the category
                                 }
+                                community = community.copy(categories = selectedCategories.value.toList())
                             }
                         )
                         Text(text = category)
                     }
                 }
 
+                Log.d("Community Debug",community.categories.toString())
+
                 Button(
                     onClick = {
+                        Log.d("Community Debug", community.toString())
+                        viewModel.createCommunity(community, parentCommunityId.toString())
                         navController.popBackStack()
                     },
                     modifier = Modifier
@@ -141,4 +156,3 @@ fun CreateCommunityScreen(navController: NavController) {
         }
     }
 }
-

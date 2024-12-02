@@ -9,14 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aula.literatiapp.domain.model.CommunityPost
+import com.aula.literatiapp.domain.model.Community
 
 @Composable
-fun ScrollablePostList(
-    parentCommunityId: String,
-    communityId: String,
-    postList: List<CommunityPost>,
-    isMember: Boolean,
+fun ScrollableSpecificCommunityColumn(
+    communityList: List<Community>,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -25,13 +22,12 @@ fun ScrollablePostList(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-
-        items(postList) { post ->
-            CommunityPostCard(
-                parentCommunityId = parentCommunityId,
-                communityId = communityId,
-                post = post,
-                isMember = isMember
+        items(communityList) { community ->
+            CommunityCard(
+                community = community,
+                onClick = {
+                    navController.navigate("specific_community/${community.parentCommunityId}/${community.id}")
+                }
             )
         }
     }

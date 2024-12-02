@@ -53,7 +53,7 @@ class GeminiChatViewModel : ViewModel() {
     private suspend fun GeminiIA(value: String): String {
         val generativeModel = GenerativeModel(
             modelName = "gemini-1.5-flash",
-            apiKey = "AIzaSyAWPbYCv5SkE3fWUImX-JF6hz2RuOki1Gs"
+            apiKey = ""
         )
 
         val response = generativeModel.generateContent(value)

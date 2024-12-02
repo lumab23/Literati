@@ -54,18 +54,38 @@ class TagsViewModel : ViewModel() {
 
     private fun fetchBooksByIds(bookIds: List<String>) {
         viewModelScope.launch {
-            val books = bookIds.mapNotNull { bookId ->
+            val books = mutableListOf<Book>()
+            bookIds.forEach { bookId ->
                 try {
                     val response = RetrofitInstance.api.searchBooks(
                         query = "id:$bookId",
                         apiKey = BuildConfig.GOOGLE_API_KEY
                     )
-                    response.items.firstOrNull()?.volumeInfo
+                    val volumeInfo = response.items.firstOrNull()?.volumeInfo
+                    if (volumeInfo != null) {
+                        books.add(
+                            Book(
+                                id = bookId,
+                                title = volumeInfo.title,
+                                authors = volumeInfo.authors ?: emptyList(),
+                                publisher = volumeInfo.publisher,
+                                publishedDate = volumeInfo.publishedDate,
+                                description = volumeInfo.description,
+                                pageCount = volumeInfo.pageCount?.toString(),
+                                categories = volumeInfo.categories ?: emptyList(),
+                                averageRating = volumeInfo.averageRating,
+                                ratingsCount = volumeInfo.ratingsCount,
+                                language = volumeInfo.language,
+                                imageLinks = volumeInfo.imageLinks,
+                                previewLink = volumeInfo.previewLink
+                            )
+                        )
+                    }
                 } catch (e: Exception) {
-                    Log.e("TagsViewModel", "Erro ao buscar livro $bookId: ${e.message}")
-                    null
+                    Log.e("TagsViewModel", "Erro ao buscar livro com ID $bookId: ${e.message}")
                 }
             }
+
             _bookshelf.value = books
         }
     }
@@ -134,6 +154,13 @@ class TagsViewModel : ViewModel() {
 
             val booksIds = tagsMap?.values?.flatten() ?: emptyList()
 
+        }
+    }
+
+    fun loadBooksByTags(selectedTags: List<String>) {
+        viewModelScope.launch {
+            val booksToLoad = _booksByTag.value.filterKeys { it in selectedTags }.values.flatten().distinct()
+            fetchBooksByIds(booksToLoad)
         }
     }
 

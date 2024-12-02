@@ -38,6 +38,8 @@ fun SelectTagDialog(
     bookId: String,
     initialTags: List<String>
 ) {
+
+    val tagsViewModel: TagsViewModel = viewModel()
     val selectedTag: TagsViewModel = viewModel()
     // Lista de tags predefinidas
     val predefinedTags = listOf("Quero ler", "Abandonei", "Estou lendo", "Quero trocar", "Completo", "Favoritos")
@@ -92,6 +94,7 @@ fun SelectTagDialog(
                     Spacer(modifier = Modifier.width(16.dp))
                     TextButton(onClick = {
                         onTagSelected(selectedTags.toList())
+                        tagsViewModel.loadBooksByTags(selectedTags)
                         onDismissRequest()
                     }) {
                         Text(

@@ -3,6 +3,7 @@ package com.aula.literatiapp.presentation.screens.community.components
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,15 +22,16 @@ import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.Community
 
 @Composable
-fun CommunityImageSelection(community: Community, onImageClick: (Uri) -> Unit) {
+fun CommunityImageSelection(community: Community, onImageClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
-            .background(Color.LightGray),
+            .background(Color.LightGray)
+            .clickable { onImageClick() },
         contentAlignment = Alignment.Center
     ) {
-        val imageUrl = community.specificCommunityImageUrl ?: community.imageUrl
+        val imageUrl = community.imageUrl
 
         if (imageUrl != null) {
             AsyncImage(

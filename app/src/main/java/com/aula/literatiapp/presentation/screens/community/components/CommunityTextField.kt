@@ -24,16 +24,12 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CommunityTextField(
     labelValue: String,
-    value: String,
-    onValueChange: (String) -> Unit
+    value: String, // Pass the current value from the parent
+    onValueChange: (String) -> Unit // Callback to propagate changes
 ) {
-    var textState by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
-
     BasicTextField(
-        value = textState,
-        onValueChange = { textState = it },
+        value = value, // Bind the current value here
+        onValueChange = onValueChange, // Propagate the updated value to the parent
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -48,7 +44,7 @@ fun CommunityTextField(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Box(modifier = Modifier.weight(1f)) {
-                    if (textState.text.isEmpty()) {
+                    if (value.isEmpty()) { // Show placeholder if value is empty
                         Text(
                             text = labelValue,
                             style = MaterialTheme.typography.bodySmall,

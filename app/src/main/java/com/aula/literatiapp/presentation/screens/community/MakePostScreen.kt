@@ -29,19 +29,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.aula.literatiapp.R
+import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
 import com.aula.literatiapp.presentation.ui.theme.onPrimaryContainerLight
 import com.aula.literatiapp.presentation.ui.theme.onPrimaryLight
 
 @Composable
 fun MakePostScreen(
-    profileImageUrl: String?,
+    parentCommunityId: String,
+    communityId: String,
+    parentPostId: String?,
     onCancel: () -> Unit,
-    onPost: (String) -> Unit
+    onPost: (String) -> Unit,
+    navController: NavController,
+    viewModel: CommunityViewModel = viewModel()
 ) {
     var postText by remember { mutableStateOf("") }
     val maxPostLength = 200
+
+
 
     Column(
         modifier = Modifier
@@ -81,7 +90,14 @@ fun MakePostScreen(
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = profileImageUrl ?: "https://example.com/default_profile_image.jpg",
+                model = viewModel.loadUserProfilePicture { profileImageUrl ->
+                    if (profileImageUrl != null) {
+                        // Use the URL, e.g., load into an image
+                        println("Profile image URL: $profileImageUrl")
+                    } else {
+                        // Handle missing or error case
+                        println("No profile image found or error occurred.")
+                    } } ?: "https://example.com/default_profile_image.jpg",
                 contentDescription = "Profile picture",
                 modifier = Modifier
                     .size(45.dp)

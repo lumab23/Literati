@@ -60,4 +60,6 @@
     <string name="meuslivros">Meus Livros</string>
     <string name="chatGemini">Chat with Gemini</string>
     <string name="upload_profile_picture">Foto</string>
+    <string name="defaultTitle">Comunidade</string>
+    <string name="no_books_found">Nenhum livro na biblioteca.</string>
 </resources>

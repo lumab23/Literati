@@ -31,6 +31,13 @@ sealed class Screen(val route: String) {
     object UploadProfilePictureScreen : Screen("uploadProfilePicture_screen")
 
     object LibraryScreen : Screen("library_screen")
+    object CreateCommunityScreen : Screen("create_community_screen/{parentCommunityId}")
+    object CommunityList: Screen("community_list/{parentCommunityId}")
+    object CommunityScreen: Screen("community_screen")
+    object SpecificCommunityScreen : Screen("specific_community/{parentCommunityId}/{communityId}")
+    object SpecificCommunityInfo: Screen("specific_community_info/{parentCommunityId}/{communityId}")
+    object ModerationScreen: Screen("moderation_screen/{parentCommunityId}/{communityId}")
+    object MakePostScreen: Screen("create_post_screen/{parentCommunityId}/{communityId}?parentPostId={parentPostId}")
 
 
 }

@@ -25,7 +25,7 @@ fun SpecificCommunityListItem(community: Community, navController: NavController
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable { navController.navigate("specific_community_screen") }
+            .clickable { navController.navigate("specific_community/${community.id}") }
     ) {
         Row(
             modifier = Modifier
@@ -38,10 +38,10 @@ fun SpecificCommunityListItem(community: Community, navController: NavController
                 modifier = Modifier
                     .padding(8.dp)
             ) {
-                community.specificCommunityImageUrl?.let {
+                community.imageUrl?.let {
                     SpecificCommunityCard(
                         specificCommunityImage = it,
-                        onBookClick = { navController.navigate("specific_community_screen") },
+                        onBookClick = { navController.navigate("specific_community/${community.id}") },
                         navController = navController,
                         modifier = Modifier
                     )

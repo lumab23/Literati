@@ -47,7 +47,7 @@ fun ProfileScreen(
     val swaps = bookshelf.filter { book -> booksByTag["Quero trocar"]?.contains(book.id) == true }
     val recentReads = bookshelf.filter { book ->
         booksByTag.values.flatten().contains(book.id)
-    }.distinct().takeLast(5)
+    }.distinct().takeLast(4)
 
 
     val listas = listOf(
