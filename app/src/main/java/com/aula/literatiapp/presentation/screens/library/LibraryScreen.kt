@@ -62,7 +62,7 @@ fun LibraryScreen(
         ) {
             if (bookshelf.isNotEmpty()) {
                 ScrollableBookColumn(
-                    bookList = emptyList(),
+                    bookList = bookshelf,
                     navController = navController
                 )
             } else {

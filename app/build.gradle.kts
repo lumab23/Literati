@@ -1,7 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
+    id ("kotlin-kapt")
+    id ("dagger.hilt.android.plugin") // Plugin do Hilt
+    alias(libs.plugins.dagger.hilt)
+
 }
 
 android {
@@ -59,7 +64,26 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.generativeai)
+    implementation(libs.coil)
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime.android)
+    val nav_version = "2.8.0"
+    implementation ("com.google.dagger:hilt-android:2.48")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation ("androidx.compose.material3:material3:1.2.1")
+    kapt(libs.dagger.hilt.compiler)
+    implementation ("androidx.compose.ui:ui:1.5.1")
+    implementation ("androidx.navigation:navigation-compose:2.7.2")
+    kapt ("com.google.dagger:hilt-compiler:2.48")
+    testImplementation ("junit:junit:4.13.2")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation(libs.navigation.compose)
+    implementation ("com.google.code.gson:gson:2.8.8") // Ou a versão mais recente
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
