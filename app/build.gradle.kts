@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.room.runtime.android)
     val nav_version = "2.8.0"
     implementation ("com.google.dagger:hilt-android:2.48")
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.5.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation ("androidx.compose.material3:material3:1.2.1")
