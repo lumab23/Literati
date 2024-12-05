@@ -153,7 +153,7 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             TagsScreen(navController = navController)
         }
 
-        composable("tag_screen/{tag}") { backStackEntry ->
+        composable("specific_tag_screen/{tag}") { backStackEntry ->
             val tag = backStackEntry.arguments?.getString("tag") ?: ""
             SpecificTagScreen(
                 tag = tag,

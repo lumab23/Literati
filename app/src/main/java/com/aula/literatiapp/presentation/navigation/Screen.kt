@@ -41,6 +41,6 @@ sealed class Screen(val route: String) {
 
 
     object TagsScreen: Screen("tags_screen")
-    object SpecificTagScreen: Screen("tag_screen/{tag}")
+    object SpecificTagScreen: Screen("specific_tag_screen/{tag}")
 
 }

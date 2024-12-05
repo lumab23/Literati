@@ -78,20 +78,6 @@ class TagsViewModel : ViewModel() {
         return book
     }
 
-//    private fun fetchBooksByIds(bookIds: List<String>) {
-//            val books = mutableListOf<Book>()
-//            bookIds.forEach { bookId ->
-//                viewModelScope.launch {
-//
-//                val book = fetchBookById(bookId)
-//                if (book != null) {
-//                    books.add(book)
-//                }
-//            }
-//
-//            _bookshelf.value = books
-//        }
-//    }
     private fun fetchBooksByIds(bookIds: List<String>) {
         viewModelScope.launch {
             // Lista para armazenar os resultados
@@ -132,25 +118,6 @@ class TagsViewModel : ViewModel() {
         }
     }
 
-
-    // Adicionar livro a uma tag específica
-    fun addBookToTag(tag: String, bookId: String) {
-        viewModelScope.launch {
-            val currentTags = _booksByTag.value.toMutableMap()
-            val updatedList = currentTags[tag]?.toMutableList() ?: mutableListOf()
-
-            if (!updatedList.contains(bookId)) {
-                updatedList.add(bookId)
-                currentTags[tag] = updatedList
-                _booksByTag.value = currentTags
-
-                Log.d("TagsViewModel", "Books in tag '$tag': ${updatedList.joinToString(", ")}")
-
-                updateFirestoreTags(currentTags)
-            }
-        }
-    }
-
     // Atualizar as tags no Firestore
     private fun updateFirestoreTags(updatedTags: Map<String, List<String>>) {
         firestore.collection("users").document(userId) // Substituir pelo ID do usuário autenticado
@@ -188,27 +155,11 @@ class TagsViewModel : ViewModel() {
         }
     }
 
-    fun getBooksByTags(userId: User) {
-        viewModelScope.launch {
-            // pegar as tags e os ids dos livros do firestore
-            val userDoc = firestore.collection("users").document(userId.id).get().await()
-            val tagsMap = userDoc.get("tags") as? Map<String, List<String>>
-
-            val booksIds = tagsMap?.values?.flatten() ?: emptyList()
-
-        }
-    }
-
     fun loadBooksByTags(selectedTags: List<String>) {
         viewModelScope.launch {
             val booksToLoad = _booksByTag.value.filterKeys { it in selectedTags }.values.flatten().distinct()
             fetchBooksByIds(booksToLoad) // foi trocado
         }
-    }
-
-    fun getBooksForTag(tag: String): List<Book> {
-        val bookIds = _booksByTag.value[tag] ?: return emptyList()
-        return bookshelf.value?.filter { book -> bookIds.contains(book.id) } ?: emptyList()
     }
 
 

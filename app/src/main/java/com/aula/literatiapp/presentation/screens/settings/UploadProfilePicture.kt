@@ -24,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -50,7 +52,6 @@ fun UploadProfilePicture(
     settingsViewModel: SettingsViewModel,
     hostState: SnackbarHostState
 ) {
-
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // Lançador para selecionar uma imagem
@@ -62,7 +63,10 @@ fun UploadProfilePicture(
 
     Scaffold(
         topBar = {
-            BackNavigationDashboard(value = stringResource(R.string.upload_profile_picture), navController = navController)
+            BackNavigationDashboard(
+                value = stringResource(R.string.upload_profile_picture),
+                navController = navController
+            )
         }
     ) { paddingValues ->
         Box(
@@ -77,32 +81,38 @@ fun UploadProfilePicture(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                // Exibe a foto de perfil
+
                 Image(
-                    painter = rememberAsyncImagePainter(model = selectedImageUri ?: settingsViewModel.userProfilePictureUrl.collectAsState().value),
+                    painter = rememberAsyncImagePainter(
+                        model = selectedImageUri?.toString()
+                            ?: settingsViewModel.userProfilePictureUrl.collectAsState().value
+                    ),
                     contentDescription = "Foto de Perfil",
                     modifier = Modifier
                         .size(100.dp)
+                        .width(100.dp)
+                        .height(100.dp)
                         .clip(CircleShape)
-                        .border(2.dp, Color.Black, CircleShape),
+                        .border(1.dp, Color.Black, CircleShape),
                     contentScale = ContentScale.Crop
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botão para selecionar a foto
                 Button(onClick = { launcher.launch("image/*") }) {
                     Text(text = "Selecionar Foto de Perfil")
                 }
 
+                Log.d("Image selection", selectedImageUri.toString())
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botão para salvar a foto
                 Button(
                     onClick = {
                         selectedImageUri?.let { uri ->
-                            settingsViewModel.uploadProfilePicture(
-                                imageUri = uri,
+                            val uriString = uri.toString()
+                            settingsViewModel.updateUserProfilePictureInFirestore(
+                                photoUrl = uriString,
                                 onComplete = { success, message ->
                                     val snackBarMessage = if (success) {
                                         "Foto de perfil atualizada com sucesso"
@@ -110,14 +120,12 @@ fun UploadProfilePicture(
                                         "Erro: $message"
                                     }
 
-                                    // Mostrar Snackbar
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        hostState.showSnackbar(snackBarMessage)
-                                    }
-
-                                    // Se o upload foi bem-sucedido, volte para a tela anterior
                                     if (success) {
-                                        navController.popBackStack()  // Retorna à tela anterior
+                                        navController.popBackStack()
+                                    } else {
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            hostState.showSnackbar(snackBarMessage)
+                                        }
                                     }
                                 }
                             )
@@ -130,8 +138,8 @@ fun UploadProfilePicture(
             }
         }
     }
-
 }
+
 
 @Preview
 @Composable

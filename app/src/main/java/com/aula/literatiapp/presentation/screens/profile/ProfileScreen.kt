@@ -74,7 +74,7 @@ fun ProfileScreen(
 
                 item {
                     if (it != null) {
-                        ProfileSection(user = it)
+                        ProfileSection(user = it, viewModel = viewModel())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider()

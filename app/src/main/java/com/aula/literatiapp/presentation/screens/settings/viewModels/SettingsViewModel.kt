@@ -42,11 +42,22 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun fetchUserData() {
-        val user = firebaseAuth.currentUser
-        user?.let {
-            _userName.value = it.displayName ?: ""
-            _userEmail.value = it.email ?: ""
-            _userProfilePictureUrl.value = it.photoUrl?.toString() ?: ""
+        val currentUser = firebaseAuth.currentUser
+        currentUser?.let { user ->
+            firestore.collection("users").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val name = document.getString("name") ?: ""
+                        val username = document.getString("username") ?: ""
+                        val profilePictureUrl = document.getString("profilePictureUrl") ?: ""
+
+                        _userName.value = name
+                        _userProfilePictureUrl.value = profilePictureUrl
+                    }
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                }
         }
     }
 
@@ -102,15 +113,23 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    private fun updateUserProfilePictureInFirestore(photoUrl: String) {
+    fun updateUserProfilePictureInFirestore(photoUrl: String, onComplete: (Boolean, String?) -> Unit) {
         val user = firebaseAuth.currentUser
         user?.let {
             firestore.collection("users").document(it.uid)
                 .update("profilePictureUrl", photoUrl)
-                .addOnFailureListener { e -> e.printStackTrace() }
+                .addOnSuccessListener {
+                    onComplete(true, null) // Chama o callback indicando sucesso
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                    onComplete(false, e.message) // Chama o callback indicando falha
+                }
+        } ?: run {
+            onComplete(false, "Usuário não autenticado") // Chama o callback se o usuário for nulo
         }
     }
-
+/*
     fun uploadProfilePicture(
         imageUri: Uri,
         onComplete: (Boolean, String) -> Unit
@@ -118,7 +137,7 @@ class SettingsViewModel : ViewModel() {
         val user = firebaseAuth.currentUser
 
         if (user == null) {
-            onComplete(false, "User is not authenticated")
+            onComplete(false, "Usuário não autenticado")
             return
         }
 
@@ -126,31 +145,35 @@ class SettingsViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                // Upload file
+                // Upload da imagem para o Firebase Storage
                 storageRef.putFile(imageUri).await()
 
-                // Get the file's URL
+                // Obter a URL de download da imagem
                 val downloadUri = storageRef.downloadUrl.await()
 
-                // Update profile in Firebase Auth
+                // Atualizar o perfil no Firebase Auth
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setPhotoUri(downloadUri)
                     .build()
 
                 user.updateProfile(profileUpdates).await()
 
-                // Update Firestore and local state
-                _userProfilePictureUrl.value = downloadUri.toString()
-                updateUserProfilePictureInFirestore(downloadUri.toString())
+                // Atualizar no Firestore
+                firestore.collection("users").document(user.uid)
+                    .update("profilePictureUrl", downloadUri.toString())
+                    .await()
 
-                // Notify the completion
+                // Atualizar o estado local
+                _userProfilePictureUrl.value = downloadUri.toString()
+
+                // Chamar o callback indicando sucesso
                 onComplete(true, downloadUri.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
-                onComplete(false, "Failed to upload profile picture: ${e.message}")
+                onComplete(false, "Erro ao atualizar a foto: ${e.message}")
             }
         }
-    }
+    }*/
 
 
     fun deleteAccount(

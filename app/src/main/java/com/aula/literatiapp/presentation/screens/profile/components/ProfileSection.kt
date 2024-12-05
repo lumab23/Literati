@@ -13,18 +13,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.aula.literatiapp.domain.model.User
+import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.AppTheme
 
 @Composable
-fun ProfileSection(user: User) {
+fun ProfileSection(user: User, viewModel: SettingsViewModel) {
 
+    val userName by viewModel.userName.collectAsState()
+    val userProfilePictureUrl by viewModel.userProfilePictureUrl.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,7 +41,7 @@ fun ProfileSection(user: User) {
     ) {
 
         AsyncImage(
-            model = user.profilePictureUrl,
+            model = userProfilePictureUrl,
             contentDescription = "profile picture",
             modifier = Modifier
                 .width(100.dp)
@@ -53,7 +59,7 @@ fun ProfileSection(user: User) {
         )
 
         Text(
-            text = user.username,
+            text = "@$userName",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(top = 4.dp)
@@ -61,18 +67,4 @@ fun ProfileSection(user: User) {
 
     }
 
-}
-
-@PreviewLightDark
-@Composable
-fun ProfileSectionPreview() {
-    AppTheme {
-        ProfileSection(user = User(
-            id = "1",
-            name = "Luma",
-            username = "@mrdarcy",
-            email = "garfield@myownpersonaldomain.com",
-            profilePictureUrl = "https://i.pinimg.com/564x/ce/fd/c0/cefdc01ca32e9cb0b5a5742dbea7f337.jpg"
-        ))
-    }
 }
