@@ -17,11 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aula.literatiapp.domain.model.Book
+import com.aula.literatiapp.domain.model.ImageLinks
 import com.aula.literatiapp.presentation.common.sharedComponents.BookCard
 import com.aula.literatiapp.presentation.common.sharedComponents.StarRatingBar
 import com.aula.literatiapp.presentation.ui.theme.getTextColor
@@ -102,4 +105,25 @@ fun ReviewComponent(book: Book, navController: NavController) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ReviewComp() {
+    val book = Book(
+        id = "2",
+        title = "1984",
+        authors = listOf("George Orwell"),
+        publisher = "Penguin Books",
+        publishedDate = "1949",
+        description = "A dystopian social science fiction novel and cautionary tale...",
+        pageCount = "328",
+        categories = listOf("Dystopian", "Science Fiction"),
+        averageRating = 4.7,
+        ratingsCount = 3500,
+        language = "en",
+        imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
+        previewLink = "https://example.com/preview",
+    )
+    ReviewComponent(book, NavController(LocalContext.current))
 }
