@@ -4,7 +4,7 @@ sealed class Screen(val route: String) {
 
     object Login : Screen("login")
     object SignUp : Screen("signUp")
-    object Home : Screen("home_screen")
+    object Home : Screen("home")
     object ForgotPassword : Screen("forgotPassword")
     object Community : Screen("community")
     object Settings : Screen("settings_screen")
@@ -43,4 +43,5 @@ sealed class Screen(val route: String) {
     object TagsScreen: Screen("tags_screen")
     object SpecificTagScreen: Screen("specific_tag_screen/{tag}")
 
+    object ChatScreen: Screen("chat_screen")
 }

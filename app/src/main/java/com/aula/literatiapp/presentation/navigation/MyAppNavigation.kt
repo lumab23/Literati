@@ -16,6 +16,7 @@ import androidx.navigation.navArgument
 import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
+import com.aula.literatiapp.presentation.screens.chat.Conversation
 import com.aula.literatiapp.presentation.screens.gemini.GeminiChatScreen
 import com.aula.literatiapp.presentation.screens.gemini.viewModels.GeminiChatViewModel
 import com.aula.literatiapp.presentation.screens.home.HomeScreen
@@ -142,6 +143,7 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
+
         composable("library_screen") {
             LibraryScreen(
                 navController = navController,
@@ -160,6 +162,11 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
                 navController = navController
             )
 
+        }
+
+        composable("chat/{channelId}") { backStackEntry ->
+            val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+            Conversation(navController = navController, channelId = channelId)
         }
 
 

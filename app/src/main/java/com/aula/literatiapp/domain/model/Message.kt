@@ -1,9 +1,11 @@
 package com.aula.literatiapp.domain.model
 
 data class Message(
-    val username: String,
-    val profileImageUrl: String,
-    val body: String,
-    val time: String,
-    val isSentByUser: Boolean
+    val id: String,
+    val senderId: String,
+    val message: String,
+    val createdAt: Long = System.currentTimeMillis(),
+    val senderName: String,
+    val senderImage: String? = null,
+    val imageUrl: String? = null
 )
