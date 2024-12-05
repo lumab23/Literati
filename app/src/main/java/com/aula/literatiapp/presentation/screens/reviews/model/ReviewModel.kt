@@ -21,6 +21,8 @@ class ReviewViewModel : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     // StateFlow para monitorar as reviews associadas a um livro
     private val _reviews = MutableStateFlow<List<Review>>(emptyList())
