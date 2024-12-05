@@ -1,129 +1,70 @@
-package com.aula.literatiapp.presentation.screens.reviews.components
-
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.aula.literatiapp.domain.model.Book
-import com.aula.literatiapp.domain.model.ImageLinks
-import com.aula.literatiapp.presentation.common.sharedComponents.BookCard
-import com.aula.literatiapp.presentation.common.sharedComponents.StarRatingBar
-import com.aula.literatiapp.presentation.ui.theme.getTextColor
+import com.aula.literatiapp.presentation.screens.reviews.viewModels.Review
 
 @Composable
-fun ReviewComponent(book: Book, navController: NavController) {
-
-    var rating by remember { mutableStateOf(4f) }
-
+fun ReviewComponent(
+    bookId: String,
+    review: Review,
+    navController: NavController
+) {
+    // Criação do card básico com uma borda
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(8.dp)
+            .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp))
+            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(12.dp)
+            .clickable {
+                // Exemplo: navegação para detalhes do livro, se implementado
+                navController.navigate("book_details_screen/$bookId")
+            }
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-            ) {
-                BookCard(
-                    book = book,
-                    onBookClick = { navController.navigate("book_screen") },
-                    modifier = Modifier
-                )
-            }
+        // Layout da Review (título do livro, nota, comentário, etc.)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // ID do Livro (pode ser substituído por título em um futuro fetch)
+            Text(
+                text = "Livro ID: $bookId",
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
-            Column(
-                modifier = Modifier
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = book.title,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Start,
-                        color = getTextColor()
-                    )
+            // Nota do livro
+            Text(
+                text = "Nota: ${review.rating} / 5",
+                style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold),
+                color = Color(0xFF00796B), // Verde para destacar
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
 
-                    StarRatingBar(
-                        maxStars = 5,
-                        rating = rating,
-                        onRatingChanged = {newRating ->
-                            rating = newRating
-                        }
-                    )
+            // Comentário do usuário
+            Text(
+                text = "Comentário: ${review.comment}",
+                style = TextStyle(fontSize = 14.sp),
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
 
-
-                }
-
-                Text(
-                    text = book.authors?.joinToString(", ") ?: "Unknown Authors",
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Start,
-                    color = getTextColor()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "",
-                    fontWeight = FontWeight.Normal,
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Start,
-                    color = getTextColor()
-                )
-
-            }
+            // Autor do comentário (ID do usuário)
+            Text(
+                text = "Autor: ${review.userId}",
+                style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Light),
+                color = Color.Gray
+            )
         }
     }
-}
-
-@Preview
-@Composable
-private fun ReviewComp() {
-    val book = Book(
-        id = "2",
-        title = "1984",
-        authors = listOf("George Orwell"),
-        publisher = "Penguin Books",
-        publishedDate = "1949",
-        description = "A dystopian social science fiction novel and cautionary tale...",
-        pageCount = "328",
-        categories = listOf("Dystopian", "Science Fiction"),
-        averageRating = 4.7,
-        ratingsCount = 3500,
-        language = "en",
-        imageLinks = ImageLinks(thumbnail = "https://example.com/handmaids-tale-thumbnail.jpg"),
-        previewLink = "https://example.com/preview",
-    )
-    ReviewComponent(book, NavController(LocalContext.current))
 }

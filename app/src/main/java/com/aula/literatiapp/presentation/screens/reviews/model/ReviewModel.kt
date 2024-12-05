@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +24,10 @@ class ReviewViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _userReviews = MutableStateFlow<List<Review>>(emptyList())
+    val userReviews: StateFlow<List<Review>> = _userReviews
+
 
     // StateFlow para monitorar as reviews associadas a um livro
     private val _reviews = MutableStateFlow<List<Review>>(emptyList())
@@ -49,6 +54,25 @@ class ReviewViewModel : ViewModel() {
                     _reviews.value = emptyList() // Pode ser usado para exibir erro
                 }
         }
+    }
+
+    fun fetchUserReviews(userId: String) {
+        _isLoading.value = true
+
+        firestore.collection("reviews")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                val reviewsList = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(Review::class.java)
+                }
+                _userReviews.value = reviewsList
+                _isLoading.value = false
+            }
+            .addOnFailureListener {
+                _userReviews.value = emptyList()
+                _isLoading.value = false
+            }
     }
 
     // Função para enviar uma nova review
