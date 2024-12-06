@@ -40,6 +40,11 @@ fun LibraryScreen(
     val bookshelf by tagsViewModel.bookshelf.observeAsState(emptyList())
     Log.d("LibraryScreen", "Bookshelf atual: ${bookshelf.map { it.title }}")
 
+    // loading of tags when the screen is recomposed
+    LaunchedEffect(Unit) {
+        tagsViewModel.loadTags()
+    }
+
     // puxar todos os livros do viewModel
     Scaffold( // seções tipo div
         topBar = {

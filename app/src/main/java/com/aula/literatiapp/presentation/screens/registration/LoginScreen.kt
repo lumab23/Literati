@@ -102,9 +102,6 @@ fun LoginScreen(
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            ForgotPasswordLink()
-
             // handling the login State
             when (loginState) {
 
@@ -113,7 +110,7 @@ fun LoginScreen(
                 }
 
                 is LoginState.Success -> {
-                    navController.navigate("home_screen")
+                    navController.navigate("home")
                 }
 
                 is LoginState.Error -> {
@@ -136,15 +133,7 @@ fun LoginScreen(
                 modifier = Modifier
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            AlternativeOptionGoogle(
-                value =  stringResource(R.string.registration_with_google),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             AlternativeOptionAccount(
                 value = stringResource(R.string.no_account),

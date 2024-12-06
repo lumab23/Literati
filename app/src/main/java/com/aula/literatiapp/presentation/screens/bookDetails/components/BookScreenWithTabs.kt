@@ -41,12 +41,14 @@ fun BookScreenWithTabs(book: Book) {
             TabButton(
                 title = "Detalhes",
                 selected = selectedTab == "Detalhes",
-                onClick = { selectedTab = "Detalhes" }
+                onClick = { selectedTab = "Detalhes" },
+                modifier = Modifier
             )
             TabButton(
                 title = "Gêneros",
                 selected = selectedTab == "Gêneros",
-                onClick = { selectedTab = "Gêneros" }
+                onClick = { selectedTab = "Gêneros" },
+                modifier = Modifier
             )
         }
 

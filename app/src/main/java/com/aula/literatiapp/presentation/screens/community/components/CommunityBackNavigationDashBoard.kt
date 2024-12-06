@@ -14,6 +14,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,20 +32,29 @@ import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
 fun CommunityBackNavigationDashBoard(
     value: String,
     navController: NavController,
-    isMember: Boolean,
-    isAdmin: Boolean,
     parentCommunityId: String,
     communityId: String,
     viewModel: CommunityViewModel = viewModel(),
     onJoinClick: () -> Unit = { viewModel.joinCommunity(parentCommunityId, communityId) },
     onModerationClick: () -> Unit = {
-        navController.navigate("moderationScreen/$communityId")
+        navController.navigate("moderation_screen/${parentCommunityId}/${communityId}")
     },
     onNavigateAway: () -> Unit = {
         navController.navigate("specific_community_info/${parentCommunityId}/${communityId}")
     }
 ) {
 
+    val isMemberState = viewModel.isMember.collectAsState()
+    val isAdminState = viewModel.isAdmin.collectAsState()
+
+
+    val isMember = isMemberState.value
+    val isAdmin = isAdminState.value
+
+
+    LaunchedEffect(Unit) {
+        viewModel.checkUserStatus(parentCommunityId, communityId)
+    }
 
     Column(
         Modifier
@@ -107,7 +118,7 @@ fun CommunityBackNavigationDashBoard(
                 }
             }else if(isMember && !isAdmin){
                 Button(
-                    onClick = { onJoinClick() },
+                    onClick = { viewModel.leaveCommunity(parentCommunityId, communityId) },
                     modifier = Modifier
                         .constrainAs(joinButton) {
                             end.linkTo(parent.end, margin = 16.dp)

@@ -31,7 +31,8 @@ fun ScrollablePostList(
                 parentCommunityId = parentCommunityId,
                 communityId = communityId,
                 post = post,
-                isMember = isMember
+                isMember = isMember,
+                navController = navController
             )
         }
     }

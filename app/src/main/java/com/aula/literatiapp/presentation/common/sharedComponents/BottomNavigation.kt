@@ -73,7 +73,7 @@ fun BottomNavigation(modifier: Modifier, navController: NavController) {
                 label = null,
                 selected = false,
                 onClick = {
-                    navController.navigate("home_screen")
+                    navController.navigate("home")
                 }
             )
 

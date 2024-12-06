@@ -60,7 +60,7 @@ fun ProfileScreenDashboard(navController: NavController) {
             Icon(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("chat_screen")
+                        navController.navigate("chat")
                     },
                 imageVector = Icons.Default.ChatBubbleOutline,
                 contentDescription = "chat",

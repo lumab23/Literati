@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.aula.literatiapp.presentation.navigation.Screen
 import com.aula.literatiapp.presentation.screens.chat.components.AddChannelDialog
 import com.aula.literatiapp.presentation.screens.chat.components.ChannelItem
 import com.aula.literatiapp.presentation.screens.chat.viewModels.ChatScreenViewModel
@@ -102,11 +103,11 @@ fun ChatScreen(
                 }
 
 
-                items(channels.value){ channel ->
+                items(channels.value) { channel ->
                     Column {
-                        ChannelItem(channel.name,{
-                            navController.navigate("chat/${channel.id}")
-                        })
+                        ChannelItem(channel.name) {
+                            //navController.navigate("chat/${channel.id}&${channel.name}")
+                        }
                     }
                 }
             }

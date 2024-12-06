@@ -18,7 +18,7 @@ import com.aula.literatiapp.presentation.ui.theme.surfaceBrightDark
 import com.aula.literatiapp.presentation.ui.theme.surfaceBrightLight
 
 @Composable
-fun TabButton(title: String, selected: Boolean, onClick: () -> Unit) {
+fun TabButton(title: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier) {
     val backgroundColor = surfaceBrightLight
     val borderColor = if (selected) scrimLight else outlineVariantLight
 

@@ -37,6 +37,7 @@ class SettingsViewModel : ViewModel() {
     private val _userProfilePictureUrl = MutableStateFlow("")
     val userProfilePictureUrl: StateFlow<String> get() = _userProfilePictureUrl
 
+
     init {
         fetchUserData()
     }
@@ -61,6 +62,7 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
+
     private fun updateUserNameInFirestore(newName: String, onComplete: (Boolean) -> Unit) {
         val currentUser = firebaseAuth.currentUser
         currentUser?.let {
@@ -71,6 +73,16 @@ class SettingsViewModel : ViewModel() {
                 }
         }
     }
+
+    fun removeProfilePicture(onComplete: (Boolean, String?) -> Unit) {
+        updateUserProfilePictureInFirestore("") { success, message ->
+            if (success) {
+                _userProfilePictureUrl.value = "" // Atualiza o state flow
+            }
+            onComplete(success, message)
+        }
+    }
+
 
 
     fun updateUserName(newName: String, onComplete: (Boolean) -> Unit) {
@@ -113,7 +125,7 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfilePictureInFirestore(photoUrl: String, onComplete: (Boolean, String?) -> Unit) {
+    private fun updateUserProfilePictureInFirestore(photoUrl: String, onComplete: (Boolean, String?) -> Unit) {
         val user = firebaseAuth.currentUser
         user?.let {
             firestore.collection("users").document(it.uid)
@@ -129,51 +141,24 @@ class SettingsViewModel : ViewModel() {
             onComplete(false, "Usuário não autenticado") // Chama o callback se o usuário for nulo
         }
     }
-/*
-    fun uploadProfilePicture(
-        imageUri: Uri,
-        onComplete: (Boolean, String) -> Unit
-    ) {
+
+    fun uploadAndSaveProfilePicture(uri: Uri, onComplete: (Boolean, String?) -> Unit) {
         val user = firebaseAuth.currentUser
-
-        if (user == null) {
-            onComplete(false, "Usuário não autenticado")
-            return
-        }
-
-        val storageRef = storage.reference.child("profile_pictures/${user.uid}.jpg")
+        val storageRef = storage.reference.child("profile_pictures/${user?.uid}.jpg")
 
         viewModelScope.launch {
             try {
-                // Upload da imagem para o Firebase Storage
-                storageRef.putFile(imageUri).await()
-
-                // Obter a URL de download da imagem
-                val downloadUri = storageRef.downloadUrl.await()
-
-                // Atualizar o perfil no Firebase Auth
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setPhotoUri(downloadUri)
-                    .build()
-
-                user.updateProfile(profileUpdates).await()
-
-                // Atualizar no Firestore
-                firestore.collection("users").document(user.uid)
-                    .update("profilePictureUrl", downloadUri.toString())
-                    .await()
-
-                // Atualizar o estado local
-                _userProfilePictureUrl.value = downloadUri.toString()
-
-                // Chamar o callback indicando sucesso
-                onComplete(true, downloadUri.toString())
+                storageRef.putFile(uri).await()
+                val downloadUri = storageRef.downloadUrl.await().toString()
+                updateUserProfilePictureInFirestore(downloadUri) { success, message ->
+                    onComplete(success, message)
+                }
             } catch (e: Exception) {
-                e.printStackTrace()
-                onComplete(false, "Erro ao atualizar a foto: ${e.message}")
+                onComplete(false, e.message)
             }
         }
-    }*/
+    }
+
 
 
     fun deleteAccount(

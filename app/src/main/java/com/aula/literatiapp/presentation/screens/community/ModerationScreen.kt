@@ -1,11 +1,15 @@
 package com.aula.literatiapp.presentation.screens.community
 
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material.*
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -14,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,10 +42,9 @@ fun ModerationScreen(
     val members by viewModel.members.collectAsState()
 
     var showAddAdminDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf(community?.name ?: "") }
     var description by remember { mutableStateOf(community?.description ?: "") }
-    var imageUrl by remember { mutableStateOf(community?.imageUrl ?: "") }
-
 
     LaunchedEffect(communityId) {
         viewModel.getCommunityById(parentCommunityId, communityId)
@@ -64,17 +68,6 @@ fun ModerationScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            community?.imageUrl?.let { currentImageUrl ->
-                Image(
-                    painter = rememberAsyncImagePainter(currentImageUrl),
-                    contentDescription = "Community Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
-            }
-
             TextField(
                 value = name,
                 onValueChange = { name = it },
@@ -89,11 +82,9 @@ fun ModerationScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-
             Button(onClick = { showAddAdminDialog = true }) {
                 Text("Add New Admin")
             }
-
 
             Button(onClick = {
                 viewModel.updateCommunity(
@@ -105,9 +96,43 @@ fun ModerationScreen(
             }) {
                 Text("Save Changes")
             }
+
+            Text("Admins", style = MaterialTheme.typography.h6, modifier = Modifier.padding(top = 16.dp))
+            LazyColumn {
+                items(admins) { admin ->
+                    MemberCard(
+                        isAdmin = true,
+                        member = admin,
+                        onClick = {
+                            viewModel.removeAdmin(parentCommunityId, communityId, admin.id)
+                        }
+                    )
+                }
+            }
+
+            Text("Members", style = MaterialTheme.typography.h6, modifier = Modifier.padding(top = 16.dp))
+            LazyColumn {
+                items(members) { member ->
+                    MemberCard(
+                        isAdmin = false,
+                        member = member,
+                        onClick = {
+                            viewModel.promoteToAdmin(parentCommunityId, communityId, member.id)
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { showDeleteConfirmationDialog = true },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Delete Community", color = Color.White)
+            }
         }
     }
-
 
     if (showAddAdminDialog) {
         AddAdminDialog(
@@ -117,6 +142,36 @@ fun ModerationScreen(
             onAddAdmin = { userId ->
                 viewModel.promoteToAdmin(parentCommunityId, communityId, userId)
                 showAddAdminDialog = false
+            }
+        )
+    }
+
+    if (showDeleteConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog = false },
+            title = { Text("Delete Community") },
+            text = { Text("Are you sure you want to delete this community? This action cannot be undone.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteCommunity(
+                            parentCommunityId = parentCommunityId,
+                            communityId = communityId,
+                            onComplete = {
+                                showDeleteConfirmationDialog = false
+                                navController.navigate("community_list/${parentCommunityId}")
+                            }
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+                ) {
+                    Text("Delete", color = Color.White)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmationDialog = false }) {
+                    Text("Cancel")
+                }
             }
         )
     }
@@ -157,5 +212,6 @@ fun AddAdminDialog(
         }
     )
 }
+
 
 

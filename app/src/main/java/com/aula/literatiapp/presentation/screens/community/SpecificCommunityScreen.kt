@@ -38,8 +38,8 @@ fun SpecificCommunityScreen(
     parentCommunityId: String
 ) {
     val isMember by viewModel.isMember.collectAsState()
-    //val isAdmin by viewModel.isAdmin.collectAsState()
-    val isAdmin = true
+    // ALTERAR!!! Para testar se ta funcionando
+    val isAdmin by viewModel.isAdmin.collectAsState()
     val posts by viewModel.posts.collectAsState()
     val community by viewModel.community.collectAsState()
 
@@ -59,13 +59,11 @@ fun SpecificCommunityScreen(
             CommunityBackNavigationDashBoard(
                 value = currentCommunity?.name ?: "Loading...",
                 navController = navController,
-                isMember = isMember,
-                isAdmin = isAdmin,
                 parentCommunityId = parentCommunityId,
                 communityId = communityId,
                 onJoinClick = { viewModel.joinCommunity(parentCommunityId, communityId) },
                 onModerationClick = {
-                    navController.navigate("moderationScreen/$communityId")
+                    navController.navigate("moderation_screen/$parentCommunityId/$communityId")
                 }
             )
         },
@@ -113,7 +111,7 @@ fun SpecificCommunityScreen(
 
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate("create_post_screen/$parentCommunityId/$communityId?parentPostId=null")
+                        navController.navigate("create_post_screen/$parentCommunityId/$communityId")
                     },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)

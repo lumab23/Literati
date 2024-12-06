@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
 class TagsViewModel : ViewModel() {
 
     // iniciando a firestore database
@@ -152,6 +153,8 @@ class TagsViewModel : ViewModel() {
 
             _booksByTag.value = currentTags
             updateFirestoreTags(currentTags)
+
+            //fetchBooksByIds(currentTags.values.flatten().distinct())
         }
     }
 

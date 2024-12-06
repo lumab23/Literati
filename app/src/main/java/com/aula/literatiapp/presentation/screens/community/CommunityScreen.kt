@@ -19,54 +19,11 @@ import com.aula.literatiapp.presentation.common.sharedComponents.MainDashboard
 import com.aula.literatiapp.presentation.screens.community.components.ScrollableCommunityColumn
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
 import com.aula.literatiapp.presentation.common.sharedComponents.SearchBarComponent
+import com.aula.literatiapp.presentation.screens.community.components.CommunitiesControl
 import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
 
 @Composable
 fun CommunityScreen(navController: NavController) {
-    val comunidades = listOf(
-        Community(
-            id = "1",
-            name = "Fantasia",
-            description = "Para aqueles que gostam de fantasia",
-            imageUrl = "https://i.pinimg.com/564x/4e/be/d6/4ebed6d42634cb724ce5bcfbc95bbf41.jpg",
-            categories = listOf("Fantasia", "Magia", "Aventura")
-        ),
-        Community(
-            id = "2",
-            name = "Romance",
-            description = "Para aqueles que gostam de romance",
-            imageUrl = "https://i.pinimg.com/564x/5a/9b/43/5a9b439115de910523c3474a0a728f78.jpg",
-            categories = listOf("Romance", "Drama", "Ficção")
-        ),
-        Community(
-            id = "3",
-            name = "Ficção Científica",
-            description = "Para aqueles que gostam de Ficção Científica",
-            imageUrl = "https://i.pinimg.com/564x/05/10/b2/0510b2703f70284c8ea255fb9f77ee28.jpg",
-            categories = listOf("Ficção Científica", "Tecnologia", "Exploração")
-        ),
-        Community(
-            id = "4",
-            name = "Comics",
-            description = "Para aqueles que gostam de livros Comics",
-            imageUrl = "https://i.pinimg.com/736x/c3/0e/20/c30e2025aeaf8bc13ca35182db791b7f.jpg",
-            categories = listOf("Comics", "Super-Heróis", "Ação")
-        ),
-        Community(
-            id = "5",
-            name = "Mangá",
-            description = "Para aqueles que gostam de mangás",
-            imageUrl = null,
-            categories = listOf("Comics")
-        ),
-        Community(
-            id = "6",
-            name = "Esportes",
-            description = "Para aqueles que gostam de livros de Esportes",
-            imageUrl = null,
-            categories = listOf("Esportes")
-        )
-    )
 
     Scaffold(
         topBar = {
@@ -81,28 +38,8 @@ fun CommunityScreen(navController: NavController) {
             modifier = Modifier
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                SearchBarComponent(
-                    query = "",
-                    onQueryChange = {},
-                    onSearch = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
-                )
 
-                ScrollableCommunityColumn(
-                    communityList = comunidades,
-                    navController = navController,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .weight(1f)
-                )
-            }
+            CommunitiesControl(navController)
         }
     }
 }

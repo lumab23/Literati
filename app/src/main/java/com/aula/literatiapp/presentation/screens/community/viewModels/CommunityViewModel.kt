@@ -1,7 +1,6 @@
 package com.aula.literatiapp.presentation.screens.community.viewModels
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.aula.literatiapp.domain.model.Community
 import com.aula.literatiapp.domain.model.CommunityPost
@@ -49,13 +48,60 @@ class CommunityViewModel : ViewModel() {
     private val _admins = MutableStateFlow<List<User>>(emptyList())
     val admins: StateFlow<List<User>> = _admins
 
+    private val _isLiked = MutableStateFlow<Boolean>(false)
+    val isLiked: StateFlow<Boolean> = _isLiked
+
+    private val _likeCounts = MutableStateFlow(0)
+    val likeCounts: StateFlow<Int> get() = _likeCounts
+
+    private val _myCommunities = MutableStateFlow<List<Community>>(emptyList())
+    val myCommunities: StateFlow<List<Community>> = _myCommunities
 
     // Firebase instance, for example
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
+
+    // TODO: fetch the communities
+    fun fetchUserCommunities() {
+        val userId = auth.currentUser?.uid ?: return
+
+        firestore.collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val communityIds = document.get("communities") as? List<String> ?: emptyList()
+
+                    val fetchedCommunities = mutableListOf<Community>()
+                    communityIds.forEach { communityId ->
+                        firestore.collectionGroup("specificCommunities")
+                            .whereEqualTo("id", communityId)
+                            .get()
+                            .addOnSuccessListener { querySnapshot ->
+                                for (doc in querySnapshot.documents) {
+                                    val community = doc.toObject(Community::class.java)
+                                    if (community != null) {
+                                        fetchedCommunities.add(community)
+                                    }
+                                }
+
+                                _myCommunities.value = fetchedCommunities
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("fetchUserCommunities", "Failed to fetch community: $e")
+                            }
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("fetchUserCommunities", "Failed to fetch user communities: $e")
+            }
+    }
+
+
+
     fun joinCommunity(parentCommunityId: String, communityId: String) {
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+        val userId = auth.currentUser?.uid ?: return
 
         val memberData = hashMapOf(
             "role" to "member",
@@ -71,6 +117,16 @@ class CommunityViewModel : ViewModel() {
             .set(memberData)
             .addOnSuccessListener {
                 Log.d("Join Community", "User $userId joined the community")
+
+                val userRef = firestore.collection("users").document(userId)
+
+                userRef.update("communities", FieldValue.arrayUnion(communityId))
+                    .addOnSuccessListener {
+                        Log.d("Join Community", "User's communities list updated successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Join Community", "Failed to update user's communities list: $e")
+                    }
             }
             .addOnFailureListener { e ->
                 Log.e("Join Community", "Error adding user: $e")
@@ -110,11 +166,20 @@ class CommunityViewModel : ViewModel() {
     }
 
     fun deleteCommunity(parentCommunityId: String, communityId: String, onComplete: (Boolean) -> Unit) {
-        firestore.collection("communities")
+        val communityRef = firestore.collection("communities")
             .document(parentCommunityId)
             .collection("specificCommunities")
             .document(communityId)
-            .delete()
+
+        communityRef.collection("subcollectionName")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                for (document in snapshot.documents) {
+                    document.reference.delete()
+                }
+            }
+
+        communityRef.delete()
             .addOnSuccessListener {
                 onComplete(true)
             }
@@ -124,7 +189,7 @@ class CommunityViewModel : ViewModel() {
     }
 
     fun leaveCommunity(parentCommunityId: String, communityId: String) {
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+        val userId = auth.currentUser?.uid ?: return
 
         firestore.collection("communities")
             .document(parentCommunityId)
@@ -322,7 +387,7 @@ class CommunityViewModel : ViewModel() {
     fun createCommunity(community: Community, parentCommunityId: String) {
         Log.d("banco", "Community creation started")
 
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+        val userId = auth.currentUser?.uid ?: return
 
         val newCommunity = community.copy(
             parentCommunityId = parentCommunityId,
@@ -356,6 +421,16 @@ class CommunityViewModel : ViewModel() {
                             .set(memberData)
                             .addOnSuccessListener {
                                 Log.d("banco", "Creator added as admin to the community members.")
+
+                                val userRef = firestore.collection("users").document(userId)
+
+                                userRef.update("communities", FieldValue.arrayUnion(newCommunityId))
+                                    .addOnSuccessListener {
+                                        Log.d("banco", "User's communities list updated successfully.")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.e("banco", "Failed to update user's communities list: $e")
+                                    }
                             }
                             .addOnFailureListener { exception ->
                                 Log.e("banco", "Failed to add creator as admin: $exception")
@@ -373,42 +448,61 @@ class CommunityViewModel : ViewModel() {
     fun createPost(post: CommunityPost, parentCommunityId: String, communityId: String) {
         Log.d("banco", "Post creation started")
 
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+        val userId = auth.currentUser?.uid ?: return
 
-        val newPost = post.copy(
-            id = post.id,  // Assuming the ID is generated elsewhere, or you can generate it here if needed
-            userId = userId,
-            userName = post.userName,
-            content = post.content,
-            imageUrl = post.imageUrl,
-            createdAt = post.createdAt,
-            likesCount = post.likesCount,
-            commentsCount = post.commentsCount,
-            likedBy = post.likedBy
-        )
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { userDocument ->
+                if (userDocument.exists()) {
 
-        firestore.collection("communities")
-            .document(parentCommunityId)
-            .collection("specificCommunities")
-            .document(communityId)
-            .collection("posts")
-            .add(newPost.toMap())
-            .addOnSuccessListener { documentReference ->
-                val newPostId = documentReference.id
-                Log.d("banco", "Post created successfully with ID: $newPostId")
+                    val userName = userDocument.getString("username") ?: "Usuário Anônimo"
+                    val userImageUrl = userDocument.getString("profilePictureUrl")
 
-                documentReference.update("id", newPostId)
-                    .addOnSuccessListener {
-                        Log.d("banco", "Post ID updated successfully in Firestore.")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e("banco", "Failed to update post ID: $exception")
-                    }
+                    val newPost = post.copy(
+                        id = post.id,
+                        userId = userId,
+                        userName = userName,
+                        userImageUrl = userImageUrl,
+                        content = post.content,
+                        imageUrl = post.imageUrl,
+                        createdAt = post.createdAt,
+                        likesCount = post.likesCount,
+                        commentsCount = post.commentsCount,
+                        likedBy = post.likedBy
+                    )
+
+                    firestore.collection("communities")
+                        .document(parentCommunityId)
+                        .collection("specificCommunities")
+                        .document(communityId)
+                        .collection("posts")
+                        .add(newPost.toMap())
+                        .addOnSuccessListener { documentReference ->
+                            val newPostId = documentReference.id
+                            Log.d("banco", "Post created successfully with ID: $newPostId")
+
+                            // Atualiza o post com o ID
+                            documentReference.update("id", newPostId)
+                                .addOnSuccessListener {
+                                    Log.d("banco", "Post ID updated successfully in Firestore.")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.e("banco", "Failed to update post ID: $exception")
+                                }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("banco", "Post creation failed: $exception")
+                        }
+                } else {
+                    Log.e("banco", "User document not found!")
+                }
             }
             .addOnFailureListener { exception ->
-                Log.e("banco", "Post creation failed: $exception")
+                Log.e("banco", "Failed to retrieve user data: $exception")
             }
     }
+
 
     fun deletePost(parentCommunityId: String, communityId: String, postId: String) {
         firestore.collection("communities")
@@ -426,98 +520,181 @@ class CommunityViewModel : ViewModel() {
             }
     }
 
-    fun likePost(parentCommunityId: String, communityId: String, postId: String) {
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+    fun likePost(
+        parentCommunityId: String,
+        communityId: String,
+        postId: String,
+        callback: ((Boolean, Int) -> Unit)? = null
+    ) {
+        val userId = auth.currentUser?.uid ?: return
 
-        val postRef = firestore.collection("communities")
+        // Código do método
+        firestore.runTransaction { transaction ->
+            val likeRef = firestore.collection("communities")
+                .document(parentCommunityId)
+                .collection("specificCommunities")
+                .document(communityId)
+                .collection("posts")
+                .document(postId)
+                .collection("likes")
+                .document(userId)
+
+            val postRef = firestore.collection("communities")
+                .document(parentCommunityId)
+                .collection("specificCommunities")
+                .document(communityId)
+                .collection("posts")
+                .document(postId)
+
+            val likeSnapshot = transaction.get(likeRef)
+            val currentLiked = likeSnapshot.getBoolean("liked") ?: false
+
+            val postSnapshot = transaction.get(postRef)
+            val post = postSnapshot.toObject(CommunityPost::class.java)
+                ?: throw Exception("Post not found!")
+
+            val newLikedState = !currentLiked
+            val updatedLikesCount = if (newLikedState) {
+                post.likesCount + 1
+            } else {
+                (post.likesCount - 1).coerceAtLeast(0)
+            }
+
+            transaction.set(likeRef, mapOf("liked" to newLikedState))
+            transaction.set(postRef, post.copy(likesCount = updatedLikesCount))
+
+            // Callback com os valores atualizados
+            callback?.invoke(newLikedState, updatedLikesCount)
+        }
+    }
+
+    fun loadLikeCounts(
+        parentCommunityId: String,
+        communityId: String,
+        postId: String,
+        onResult: (Int) -> Unit
+    ) {
+        firestore.collection("communities")
             .document(parentCommunityId)
             .collection("specificCommunities")
             .document(communityId)
             .collection("posts")
             .document(postId)
-
-        firestore.runTransaction { transaction ->
-            val postSnapshot = transaction.get(postRef)
-            val post = postSnapshot.toObject(CommunityPost::class.java)
-
-            if (post?.likedBy?.containsKey(userId) == true) {
-                return@runTransaction
+            .get()
+            .addOnSuccessListener { document ->
+                val likeCount = document.getLong("likesCount")?.toInt() ?: 0
+                onResult(likeCount) // Retorna o valor para o callback
             }
-
-            val updatedLikedBy = post?.likedBy?.toMutableMap() ?: mutableMapOf()
-            updatedLikedBy[userId] = true
-
-            val updatedPost = post?.copy(
-                likedBy = updatedLikedBy,
-                likesCount = post.likesCount + 1
-            )
-
-            transaction.set(postRef, updatedPost!!)
-        }.addOnSuccessListener {
-            println("Post liked successfully")
-        }.addOnFailureListener { exception ->
-            println("Error liking post: $exception")
-        }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Failed to load like counts: $exception")
+            }
     }
 
-    fun removeLike(parentCommunityId: String, communityId: String, postId: String) {
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
+    fun loadIsLiked(
+        parentCommunityId: String,
+        communityId: String,
+        postId: String,
+        onResult: (Boolean) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid ?: return
 
-        val postRef = firestore.collection("communities")
+        firestore.collection("communities")
             .document(parentCommunityId)
             .collection("specificCommunities")
             .document(communityId)
             .collection("posts")
             .document(postId)
-
-        firestore.runTransaction { transaction ->
-            val postSnapshot = transaction.get(postRef)
-            val post = postSnapshot.toObject(CommunityPost::class.java)
-
-            if (post?.likedBy?.containsKey(userId) == false) {
-                return@runTransaction
+            .collection("likes")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                val isLiked = document.getBoolean("liked") ?: false
+                onResult(isLiked) // Retorna o valor para o callback
             }
-
-            val updatedLikedBy = post?.likedBy?.toMutableMap() ?: mutableMapOf()
-            updatedLikedBy.remove(userId)
-
-            val updatedPost = post?.copy(
-                likedBy = updatedLikedBy,
-                likesCount = post.likesCount - 1
-            )
-
-            transaction.set(postRef, updatedPost!!)
-        }.addOnSuccessListener {
-            println("Post unliked successfully")
-        }.addOnFailureListener { exception ->
-            println("Error unliking post: $exception")
-        }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Failed to check like status: $exception")
+            }
     }
 
-    fun addComment(communityId: String, parentCommunityId: String, postId: String, post: CommunityPost) {
-        val userId = "o9gG9EuEiOd3wqUQZuCRjwfuQKz1" // Replace with auth.currentUser?.uid ?: return
-        val postRef = firestore.collection("communities").document(postId)
+    fun addComment(post: CommunityPost, parentCommunityId: String, communityId: String, postId: String) {
+        val userId = auth.currentUser?.uid ?: return
 
-        firestore.runTransaction { transaction ->
-            val postSnapshot = transaction.get(postRef)
-            val post = postSnapshot.toObject(CommunityPost::class.java)
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { userDocument ->
+                if (userDocument.exists()) {
 
-            // Add comment to the post
-            val updatedComments = post?.commentsCount?.let {
-                it + 1
-            } ?: 1
+                    val userName = userDocument.getString("userName") ?: "Usuário Anônimo"
+                    val userImageUrl = userDocument.getString("userImageUrl") // Aqui pegamos a URL da imagem do usuário
 
-            // Update the post with new comments and comment count
-            val updatedPost = post?.copy(
-                commentsCount = updatedComments
-            )
+                    val newComment = CommunityPost(
+                        id = post.id,
+                        userId = userId,
+                        userName = userName,
+                        userImageUrl = userImageUrl,
+                        content = post.content,
+                        imageUrl = post.imageUrl,
+                        createdAt = post.createdAt,
+                        likesCount = post.likesCount,
+                        commentsCount = post.commentsCount,
+                        likedBy = post.likedBy
+                    )
 
-            transaction.set(postRef, updatedPost!!)
-        }.addOnSuccessListener {
-            println("Comment added successfully")
-        }.addOnFailureListener { exception ->
-            println("Error adding comment: $exception")
-        }
+                    firestore.collection("communities")
+                        .document(parentCommunityId)
+                        .collection("specificCommunities")
+                        .document(communityId)
+                        .collection("posts")
+                        .document(postId)
+                        .collection("comments")
+                        .add(newComment.toMap())
+                        .addOnSuccessListener { documentReference ->
+                            val commentId = documentReference.id
+                            Log.d("banco", "Comment added successfully with ID: $commentId")
+
+                            // Atualiza o comentário com o ID gerado
+                            documentReference.update("id", commentId)
+                                .addOnSuccessListener {
+                                    Log.d("banco", "Comment ID updated successfully")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.e("banco", "Error updating comment ID: $exception")
+                                }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("banco", "Error adding comment: $exception")
+                        }
+
+                    val postRef = firestore.collection("communities")
+                        .document(parentCommunityId)
+                        .collection("specificCommunities")
+                        .document(communityId)
+                        .collection("posts")
+                        .document(postId)
+
+                    firestore.runTransaction { transaction ->
+                        val postSnapshot = transaction.get(postRef)
+                        val post = postSnapshot.toObject(CommunityPost::class.java)
+
+                        val updatedCommentsCount = post?.commentsCount?.let {
+                            it + 1
+                        } ?: 1
+
+                        val updatedPost = post?.copy(commentsCount = updatedCommentsCount)
+                        transaction.set(postRef, updatedPost!!)
+                    }.addOnSuccessListener {
+                        Log.d("banco", "Post updated successfully with new comments count")
+                    }.addOnFailureListener { exception ->
+                        Log.e("banco", "Error updating post: $exception")
+                    }
+                } else {
+                    Log.e("banco", "User document not found!")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("banco", "Failed to retrieve user data: $exception")
+            }
     }
 
 
@@ -704,4 +881,3 @@ class CommunityViewModel : ViewModel() {
         }
     }
 }
-

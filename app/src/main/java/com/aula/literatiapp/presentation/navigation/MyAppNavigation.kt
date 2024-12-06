@@ -16,7 +16,15 @@ import androidx.navigation.navArgument
 import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
+import com.aula.literatiapp.presentation.screens.chat.ChatScreen
 import com.aula.literatiapp.presentation.screens.chat.Conversation
+import com.aula.literatiapp.presentation.screens.community.CommunityList
+import com.aula.literatiapp.presentation.screens.community.CommunityScreen
+import com.aula.literatiapp.presentation.screens.community.CreateCommunityScreen
+import com.aula.literatiapp.presentation.screens.community.MakePostScreen
+import com.aula.literatiapp.presentation.screens.community.ModerationScreen
+import com.aula.literatiapp.presentation.screens.community.SpecificCommunityInfo
+import com.aula.literatiapp.presentation.screens.community.SpecificCommunityScreen
 import com.aula.literatiapp.presentation.screens.gemini.GeminiChatScreen
 import com.aula.literatiapp.presentation.screens.gemini.viewModels.GeminiChatViewModel
 import com.aula.literatiapp.presentation.screens.home.HomeScreen
@@ -54,7 +62,7 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
     val profileViewModel: ProfileViewModel = viewModel()
 
 
-    NavHost(navController = navController, startDestination = "search_screen") {
+    NavHost(navController = navController, startDestination = "login") {
         composable(Screen.SearchScreen.route) {
             SearchScreen(navController, searchViewModel = searchViewModel)
         }
@@ -72,12 +80,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         }
         composable(Screen.GenresScreen.route) {
             GenresScreen(navController)
-        }
-
-        composable(Screen.Profile.route) {
-            ProfileScreen(
-                navController = navController
-            )
         }
 
         composable(Screen.Settings.route) {
@@ -164,10 +166,147 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
 
         }
 
-        composable("chat/{channelId}") { backStackEntry ->
+
+        composable("chat/{channelId}&{channelName}", arguments = listOf(
+            navArgument("channelId") {
+                type = NavType.StringType
+            },
+            navArgument("channelName") {
+                type = NavType.StringType
+            }
+        )) {
+            val channelId = it.arguments?.getString("channelId") ?: ""
+            val channelName = it.arguments?.getString("channelName") ?: ""
+            ChatScreen(navController = navController)
+        }
+
+        composable(Screen.ConversationScreen.route,
+            arguments = listOf(navArgument("channelId") { type = NavType.StringType })
+        ) { backStackEntry ->
             val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
             Conversation(navController = navController, channelId = channelId)
         }
+
+
+
+
+        composable(
+            Screen.CreateCommunityScreen.route,
+            arguments = listOf(navArgument("parentCommunityId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")
+            CreateCommunityScreen(navController, parentCommunityId)
+        }
+
+        composable(
+            Screen.CommunityList.route,
+            arguments = listOf(navArgument("parentCommunityId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")
+            CommunityList(navController = navController, parentCommunityId = parentCommunityId)
+        }
+
+        composable(Screen.CommunityScreen.route) {
+            CommunityScreen(navController)
+        }
+
+        composable(
+            Screen.SpecificCommunityScreen.route,
+            arguments = listOf(
+                navArgument("parentCommunityId") { type = NavType.StringType },
+                navArgument("communityId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")
+            val communityId = backStackEntry.arguments?.getString("communityId")
+            if (parentCommunityId != null && communityId != null) {
+                SpecificCommunityScreen(
+                    parentCommunityId = parentCommunityId,
+                    communityId = communityId,
+                    navController = navController
+                )
+            }
+        }
+
+        composable(
+            Screen.SpecificCommunityInfo.route,
+            arguments = listOf(
+                navArgument("parentCommunityId") { type = NavType.StringType },
+                navArgument("communityId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")
+            val communityId = backStackEntry.arguments?.getString("communityId")
+            if (parentCommunityId != null && communityId != null) {
+                SpecificCommunityInfo(
+                    parentCommunityId = parentCommunityId,
+                    communityId = communityId,
+                    navController = navController
+                )
+            }
+        }
+        composable(
+            Screen.ModerationScreen.route,
+            arguments = listOf(
+                navArgument("parentCommunityId") { type = NavType.StringType },
+                navArgument("communityId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")
+            val communityId = backStackEntry.arguments?.getString("communityId")
+
+            if (parentCommunityId != null && communityId != null) {
+                ModerationScreen(
+                    parentCommunityId = parentCommunityId,
+                    communityId = communityId,
+                    navController = navController
+                )
+            }
+        }
+        composable(
+            route = Screen.MakePostScreen.route,
+            arguments = listOf(
+                navArgument("parentCommunityId") { type = NavType.StringType },
+                navArgument("communityId") { type = NavType.StringType },
+                navArgument("parentPostId") {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) { backStackEntry ->
+            val parentCommunityId = backStackEntry.arguments?.getString("parentCommunityId")!!
+            val communityId = backStackEntry.arguments?.getString("communityId")!!
+            val parentPostId = backStackEntry.arguments?.getString("parentPostId")
+
+            MakePostScreen(
+                parentCommunityId = parentCommunityId,
+                communityId = communityId,
+                parentPostId = parentPostId,
+                navController = navController,
+                onCancel = { navController.popBackStack() },
+                onPost = { content ->
+                    println("Post content: $content")
+                    navController.popBackStack()
+                }
+            )
+        }
+
+
+        composable("profile_screen/{userId}") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            ProfileScreen(userId = userId, navController = navController)
+        }
+
+
+        composable(Screen.Profile.route) {
+            ProfileScreen(
+                userId = it.arguments?.getString("userId") ?: "",
+                navController = navController
+            )
+        }
+
+
+
 
 
     }

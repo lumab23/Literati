@@ -29,6 +29,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.R
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
@@ -52,13 +54,20 @@ fun UploadProfilePicture(
     settingsViewModel: SettingsViewModel,
     hostState: SnackbarHostState
 ) {
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    //var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Lançador para selecionar uma imagem
+    var imageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract =
+            ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        selectedImageUri = uri
+        imageUri = uri
+    }
+
+    LaunchedEffect(launcher) {
+        settingsViewModel.fetchUserData()
     }
 
     Scaffold(
@@ -82,11 +91,8 @@ fun UploadProfilePicture(
                     .padding(16.dp)
             ) {
 
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = selectedImageUri?.toString()
-                            ?: settingsViewModel.userProfilePictureUrl.collectAsState().value
-                    ),
+                AsyncImage(
+                    model = settingsViewModel.userProfilePictureUrl.collectAsState().value.ifEmpty { R.drawable.blank_profile_pic },
                     contentDescription = "Foto de Perfil",
                     modifier = Modifier
                         .size(100.dp)
@@ -103,38 +109,53 @@ fun UploadProfilePicture(
                     Text(text = "Selecionar Foto de Perfil")
                 }
 
-                Log.d("Image selection", selectedImageUri.toString())
+                Log.d("Image selection", imageUri.toString())
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
-                        selectedImageUri?.let { uri ->
-                            val uriString = uri.toString()
-                            settingsViewModel.updateUserProfilePictureInFirestore(
-                                photoUrl = uriString,
-                                onComplete = { success, message ->
-                                    val snackBarMessage = if (success) {
-                                        "Foto de perfil atualizada com sucesso"
-                                    } else {
-                                        "Erro: $message"
-                                    }
-
-                                    if (success) {
-                                        navController.popBackStack()
-                                    } else {
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            hostState.showSnackbar(snackBarMessage)
-                                        }
-                                    }
+                        imageUri?.let { uri ->
+                            settingsViewModel.uploadAndSaveProfilePicture(uri) { success, message ->
+                                val snackBarMessage = if (success) {
+                                    "Foto de perfil atualizada com sucesso!"
+                                } else {
+                                    "Erro ao atualizar: $message"
                                 }
-                            )
+
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    hostState.showSnackbar(snackBarMessage)
+                                }
+
+                                if (success) {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
                     },
-                    enabled = selectedImageUri != null
+                    enabled = imageUri != null
                 ) {
-                    Text(text = "Salvar Foto de Perfil")
+                    Text(text = "Salvar Imagem")
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+                    settingsViewModel.removeProfilePicture { success, message ->
+                        val snackBarMessage = if (success) {
+                            "Foto de perfil removida com sucesso!"
+                        } else {
+                            "Erro ao remover: $message"
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            hostState.showSnackbar(snackBarMessage)
+                        }
+                    }
+                }) {
+                    Text(text = "Remover Foto de Perfil")
+                }
+
             }
         }
     }

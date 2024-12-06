@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,16 +31,26 @@ import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.profile.components.ProfileScreenDashboard
 import com.aula.literatiapp.presentation.screens.profile.components.ProfileSection
 import com.aula.literatiapp.presentation.screens.profile.viewModels.ProfileViewModel
+import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = viewModel(),
+    userId: String,
+    profileViewModel: ProfileViewModel = viewModel(),
     navController: NavController,
-    tagsViewModel: TagsViewModel = viewModel()
+    tagsViewModel: TagsViewModel = viewModel(),
+    //userId: String
     )
 {
+    val settingsViewModel: SettingsViewModel = viewModel()
 
-    val user by viewModel.user.collectAsState()
+
+    LaunchedEffect(Unit) {
+        profileViewModel.getUserById(userId)
+    }
+
+    val user by profileViewModel.user.collectAsState()
+    //val loading by profileViewModel.loading.collectAsState()
     val booksByTag by tagsViewModel.booksByTag.collectAsState()
     val bookshelf by tagsViewModel.bookshelf.observeAsState(emptyList())
 
@@ -48,6 +59,11 @@ fun ProfileScreen(
     val recentReads = bookshelf.filter { book ->
         booksByTag.values.flatten().contains(book.id)
     }.distinct().takeLast(4)
+
+    LaunchedEffect(Unit) {
+        tagsViewModel.loadTags()
+        settingsViewModel.userProfilePictureUrl
+    }
 
 
     val listas = listOf(
@@ -73,9 +89,7 @@ fun ProfileScreen(
             ) {
 
                 item {
-                    if (it != null) {
-                        ProfileSection(user = it, viewModel = viewModel())
-                    }
+                    ProfileSection(viewModel = viewModel())
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider()
                 }

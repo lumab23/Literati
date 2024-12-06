@@ -43,5 +43,8 @@ sealed class Screen(val route: String) {
     object TagsScreen: Screen("tags_screen")
     object SpecificTagScreen: Screen("specific_tag_screen/{tag}")
 
-    object ChatScreen: Screen("chat_screen")
+    object ChatScreen: Screen("chat")
+    object ConversationScreen : Screen("conversation_screen/{channelId}") {
+        fun createRoute(channelId: String) = "conversation_screen/$channelId"
+    }
 }

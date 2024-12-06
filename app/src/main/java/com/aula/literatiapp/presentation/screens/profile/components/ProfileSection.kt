@@ -2,12 +2,14 @@ package com.aula.literatiapp.presentation.screens.profile.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -18,19 +20,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.AppTheme
 
 @Composable
-fun ProfileSection(user: User, viewModel: SettingsViewModel) {
+fun ProfileSection(viewModel: SettingsViewModel) {
 
     val userName by viewModel.userName.collectAsState()
     val userProfilePictureUrl by viewModel.userProfilePictureUrl.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,18 +46,18 @@ fun ProfileSection(user: User, viewModel: SettingsViewModel) {
     ) {
 
         AsyncImage(
-            model = userProfilePictureUrl,
-            contentDescription = "profile picture",
+            model = userProfilePictureUrl.ifEmpty { R.drawable.blank_profile_pic },
+            contentDescription = "Foto de perfil",
             modifier = Modifier
+                .size(100.dp)
                 .width(100.dp)
                 .height(100.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface),
+                .border(1.dp, Color.Black, CircleShape)
         )
 
-        Log.d("username", user.username)
         Text(
-            text = user.name,
+            text = userName,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(top = 8.dp)

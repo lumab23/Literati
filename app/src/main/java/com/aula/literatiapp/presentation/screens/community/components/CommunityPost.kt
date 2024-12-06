@@ -1,5 +1,6 @@
 package com.aula.literatiapp.presentation.screens.community.components
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.CommunityPost
@@ -26,14 +28,30 @@ import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityV
 import java.util.Date
 
 @Composable
-fun CommunityPostCard(parentCommunityId: String, communityId: String, post: CommunityPost, isMember: Boolean, viewModel: CommunityViewModel = viewModel()) {
+fun CommunityPostCard(
+    parentCommunityId: String,
+    communityId: String,
+    post: CommunityPost,
+    isMember: Boolean,
+    viewModel: CommunityViewModel = viewModel(),
+    navController: NavController
+) {
+    // Estados locais para likes e isLiked para este post específico
     var likes by remember { mutableStateOf(post.likesCount) }
-    var isLiked by remember { mutableStateOf(false) }  // Initial liked state should be handled here or via a parameter
-    var commentText by remember { mutableStateOf("") }
+    var isLiked by remember { mutableStateOf(false) }
     val comments by viewModel.comments.collectAsState(initial = emptyList())
 
+    Log.d("Likes", post.id)
+
+    // Carrega os dados iniciais para este post
     LaunchedEffect(post.id) {
         viewModel.loadAllComments(parentCommunityId, communityId, post.id)
+        viewModel.loadLikeCounts(parentCommunityId, communityId, post.id) { count ->
+            likes = count // Atualiza o estado local de likes
+        }
+        viewModel.loadIsLiked(parentCommunityId, communityId, post.id) { liked ->
+            isLiked = liked // Atualiza o estado local de isLiked
+        }
     }
 
     Card(
@@ -76,8 +94,10 @@ fun CommunityPostCard(parentCommunityId: String, communityId: String, post: Comm
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         IconButton(
                             onClick = {
-                                isLiked = !isLiked
-                                likes += if (isLiked) 1 else -1
+                                viewModel.likePost(parentCommunityId, communityId, post.id) { newLikedState, newLikeCount ->
+                                    isLiked = newLikedState
+                                    likes = newLikeCount
+                                }
                             }
                         ) {
                             Icon(
@@ -88,7 +108,9 @@ fun CommunityPostCard(parentCommunityId: String, communityId: String, post: Comm
                         Text(text = "$likes curtidas")
                     }
 
-                    IconButton(onClick = { /* Handle comment functionality here */ }) {
+                    IconButton(onClick = {
+                        navController.navigate("create_post_screen/$parentCommunityId/$communityId?parentPostId=${post.id}")
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Comment,
                             contentDescription = "Comentar"
@@ -104,8 +126,8 @@ fun CommunityPostCard(parentCommunityId: String, communityId: String, post: Comm
                         modifier = Modifier.padding(4.dp)
                     )
                 }
-
             }
         }
     }
 }
+

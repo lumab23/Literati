@@ -8,65 +8,37 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ProfileViewModel : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
 
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
 
-    private val _favorites = MutableStateFlow<List<String>>(emptyList())
-    val favorites: StateFlow<List<String>> = _favorites
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
 
-    private val _recentReads = MutableStateFlow<List<String>>(emptyList())
-    val recentReads: StateFlow<List<String>> = _recentReads
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
 
-    private val _swaps = MutableStateFlow<List<String>>(emptyList())
-    val exchange: StateFlow<List<String>> = _swaps
-
-    init {
-        loadUserData()
-        loadUserFavorites()
-        loadRecentReads()
-        loadSwaps()
-    }
-
-    private fun loadUserData() {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            firestore.collection("users").document(currentUser.uid)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        return@addSnapshotListener
-                    }
-                    snapshot?.toObject(User::class.java)?.let { user ->
-                        _user.value = user
-                    }
-                }
-        }
-    }
-
-    private fun loadUserFavorites() {
+    fun getUserById(userId: String) {
         viewModelScope.launch {
-            //_favorites.value = user.value?.favorites ?: emptyList()
-            _favorites.value = listOf("Favorite Book 1", "Favorite Book 2")
+            _loading.value = true
+            try {
+                val userDocument = firestore.collection("users").document(userId).get().await()
+                val userData = userDocument.toObject(User::class.java)
+                _user.value = userData
+                _loading.value = false
+            } catch (e: Exception) {
+                _error.value = "Failed to fetch user: ${e.message}"
+                _loading.value = false
+            }
         }
     }
 
-    private fun loadRecentReads() {
-        viewModelScope.launch {
-            // Mock or actual logic to fetch recent reads
-            _recentReads.value = listOf("Recently Read Book 1", "Recently Read Book 2")
-        }
-    }
 
-    private fun loadSwaps() {
-        viewModelScope.launch {
-            // Mock or actual logic to fetch books for swapping
-            _swaps.value = listOf("Swap Book 1", "Swap Book 2")
-        }
-    }
+
 
 }

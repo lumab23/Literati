@@ -44,7 +44,7 @@ fun SignUpScreen(
 
     LaunchedEffect(signUpState) {
         if (signUpState is SignUpState.Success) {
-            navController.navigate("home_screen") {
+            navController.navigate("home") {
                 popUpTo("login") { inclusive = true }
             }
         }
@@ -124,7 +124,7 @@ fun SignUpScreen(
                 }
                 is SignUpState.Success -> {
                     LaunchedEffect(Unit) {
-                        navController.navigate("home_screen")
+                        navController.navigate("home")
                     }
                 }
                 is SignUpState.Error -> {
@@ -144,14 +144,7 @@ fun SignUpScreen(
                 modifier = Modifier
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            AlternativeOptionGoogle(
-                value =  stringResource(R.string.registration_with_google_cadastro),
-                modifier = Modifier
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             AlternativeOptionAccount(
                 value = stringResource(R.string.has_an_account),

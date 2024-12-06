@@ -6,5 +6,6 @@ data class User(
     val username: String = "",
     val email: String = "",
     val profilePictureUrl: String = "",
-    val tags: Map<String, List<String>> = emptyMap()
+    val tags: Map<String, List<String>> = emptyMap(),
+    val communities: List<String> = emptyList()
 )
