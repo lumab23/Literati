@@ -59,10 +59,10 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
     val settingsViewModel: SettingsViewModel = viewModel()
     val geminiChatViewModel: GeminiChatViewModel = viewModel()
     val tagsViewModel: TagsViewModel = viewModel()
-    val profileViewModel: ProfileViewModel = viewModel()
+    //val profileViewModel: ProfileViewModel = viewModel()
 
 
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = Screen.Login.route) {
         composable(Screen.SearchScreen.route) {
             SearchScreen(navController, searchViewModel = searchViewModel)
         }

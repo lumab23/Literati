@@ -191,6 +191,8 @@ class CommunityViewModel : ViewModel() {
     fun leaveCommunity(parentCommunityId: String, communityId: String) {
         val userId = auth.currentUser?.uid ?: return
 
+        val userDocRef = firestore.collection("users").document(userId)
+
         firestore.collection("communities")
             .document(parentCommunityId)
             .collection("specificCommunities")
@@ -200,6 +202,24 @@ class CommunityViewModel : ViewModel() {
             .delete()
             .addOnSuccessListener {
                 Log.d("Leave Community", "User $userId left the community")
+
+                userDocRef.get().addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val user = document.toObject(User::class.java)
+
+                        val updatedCommunities = user?.communities?.toMutableList()?.apply {
+                            remove(communityId)
+                        } ?: mutableListOf()
+
+                        userDocRef.update("communities", updatedCommunities)
+                            .addOnSuccessListener {
+                                Log.d("Leave Community", "User's communities list updated successfully.")
+                            }
+                            .addOnFailureListener { e->
+                                Log.e("Leave Community", "Failed to update user's communities list: $e")
+                            }
+                    }
+                }
             }
             .addOnFailureListener { e ->
                 Log.e("Leave Community", "Error removing user: $e")

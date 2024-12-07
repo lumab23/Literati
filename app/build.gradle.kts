@@ -140,9 +140,11 @@ dependencies {
     // gemini
     implementation(libs.generativeai)
 
+    // for nav bar animation
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
 
-
-
+    // splash screen
+    implementation(libs.core.splashscreen)
 
 
 }

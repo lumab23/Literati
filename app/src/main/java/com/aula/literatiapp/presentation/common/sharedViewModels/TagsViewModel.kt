@@ -30,13 +30,15 @@ class TagsViewModel : ViewModel() {
     private val userId: String
         get() = auth.currentUser?.uid ?: ""
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     /*
     booksByTag sendo definido como um MutableStateFlow que é usada para gerenciar estados mutáveis e observáveis
     O StateFlow é um tipo especial de fluxo projetado para representar e observar estados que mudam ao longo do tempo
      */
     private val _booksByTag = MutableStateFlow<Map<String, List<String>>>(emptyMap())
     val booksByTag: StateFlow<Map<String, List<String>>> = _booksByTag
-
 
     private val _bookshelf = MutableLiveData<List<Book>>()
     val bookshelf: LiveData<List<Book>> get() = _bookshelf
@@ -81,6 +83,7 @@ class TagsViewModel : ViewModel() {
 
     private fun fetchBooksByIds(bookIds: List<String>) {
         viewModelScope.launch {
+            _isLoading.value = true
             // Lista para armazenar os resultados
             val books = mutableListOf<Book>()
 
@@ -98,12 +101,12 @@ class TagsViewModel : ViewModel() {
                     val book = Book(
                         id = it.id,
                         title = it.volumeInfo.title,
-                        authors = it.volumeInfo.authors ?: emptyList(),
+                        authors = it.volumeInfo.authors,
                         publisher = it.volumeInfo.publisher,
                         publishedDate = it.volumeInfo.publishedDate,
                         description = it.volumeInfo.description,
-                        pageCount = it.volumeInfo.pageCount?.toString(),
-                        categories = it.volumeInfo.categories ?: emptyList(),
+                        pageCount = it.volumeInfo.pageCount,
+                        categories = it.volumeInfo.categories,
                         averageRating = it.volumeInfo.averageRating,
                         ratingsCount = it.volumeInfo.ratingsCount,
                         language = it.volumeInfo.language,
@@ -116,6 +119,7 @@ class TagsViewModel : ViewModel() {
 
             // Atualiza o estado da prateleira com os livros encontrados
             _bookshelf.value = books
+            _isLoading.value = false
         }
     }
 

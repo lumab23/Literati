@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 import com.aula.literatiapp.R
 import com.aula.literatiapp.domain.model.CommunityPost
 import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
-import java.util.Date
+import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 
 @Composable
 fun CommunityPostCard(
@@ -41,10 +41,12 @@ fun CommunityPostCard(
     var isLiked by remember { mutableStateOf(false) }
     val comments by viewModel.comments.collectAsState(initial = emptyList())
 
-    Log.d("Likes", post.id)
+    var settingsViewModel: SettingsViewModel = viewModel()
+    var userProfilePicUrl by remember { mutableStateOf("") }
 
     // Carrega os dados iniciais para este post
     LaunchedEffect(post.id) {
+        settingsViewModel.fetchUserData()
         viewModel.loadAllComments(parentCommunityId, communityId, post.id)
         viewModel.loadLikeCounts(parentCommunityId, communityId, post.id) { count ->
             likes = count // Atualiza o estado local de likes
@@ -66,7 +68,7 @@ fun CommunityPostCard(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
-                    model = post.imageUrl,
+                    model = settingsViewModel.userProfilePictureUrl.collectAsState().value.ifEmpty { R.drawable.blank_profile_pic },
                     contentDescription = "Avatar of ${post.userName}",
                     modifier = Modifier
                         .size(40.dp)
@@ -120,6 +122,7 @@ fun CommunityPostCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // todo: edit the comments design
                 comments.forEach { comment ->
                     Text(
                         text = comment.content ?: "No comment",

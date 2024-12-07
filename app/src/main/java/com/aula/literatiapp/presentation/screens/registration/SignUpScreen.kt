@@ -120,7 +120,11 @@ fun SignUpScreen(
             // Handle sign-up state
             when (signUpState) {
                 is SignUpState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = MaterialTheme.colorScheme.primary,
+                        strokeWidth = 1.dp
+                    )
                 }
                 is SignUpState.Success -> {
                     LaunchedEffect(Unit) {

@@ -106,7 +106,11 @@ fun LoginScreen(
             when (loginState) {
 
                 is LoginState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = MaterialTheme.colorScheme.primary,
+                        strokeWidth = 1.dp
+                    )
                 }
 
                 is LoginState.Success -> {

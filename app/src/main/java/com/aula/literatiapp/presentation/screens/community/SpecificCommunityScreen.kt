@@ -90,10 +90,6 @@ fun SpecificCommunityScreen(
                         .padding(16.dp)
                         .fillMaxSize()
                 ) {
-                    Text(
-                        text = currentCommunity.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
 
                     if (!isMember) {
                         Text("Join to view the posts and interact!", color = Color.Gray)

@@ -21,10 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aula.literatiapp.domain.model.Community
+import com.aula.literatiapp.presentation.navigation.Screen
+import com.aula.literatiapp.presentation.ui.theme.getTextColor
 
 @Composable
 fun CommunityCard(community: Community, onClick: () -> Unit) {
