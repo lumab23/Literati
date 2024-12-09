@@ -68,15 +68,15 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime.android)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation ("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.compose.material3:material3:1.2.1")
     kapt(libs.dagger.hilt.compiler)
-    implementation ("androidx.compose.ui:ui:1.5.1")
-    kapt ("com.google.dagger:hilt-compiler:2.48")
-    testImplementation ("junit:junit:4.13.2")
+    implementation("androidx.compose.ui:ui:1.5.1")
+    kapt("com.google.dagger:hilt-compiler:2.48")
+    testImplementation("junit:junit:4.13.2")
     implementation("androidx.navigation:navigation-compose:2.8.0")
-    implementation ("com.google.code.gson:gson:2.8.8") // Ou a versão mais recente
+    implementation("com.google.code.gson:gson:2.8.8") // Ou a versão mais recente
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -132,9 +132,9 @@ dependencies {
 
 
     // retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("androidx.compose.material:material:1.4.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.compose.material:material:1.4.0")
     implementation(kotlin("script-runtime"))
 
     // gemini
@@ -145,6 +145,5 @@ dependencies {
 
     // splash screen
     implementation(libs.core.splashscreen)
-
 
 }

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,7 +61,7 @@ private fun SplashScreen(context: Context) {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Color(0xFFFFFF)
+                Color(0xFFFFFFFF)
             ),
         contentAlignment = Alignment.Center
     ) {

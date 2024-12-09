@@ -11,7 +11,6 @@ import androidx.navigation.NavController
 import com.aula.literatiapp.R
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.common.sharedComponents.BottomNavigation
-import com.aula.literatiapp.presentation.common.sharedComponents.CategorySection
 import com.aula.literatiapp.presentation.screens.tags.components.TagsSection
 
 @Composable
