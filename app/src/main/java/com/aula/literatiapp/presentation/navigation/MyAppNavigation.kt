@@ -189,7 +189,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
 
 
 
-
         composable(
             Screen.CreateCommunityScreen.route,
             arguments = listOf(navArgument("parentCommunityId") { type = NavType.StringType })
@@ -290,7 +289,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
                 }
             )
         }
-
 
         composable("profile_screen/{userId}") { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId") ?: ""

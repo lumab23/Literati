@@ -1,7 +1,5 @@
 package com.aula.literatiapp.domain.model
 
-import android.util.Log
-
 data class Book(
     val id: String,
     val title: String,
