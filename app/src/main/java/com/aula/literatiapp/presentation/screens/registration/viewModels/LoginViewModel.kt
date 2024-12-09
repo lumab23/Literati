@@ -30,6 +30,10 @@ class LoginViewModel : ViewModel() {
     var loginState by mutableStateOf<LoginState>(LoginState.Idle)
         private set
 
+    fun isUserAuthenticated(): Boolean {
+        return auth.currentUser != null
+    }
+
     fun onEmailChange(newEmail: String) {
         email = newEmail
     }

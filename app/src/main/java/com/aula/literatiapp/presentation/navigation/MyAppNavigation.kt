@@ -59,10 +59,15 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
     val settingsViewModel: SettingsViewModel = viewModel()
     val geminiChatViewModel: GeminiChatViewModel = viewModel()
     val tagsViewModel: TagsViewModel = viewModel()
+    val loginViewModel: LoginViewModel = viewModel()
     //val profileViewModel: ProfileViewModel = viewModel()
 
 
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    val isAuthenticated = loginViewModel.isUserAuthenticated()
+
+    NavHost(navController = navController,
+        startDestination = if (isAuthenticated) Screen.Home.route else Screen.Login.route
+        ) {
         composable(Screen.SearchScreen.route) {
             SearchScreen(navController, searchViewModel = searchViewModel)
         }
@@ -73,7 +78,13 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             SignUpScreen(modifier, navController)
         }
         composable(Screen.Home.route) {
-            HomeScreen(navController)
+            if (isAuthenticated) {
+                HomeScreen(navController)
+            } else {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
         }
         composable(Screen.BookScreen.route) {
             BookScreen(navController)
@@ -106,10 +117,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
         { backStackEntry ->
             val type = backStackEntry.arguments?.getString("type") ?: "popular"
             BooksListScreen(navController = navController, type = type, searchViewModel = searchViewModel)
-        }
-
-        composable("genres_screen") {
-            GenresScreen(navController = navController)
         }
 
         composable("genre_screen/{genreName}") { backStackEntry ->
