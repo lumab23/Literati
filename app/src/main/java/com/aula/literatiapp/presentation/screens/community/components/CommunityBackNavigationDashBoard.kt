@@ -28,7 +28,6 @@ import androidx.navigation.NavController
 import com.aula.literatiapp.presentation.screens.community.viewModels.CommunityViewModel
 import com.aula.literatiapp.presentation.ui.theme.gradientBrushLight
 
-// TODO: edit the design (change the moderation button of position)
 @Composable
 fun CommunityBackNavigationDashBoard(
     value: String,
@@ -45,7 +44,6 @@ fun CommunityBackNavigationDashBoard(
     }
 ) {
 
-    // todo: if it goes wrong change it to true
     val isMemberState = viewModel.isMember.collectAsState(initial =  false)
     val isAdminState = viewModel.isAdmin.collectAsState(initial = false)
 

@@ -289,22 +289,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
-        composable(Screen.ChatScreen.route) {
-            ChatScreen(navController = navController)
-        }
-
-        composable(
-            "conversation_screen/{channelId}?userId={userId}",
-            arguments = listOf(
-                navArgument("channelId") { type = NavType.StringType },
-                navArgument("userId") { type = NavType.StringType; nullable = true }
-            )
-        ) { backStackEntry ->
-            val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-            val userId = backStackEntry.arguments?.getString("userId")
-            Conversation(navController = navController, channelId = channelId)
-        }
-
 
 
 

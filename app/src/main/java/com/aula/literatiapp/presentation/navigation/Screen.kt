@@ -43,11 +43,4 @@ sealed class Screen(val route: String) {
     object TagsScreen: Screen("tags_screen")
     object SpecificTagScreen: Screen("specific_tag_screen/{tag}")
 
-    data object ChatScreen : Screen("chat_screen")
-    data object ConversationScreen : Screen("conversation_screen/{channelId}?userId={userId}") {
-        fun createRoute(channelId: String, userId: String? = null): String {
-            return if (userId != null) "conversation_screen/$channelId?userId=$userId"
-            else "conversation_screen/$channelId"
-        }
-    }
 }

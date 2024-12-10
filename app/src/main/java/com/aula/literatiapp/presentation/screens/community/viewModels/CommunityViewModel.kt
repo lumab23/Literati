@@ -123,6 +123,7 @@ class CommunityViewModel : ViewModel() {
                 userRef.update("communities", FieldValue.arrayUnion(communityId))
                     .addOnSuccessListener {
                         Log.d("Join Community", "User's communities list updated successfully")
+                        checkUserStatus(parentCommunityId, communityId) // Atualizar o estado
                     }
                     .addOnFailureListener { e ->
                         Log.e("Join Community", "Failed to update user's communities list: $e")
@@ -214,8 +215,9 @@ class CommunityViewModel : ViewModel() {
                         userDocRef.update("communities", updatedCommunities)
                             .addOnSuccessListener {
                                 Log.d("Leave Community", "User's communities list updated successfully.")
+                                checkUserStatus(parentCommunityId, communityId) // Atualizar o estado
                             }
-                            .addOnFailureListener { e->
+                            .addOnFailureListener { e ->
                                 Log.e("Leave Community", "Failed to update user's communities list: $e")
                             }
                     }
@@ -240,13 +242,11 @@ class CommunityViewModel : ViewModel() {
                     val role = document.getString("role")
                     _isMember.value = role == "member" || role == "admin"
                     _isAdmin.value = role == "admin"
-                } else {
-                    _isMember.value = false
-                    _isAdmin.value = false
                 }
             }
             .addOnFailureListener {
-                // Handle failure
+                _isMember.value = false
+                _isAdmin.value = false
             }
     }
 
