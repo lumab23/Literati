@@ -88,7 +88,7 @@ class TagsViewModel : ViewModel() {
             } catch (e: HttpException) {
                 if (e.code() == 429) {  // Rate limiting error
                     Log.d("FetchBooks", "Rate limited. Retrying in 2 seconds.")
-                    delay(2000)  // Wait for 2 seconds before retrying
+                    delay(5000)  // Wait for 2 seconds before retrying
                     retryCount++
                 } else {
                     Log.e("FetchBooks", "HTTP error: ${e.code()} - ${e.message()}")

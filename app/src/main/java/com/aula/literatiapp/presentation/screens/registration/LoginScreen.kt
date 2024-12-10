@@ -114,7 +114,7 @@ fun LoginScreen(
                 }
 
                 is LoginState.Success -> {
-                    navController.navigate("home")
+                    navController.navigate("profile_screen")
                 }
 
                 is LoginState.Error -> {

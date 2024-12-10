@@ -44,7 +44,7 @@ fun SignUpScreen(
 
     LaunchedEffect(signUpState) {
         if (signUpState is SignUpState.Success) {
-            navController.navigate("home") {
+            navController.navigate("profile_screen") {
                 popUpTo("login") { inclusive = true }
             }
         }
@@ -128,7 +128,7 @@ fun SignUpScreen(
                 }
                 is SignUpState.Success -> {
                     LaunchedEffect(Unit) {
-                        navController.navigate("home")
+                        navController.navigate("profile_screen")
                     }
                 }
                 is SignUpState.Error -> {
