@@ -138,16 +138,3 @@ fun MakeReviewScreen(
         }
     }
 }
-
-@Composable
-@Preview (
-    showBackground = true,
-    showSystemUi = true
-)
-fun MakeReviewScreenPreview() {
-    MakeReviewScreen(
-        onCancel = {},
-        onSubmitReview = { review, rating -> }
-
-    )
-}

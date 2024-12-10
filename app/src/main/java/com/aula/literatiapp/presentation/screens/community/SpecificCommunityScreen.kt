@@ -38,12 +38,10 @@ fun SpecificCommunityScreen(
     parentCommunityId: String
 ) {
     val isMember by viewModel.isMember.collectAsState()
-    // ALTERAR!!! Para testar se ta funcionando
     val isAdmin by viewModel.isAdmin.collectAsState()
     val posts by viewModel.posts.collectAsState()
     val community by viewModel.community.collectAsState()
 
-    // Create a local variable for 'community'
     val currentCommunity = community
 
     LaunchedEffect(Unit) {
@@ -51,8 +49,6 @@ fun SpecificCommunityScreen(
         viewModel.checkUserStatus(parentCommunityId, communityId)
         viewModel.loadAllPosts(parentCommunityId, communityId)
     }
-
-    Log.d("SpecificScreen Community Debug banco", community.toString())
 
     Scaffold(
         topBar = {
@@ -77,7 +73,6 @@ fun SpecificCommunityScreen(
                 .fillMaxSize()
         ) {
             if (currentCommunity == null) {
-                // Show a loading state while the community is being fetched
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -90,10 +85,37 @@ fun SpecificCommunityScreen(
                         .padding(16.dp)
                         .fillMaxSize()
                 ) {
+                    // Seção de botões
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        if (!isMember) {
+                            Button(onClick = { viewModel.joinCommunity(parentCommunityId, communityId) }) {
+                                Text("Join Community")
+                            }
+                        } else {
+                            Button(onClick = { viewModel.leaveCommunity(parentCommunityId, communityId) }) {
+                                Text("Leave Community")
+                            }
+                        }
 
+                        if (isAdmin) {
+                            Button(onClick = {
+                                navController.navigate("moderation_screen/$parentCommunityId/$communityId")
+                            }) {
+                                Text("Moderation")
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Conteúdo principal
                     if (!isMember) {
                         Text("Join to view the posts and interact!", color = Color.Gray)
-
                     } else {
                         ScrollablePostList(
                             parentCommunityId = parentCommunityId,
@@ -131,6 +153,7 @@ fun SpecificCommunityScreen(
         }
     }
 }
+
 
 
 

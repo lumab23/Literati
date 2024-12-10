@@ -57,7 +57,6 @@ fun SettingsScreen(navController: NavController) {
         "Alterar email",
         "Alterar senha",
         "Alterar nome de usuário",
-        "Acessibilidade",
         "Alterar foto de perfil",
         "Sair",
         "Excluir Conta"
@@ -100,9 +99,6 @@ fun SettingsScreen(navController: NavController) {
                             }
                             "Alterar nome de usuário" -> {
                                 navController.navigate("updateUser_screen")
-                            }
-                            "Acessibilidade" -> {
-                                navController.navigate("accessibility_screen")
                             }
                             "Alterar foto de perfil" -> {
                                 navController.navigate("uploadProfilePicture_screen")

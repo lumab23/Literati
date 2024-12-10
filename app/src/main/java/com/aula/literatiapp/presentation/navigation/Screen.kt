@@ -42,5 +42,6 @@ sealed class Screen(val route: String) {
 
     object TagsScreen: Screen("tags_screen")
     object SpecificTagScreen: Screen("specific_tag_screen/{tag}")
+    object MakeReviewScreen: Screen("make_review_screen")
 
 }

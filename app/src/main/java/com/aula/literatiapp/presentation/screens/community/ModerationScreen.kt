@@ -6,9 +6,11 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
@@ -20,11 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.domain.model.User
+import com.aula.literatiapp.presentation.ui.theme.*
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.navigation.Screen
 import com.aula.literatiapp.presentation.screens.community.components.MemberCard
@@ -71,7 +76,7 @@ fun ModerationScreen(
             TextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Community Name") },
+                label = { Text("Community Name", color = getTextColor()) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -82,7 +87,15 @@ fun ModerationScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Button(onClick = { showAddAdminDialog = true }) {
+            Button(
+                onClick = { showAddAdminDialog = true },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(brush = gradientBrushLight, shape = RoundedCornerShape(16.dp))
+            ) {
                 Text("Add New Admin")
             }
 
@@ -187,10 +200,10 @@ fun AddAdminDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add New Admin") },
+        title = { Text("Add New Admin", color = getTextColor()) },
         text = {
             Column {
-                Text("Select a user to add as admin", fontWeight = FontWeight.Bold)
+                Text("Select a user to add as admin", fontWeight = FontWeight.Bold, color = getTextColor())
 
                 LazyColumn {
                     items(members) { member ->
@@ -206,12 +219,30 @@ fun AddAdminDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
+            Button(
+                onClick = { onDismiss() },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .background(brush = gradientBrushLight, shape = RoundedCornerShape(12.dp))
+            ) {
+                Text("Delete", color = Color.White)
             }
         }
     )
 }
 
 
-
+@Preview(showBackground = true)
+@Composable
+fun ModerationScreenPreview() {
+    AppTheme {
+        ModerationScreen(
+            communityId = "community123",
+            parentCommunityId = "parentCommunity456",
+            navController = rememberNavController(),
+            viewModel = viewModel() // Use um ViewModel de visualização
+        )
+    }
+}

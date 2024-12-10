@@ -57,15 +57,7 @@ fun ProfileScreenDashboard(navController: NavController) {
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("chat")
-                    },
-                imageVector = Icons.Default.ChatBubbleOutline,
-                contentDescription = "chat",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
+
         }
 
     }

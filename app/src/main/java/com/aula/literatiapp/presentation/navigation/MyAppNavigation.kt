@@ -16,8 +16,6 @@ import androidx.navigation.navArgument
 import com.aula.literatiapp.domain.model.User
 import com.aula.literatiapp.presentation.common.sharedViewModels.TagsViewModel
 import com.aula.literatiapp.presentation.screens.bookDetails.BookScreen
-import com.aula.literatiapp.presentation.screens.chat.ChatScreen
-import com.aula.literatiapp.presentation.screens.chat.Conversation
 import com.aula.literatiapp.presentation.screens.community.CommunityList
 import com.aula.literatiapp.presentation.screens.community.CommunityScreen
 import com.aula.literatiapp.presentation.screens.community.CreateCommunityScreen
@@ -288,7 +286,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
                 navController = navController
             )
         }
-
 
 
 

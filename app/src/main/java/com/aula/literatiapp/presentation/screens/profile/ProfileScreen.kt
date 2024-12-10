@@ -166,9 +166,6 @@ fun ProfileScreen(
                         categories = listas,
                         onCategoryClick = { selectedSection ->
                             when (selectedSection) {
-                                "Reviews" -> {
-                                    navController.navigate("reviews_screen")
-                                }
 
                                 "Tags" -> {
                                     navController.navigate("tags_screen")

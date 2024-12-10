@@ -112,7 +112,7 @@ fun MyBookDashboard(
                     onCategoryClick = { category ->
                         when (category) {
                             "Review" -> {
-                                navController.navigate("make_review_screen")
+                                //navController.navigate("make_review_screen")
                             }
                             "Adicione na biblioteca" -> {
                                 showBottomSheet = false

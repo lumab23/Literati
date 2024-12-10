@@ -105,40 +105,7 @@ fun CommunityBackNavigationDashBoard(
                     }
             )
 
-            if (!isMember) {
-                Button(
-                    onClick = { onJoinClick() },
-                    modifier = Modifier
-                        .constrainAs(joinButton) {
-                            end.linkTo(parent.end, margin = 16.dp)
-                            bottom.linkTo(parent.bottom)
-                        }
-                ) {
-                    Text("Join Community")
-                }
-            }else if(isMember && !isAdmin){
-                Button(
-                    onClick = { viewModel.leaveCommunity(parentCommunityId, communityId) },
-                    modifier = Modifier
-                        .constrainAs(joinButton) {
-                            end.linkTo(parent.end, margin = 16.dp)
-                            bottom.linkTo(parent.bottom)
-                        }
-                ) {
-                    Text("Leave community")
-                }
-            }else if(isAdmin){
-                Button(
-                    onClick = { onModerationClick() },
-                    modifier = Modifier
-                        .constrainAs(moderationButton) {
-                            end.linkTo(parent.end, margin = 16.dp)
-                            top.linkTo(parent.top)
-                        }
-                ) {
-                    Text("Moderation")
-                }
-            }
+
         }
     }
 }
