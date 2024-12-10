@@ -1,13 +1,17 @@
 package com.aula.literatiapp.presentation.screens.profile
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -45,9 +50,9 @@ fun ProfileScreen(
     val settingsViewModel: SettingsViewModel = viewModel()
 
 
-    LaunchedEffect(Unit) {
-        profileViewModel.getUserById(userId)
-    }
+//    LaunchedEffect(Unit) {
+//        profileViewModel.getUserById(userId)
+//    }
 
     val user by profileViewModel.user.collectAsState()
     //val loading by profileViewModel.loading.collectAsState()
@@ -62,6 +67,7 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) {
         tagsViewModel.loadTags()
+        profileViewModel.getUserById(userId)
         settingsViewModel.userProfilePictureUrl
     }
 
@@ -78,6 +84,22 @@ fun ProfileScreen(
             },
             bottomBar = {
                 BottomNavigation(modifier = Modifier, navController = navController)
+            },
+            floatingActionButton = {
+                SmallFloatingActionButton(
+                    onClick = {
+                        Log.d("HomeScreen", "FloatingActionButton clicked, navigating to gemini_chat.")
+                        navController.navigate("gemini_chat")
+                    },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.secondary
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.google_gemini_icon),
+                        contentDescription = "gemini chat",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         ) { paddingValues ->
 

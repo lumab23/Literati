@@ -36,8 +36,10 @@ import java.util.Locale
 
 
 @Composable
-fun Conversation(navController: NavController,
-                 channelId: String) {
+fun Conversation(
+    navController: NavController,
+    channelId: String
+) {
     //voltado a câmera
     //declarando variaveis
     val chooserDialog = remember {
@@ -55,6 +57,18 @@ fun Conversation(navController: NavController,
             }
         }
     }
+
+    /*
+    // Permissão da câmera
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            camerImageLauncher.launch(createImageUri(navController, cameraImageUri))
+        }
+    }
+     */
+
 
     Scaffold(
         containerColor = Color.Black
@@ -131,11 +145,4 @@ fun Conversation(navController: NavController,
                 })
         }
     }
-}
-
-@Preview
-@Composable
-private fun ConversationPrev() {
-    val navController = rememberNavController()
-    Conversation(navController = navController, "Teste")
 }

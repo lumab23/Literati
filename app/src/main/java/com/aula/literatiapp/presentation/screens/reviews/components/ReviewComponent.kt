@@ -70,14 +70,6 @@ fun ReviewComponent(book: Book, navController: NavController) {
                         color = getTextColor()
                     )
 
-                    StarRatingBar(
-                        maxStars = 5,
-                        rating = rating,
-                        onRatingChanged = {newRating ->
-                            rating = newRating
-                        }
-                    )
-
 
                 }
 

@@ -14,11 +14,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import retrofit2.HttpException
+import java.io.IOException
 
+// a nav do chat, o armazenamento de fotos para a profile, o leave community e a review do chat
 
 class TagsViewModel : ViewModel() {
 
@@ -67,18 +71,35 @@ class TagsViewModel : ViewModel() {
     }
 
     private suspend fun fetchBookById(bookId: String): BookItem? {
+        // Try to fetch the book with retry logic for rate limiting
+        var retryCount = 0
+        while (retryCount < 3) {  // Retry 3 times
+            try {
+                Log.d("bookId", bookId)
+                val response = RetrofitInstance.api.getBookById(bookId, BuildConfig.GOOGLE_API_KEY)
+                val volumeInfo = response.volumeInfo
 
-        // Chama a API para obter o livro pelo ID
-        Log.d("bookId", bookId)
-        val response = RetrofitInstance.api.getBookById(bookId, BuildConfig.GOOGLE_API_KEY)
-        val volumeInfo = response.volumeInfo
-
-        val book = BookItem(
-            id = bookId,
-            volumeInfo = volumeInfo
-        )
-
-        return book
+                val book = BookItem(
+                    id = bookId,
+                    volumeInfo = volumeInfo
+                )
+                Log.d("FetchBooks", "Book fetched: $book")
+                return book
+            } catch (e: HttpException) {
+                if (e.code() == 429) {  // Rate limiting error
+                    Log.d("FetchBooks", "Rate limited. Retrying in 2 seconds.")
+                    delay(2000)  // Wait for 2 seconds before retrying
+                    retryCount++
+                } else {
+                    Log.e("FetchBooks", "HTTP error: ${e.code()} - ${e.message()}")
+                    break
+                }
+            } catch (e: IOException) {
+                Log.e("FetchBooks", "Network error: ${e.message}")
+                break
+            }
+        }
+        return null  // Return null if failed after retries
     }
 
     private fun fetchBooksByIds(bookIds: List<String>) {

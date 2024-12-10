@@ -1,5 +1,8 @@
 package com.aula.literatiapp.presentation.screens.profile.components
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,6 +40,21 @@ fun ProfileSection(viewModel: SettingsViewModel) {
     val userName by viewModel.userName.collectAsState()
     val userProfilePictureUrl by viewModel.userProfilePictureUrl.collectAsState()
 
+    fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    val profileBitmap = if (userProfilePictureUrl.isNotEmpty()) {
+        decodeBase64ToBitmap(userProfilePictureUrl)
+    } else {
+        null
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -45,16 +64,29 @@ fun ProfileSection(viewModel: SettingsViewModel) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        AsyncImage(
-            model = userProfilePictureUrl.ifEmpty { R.drawable.blank_profile_pic },
-            contentDescription = "Foto de perfil",
-            modifier = Modifier
-                .size(100.dp)
-                .width(100.dp)
-                .height(100.dp)
-                .clip(CircleShape)
-                .border(1.dp, Color.Black, CircleShape)
-        )
+        if (profileBitmap != null) {
+            // Exibe a imagem de perfil com base no Bitmap decodificado
+            AsyncImage(
+                model = profileBitmap,
+                contentDescription = "Foto de perfil",
+                modifier = Modifier
+                    .size(88.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color.Black, CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            // Exibe uma imagem padrão quando o Bitmap não está disponível
+            AsyncImage(
+                model = R.drawable.blank_profile_pic,
+                contentDescription = "Foto de perfil",
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color.Black, CircleShape)
+            )
+        }
+
 
         Text(
             text = userName,

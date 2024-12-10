@@ -106,7 +106,7 @@ fun ChatScreen(
                 items(channels.value) { channel ->
                     Column {
                         ChannelItem(channel.name) {
-                            //navController.navigate("chat/${channel.id}&${channel.name}")
+                            //navController.navigate("conversation_screen/${channel.id}?userId=${channel.userId}")
                         }
                     }
                 }
@@ -124,3 +124,4 @@ fun ChatScreen(
         }
     }
 }
+

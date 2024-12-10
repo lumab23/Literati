@@ -1,5 +1,6 @@
 package com.aula.literatiapp.presentation.screens.settings
 
+import android.graphics.ImageDecoder
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -24,8 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +45,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.aula.literatiapp.R
+import com.aula.literatiapp.domain.model.bitmapToBase64
 import com.aula.literatiapp.presentation.common.sharedComponents.BackNavigationDashboard
 import com.aula.literatiapp.presentation.screens.settings.viewModels.SettingsViewModel
 import com.aula.literatiapp.presentation.ui.theme.AppTheme
@@ -59,11 +64,17 @@ fun UploadProfilePicture(
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
+
+    val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
-        contract =
-            ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        imageUri = uri
+        uri?.let {
+            val source = ImageDecoder.createSource(context.contentResolver, it)
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            val base64Image = bitmapToBase64(bitmap)  // Converter para Base64
+            settingsViewModel.uploadBase64ProfilePicture(base64Image) // Enviar Base64 para o ViewModel
+        }
     }
 
     LaunchedEffect(launcher) {
@@ -99,15 +110,12 @@ fun UploadProfilePicture(
                         .width(100.dp)
                         .height(100.dp)
                         .clip(CircleShape)
+                        .clickable {
+                            launcher.launch("image/*")
+                        }
                         .border(1.dp, Color.Black, CircleShape),
                     contentScale = ContentScale.Crop
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(onClick = { launcher.launch("image/*") }) {
-                    Text(text = "Selecionar Foto de Perfil")
-                }
 
                 Log.d("Image selection", imageUri.toString())
 
@@ -116,27 +124,18 @@ fun UploadProfilePicture(
                 Button(
                     onClick = {
                         imageUri?.let { uri ->
-                            settingsViewModel.uploadAndSaveProfilePicture(uri) { success, message ->
-                                val snackBarMessage = if (success) {
-                                    "Foto de perfil atualizada com sucesso!"
-                                } else {
-                                    "Erro ao atualizar: $message"
-                                }
-
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    hostState.showSnackbar(snackBarMessage)
-                                }
-
-                                if (success) {
-                                    navController.popBackStack()
-                                }
+                            val bitmap = ImageDecoder.createSource(context.contentResolver, uri).let {
+                                ImageDecoder.decodeBitmap(it)
                             }
+                            val base64Image = bitmapToBase64(bitmap)
+                            settingsViewModel.uploadBase64ProfilePicture(base64Image)
                         }
                     },
                     enabled = imageUri != null
                 ) {
                     Text(text = "Salvar Imagem")
                 }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -161,15 +160,3 @@ fun UploadProfilePicture(
     }
 }
 
-
-@Preview
-@Composable
-fun UploadProfilePicturePreview() {
-    AppTheme {
-        UploadProfilePicture(
-            navController = rememberNavController(),
-            settingsViewModel = SettingsViewModel(),
-            hostState = remember { SnackbarHostState() }
-        )
-    }
-}

@@ -23,13 +23,14 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun MainDashboard(modifier: Modifier, value: String, fontSize: TextUnit) {
 
+
     Column(
         modifier
             .height(80.dp)
             .background(brush = gradientBrushLight),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ConstraintLayout() {
+        ConstraintLayout {
             val (text) = createRefs()
             Box(
                 modifier = Modifier

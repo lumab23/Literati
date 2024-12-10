@@ -35,6 +35,21 @@ fun BottomNavigation(modifier: Modifier, navController: NavController) {
             containerColor = Color.Transparent,
             modifier = Modifier.fillMaxSize()
         ) {
+
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.PermIdentity,
+                        contentDescription = null
+                    )
+                },
+                label = null,
+                selected = false,
+                onClick = {
+                    navController.navigate("profile_screen")
+                }
+            )
+
             NavigationBarItem(
                 icon = {
                     Icon(
@@ -63,19 +78,6 @@ fun BottomNavigation(modifier: Modifier, navController: NavController) {
                 }
             )
 
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Home,
-                        contentDescription = null
-                    )
-                },
-                label = null,
-                selected = false,
-                onClick = {
-                    navController.navigate("home")
-                }
-            )
 
             NavigationBarItem(
                 icon = {
@@ -91,19 +93,6 @@ fun BottomNavigation(modifier: Modifier, navController: NavController) {
                 }
             )
 
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.PermIdentity,
-                        contentDescription = null
-                    )
-                },
-                label = null,
-                selected = false,
-                onClick = {
-                    navController.navigate("profile_screen")
-                }
-            )
         }
     }
 }

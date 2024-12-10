@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class GeminiChatViewModel : ViewModel() {
 
+
     var prompt = mutableStateOf("")
         private set
 
@@ -50,7 +51,7 @@ class GeminiChatViewModel : ViewModel() {
     private suspend fun GeminiIA(value: String): String {
         val generativeModel = GenerativeModel(
             modelName = "gemini-1.5-flash",
-            apiKey = BuildConfig.GEMINI_API_KEY // TODO: Fix the build config call
+            apiKey = "AIzaSyAI9wYsGj83_C7fmElAqmQzypWPGb2O5wc"// TODO: Fix the build config call
         )
 
         val response = generativeModel.generateContent(value)

@@ -13,5 +13,4 @@ object RetrofitInstance {
             .create(GoogleBooksApi::class.java)
     }
 
-
 }

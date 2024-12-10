@@ -66,7 +66,7 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
     val isAuthenticated = loginViewModel.isUserAuthenticated()
 
     NavHost(navController = navController,
-        startDestination = if (isAuthenticated) Screen.Home.route else Screen.Login.route
+        startDestination = if (isAuthenticated) Screen.Profile.route else Screen.Login.route
         ) {
         composable(Screen.SearchScreen.route) {
             SearchScreen(navController, searchViewModel = searchViewModel)
@@ -171,27 +171,6 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
                 navController = navController
             )
 
-        }
-
-
-        composable("chat/{channelId}&{channelName}", arguments = listOf(
-            navArgument("channelId") {
-                type = NavType.StringType
-            },
-            navArgument("channelName") {
-                type = NavType.StringType
-            }
-        )) {
-            val channelId = it.arguments?.getString("channelId") ?: ""
-            val channelName = it.arguments?.getString("channelName") ?: ""
-            ChatScreen(navController = navController)
-        }
-
-        composable(Screen.ConversationScreen.route,
-            arguments = listOf(navArgument("channelId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-            Conversation(navController = navController, channelId = channelId)
         }
 
 
@@ -308,6 +287,22 @@ fun MyAppNavigation(modifier: Modifier = Modifier) {
                 userId = it.arguments?.getString("userId") ?: "",
                 navController = navController
             )
+        }
+
+        composable(Screen.ChatScreen.route) {
+            ChatScreen(navController = navController)
+        }
+
+        composable(
+            "conversation_screen/{channelId}?userId={userId}",
+            arguments = listOf(
+                navArgument("channelId") { type = NavType.StringType },
+                navArgument("userId") { type = NavType.StringType; nullable = true }
+            )
+        ) { backStackEntry ->
+            val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+            val userId = backStackEntry.arguments?.getString("userId")
+            Conversation(navController = navController, channelId = channelId)
         }
 
 

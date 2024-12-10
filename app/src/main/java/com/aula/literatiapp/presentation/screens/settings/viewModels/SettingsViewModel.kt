@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -174,6 +175,23 @@ class SettingsViewModel : ViewModel() {
             }
         }
     }
+
+    fun uploadBase64ProfilePicture(base64Image: String) {
+        val user = firebaseAuth.currentUser
+        user?.let {
+            firestore.collection("users").document(it.uid)
+                .update("profilePictureUrl", base64Image)
+                .addOnSuccessListener {
+                    _userProfilePictureUrl.value = base64Image
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                }
+        }
+    }
+
+
+
 
 
     fun signOut() {
